@@ -2,7 +2,7 @@ const User = require('./user'),
       passportLocal = require('passport-local'),
       passport = require('passport'),
       bcrypt = require('bcrypt')
-//endring
+
 passport.use(new LocalStrategy(
     function(username, password, done) {
       User.findOne({ username: username }, function (err, user) {
