@@ -1,4 +1,5 @@
 require('dotenv').config();
+require('./config/passport')
 const express = require('express'),
       mongoose = require('mongoose'),
       bcrypt = require('bcrypt'),
@@ -7,6 +8,7 @@ const express = require('express'),
       user = require('./routes/user'),
       app = express(),
       port = 3000
+      
 
 
 const dbOptions = {
@@ -25,10 +27,14 @@ const db = mongoose.connect(conn, ()=> {
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(session.runSession)
-app.use(passport.authenticate('session'))
 app.use('/user', user) //filen håndterer alt som kommer inn i routen til login
-
-
+app.use(passport.authenticate('session'))
+app.use((req, res, next)=>{
+    console.log(req.session)
+    next()
+})
+app.use(passport.initialize())
+app.use(passport.session())
 
 app.get('/', (req, res) => {
     res.send('hello world');

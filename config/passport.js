@@ -1,24 +1,24 @@
-const User = require('./user'),
-      passportLocal = require('passport-local'),
+const User = require('./userSchema'),
+      LocalStrategy = require('passport-local').Strategy,
+      express = require('express'),
       passport = require('passport'),
       bcrypt = require('bcrypt')
 
-passport.use(new LocalStrategy(
+const strategy = new LocalStrategy(
     function(username, password, done) {
-      User.findOne({ username: username }, function (err, user) {
-        if (err) { return done(err); }
+      User.findOne({ username: username }).select("+password").then((user) => {   
         if (!user) { return done(null, false); }
-        if (!bcrypt.compare(password, user.password)) { return done(null, false); }
+        bcrypt.compare(password, user.password, function(erro, isMatch) {
+          if (erro) return done(erro);
+          if(!isMatch) return done(null, false)
+          console.log(isMatch)
+        })
         return done(null, user);
       });
     }
-  ));
+);
 
-  app.post('/login', 
-  passport.authenticate('local', { failureRedirect: '/login' }),
-  function(req, res) {
-    res.redirect('/');
-  });
+  passport.use(strategy)
 
   passport.serializeUser(function(user, cb) {
     process.nextTick(function() {
@@ -31,3 +31,5 @@ passport.use(new LocalStrategy(
       return cb(null, user);
     });
   });
+
+

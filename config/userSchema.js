@@ -5,7 +5,8 @@ const mongoose = require("mongoose"),
 const brukerSchema = new mongoose.Schema({
     username: {
         type: String,
-        unique: true
+        unique: true,
+        required: true
     },
     password: {
         type: String,
@@ -15,9 +16,9 @@ const brukerSchema = new mongoose.Schema({
 })
 
 brukerSchema.pre('save', function (next) {
-    bcrypt.hash(this.passord, saltRounds, (err, hash) => {
+    bcrypt.hash(this.password, saltRounds, (err, hash) => {
         console.log(hash)
-        this.passord = hash;
+        this.password = hash;
         next();
     })   
 });
