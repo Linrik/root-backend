@@ -1,8 +1,8 @@
-const passport = require('passport');
-
 const express = require('express'),
       router = express.Router(),
-      User = require('../config/userSchema')
+      User = require('../config/userSchema'),
+      passport = require('passport'),
+      session = require('express-session')
 
 
 const conn = process.env.DB_STRING;
@@ -27,25 +27,20 @@ router.route('/signup')
 router.route('/')
         //login
     .post(passport.authenticate('local'), (req, res, next) => {next()})
-    /*.get(async (req, res) => {
-        //hente bruker
-        if(req.isAuthenticated){
-            const user = await User.findOne({brukernavn: req.body.username}).select("-password");
-            res.json(user)
-        } else{
-            res.send("du er ikke logget inn")
-        }
-    })*/
     .put(async (req, res) => {
-        const id = req.session.cookie
-        const user = await User.findOne
+        const check = req.user.
+        console.log(check);
+        //const id = req.session.cookie
+        //const user = await User.findOne
     })
     .delete((res, req) => {
         //slette bruker
     })
     router.route('/logout')
     .post((req,res,next)=>{
-        req.logOut()
+        //console.log(req.session.passport.user)
+        req.logout()
+        //req.session.destroy()
         next()
     })
 
