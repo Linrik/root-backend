@@ -8,8 +8,6 @@ const express = require('express'),
       user = require('./routes/user'),
       app = express(),
       port = 3000
-      
-
 
 const dbOptions = {
     useNewUrslParser: true,

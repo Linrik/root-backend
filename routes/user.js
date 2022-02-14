@@ -2,17 +2,16 @@ const express = require('express'),
       router = express.Router(),
       User = require('../config/userSchema'),
       passport = require('passport'),
-      session = require('express-session')
-
+      session = require('express-session'),
+      mongoose = require('mongoose')
 
 const conn = process.env.DB_STRING;
-
 
 router.route('/signup')
     .post(async (req, res, next) => {
         //registrer bruker
         const nyBruker = new User({
-            username: req.body.username,
+            email: req.body.email,
             password: req.body.password,
         })
         await nyBruker.save((err)=>{
@@ -22,67 +21,25 @@ router.route('/signup')
         next()
     })
 
-  
-
 router.route('/')
         //login
     .post(passport.authenticate('local'), (req, res, next) => {next()})
-    .put(async (req, res) => {
-        const check = req.user.
-        console.log(check);
-        //const id = req.session.cookie
-        //const user = await User.findOne
+    .put(async (req, res, next) => {
+        
+        await User.updateOne({email: req.user.email}, {email: req.body.email})
+        req.session.passport.user.email = req.body.email
+        next()
     })
-    .delete((res, req) => {
-        //slette bruker
+    .delete((res, req, next) => {
+        req.logout()
+        req.session.destroy()
+        next()
     })
     router.route('/logout')
     .post((req,res,next)=>{
-        //console.log(req.session.passport.user)
         req.logout()
-        //req.session.destroy()
+        req.session.destroy()
         next()
     })
 
 module.exports = router;
-
-
-
-
-/*
-router
-    .route('/')
-    .post((req, res) => {
-        
-    })
-    .get((req, res) => {
-
-    })
-    .put((req, res) => {
-
-    })
-    .delete((res, req) => {
-
-    })
-module.exports = router;
-
-logge inn
-async (req, res) => {
-        //logge inn bruker
-        await Bruker.findOne({email: req.body.username}, (err, bruker)=>{
-            if(err){
-                res.send("Noe gikk galt")
-            } else {
-                bcrypt.compare(req.body.passord, bruker.passord, (err, res) => {
-                    if(err){
-                        res.send("Noe gikk galt")
-                    } else if(res){
-             
-                    } else{
-                        res.send("Noe gikk galt")
-                    }
-                })
-            }
-       })
-    }
-*/

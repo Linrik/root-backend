@@ -4,25 +4,25 @@ const User = require('./userSchema'),
       passport = require('passport'),
       bcrypt = require('bcrypt')
 
-const strategy = new LocalStrategy(
-    function(username, password, done) {
-      User.findOne({ username: username }).select("+password").then((user) => {   
+  passport.use(new LocalStrategy({
+      usernameField: 'email',
+      passReqToCallback: true
+    },
+    function(req, email, password, done) {
+      User.findOne({ email: email }).select("+password").then((user) => {  
         if (!user) { return done(null, false); }
         bcrypt.compare(password, user.password, function(erro, isMatch) {
           if (erro) return done(erro);
           if(!isMatch) return done(null, false)
-          console.log(isMatch)
         })
         return done(null, user);
       });
-    }
-);
-
-  passport.use(strategy)
+    })
+  )
 
   passport.serializeUser(function(user, cb) {
     process.nextTick(function() {
-      cb(null, { id: user.id, username: user.username });
+      cb(null, { id: user.id, email: user.email });
     });
   });
 
