@@ -1,18 +1,16 @@
-const { isAdmin } = require('./routes/AuthMiddelware');
-
 require('dotenv').config();
 require('./config/passport')
 const express = require('express'),
       mongoose = require('mongoose'),
       bcrypt = require('bcrypt'),
-      session = require('./session/session'),
-      passport = require('passport'),
+      passport = require('passport')
+
+const session = require('./session/session'),
       user = require('./routes/user'),
       admin = require('./routes/admin'),
       app = express(),
       port = 3000,
-      isUser = require("./routes/AuthMiddelware").isUser
-      isRoot = require("./routes/AuthMiddelware").isRoot
+      { isAdmin, isRoot, isUser } = require('./routes/AuthMiddelware');
 
 const dbOptions = {
     useNewUrslParser: true,
@@ -38,14 +36,6 @@ app.use('/admin', isAdmin, admin)
 app.use((req, res, next)=>{
     console.log(req.user)
     next()
-})
-
-app.get('/bruker', isUser, (req, res) => {
-        res.send("nice")
-})
-
-app.get('/root', isRoot, (req, res) => {
-    res.send("nice medlem")
 })
 
 app.get('/', (req, res) => {
