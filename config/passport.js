@@ -3,7 +3,7 @@ const User = require('./userSchema'),
       express = require('express'),
       passport = require('passport'),
       bcrypt = require('bcrypt')
-
+// implementert passport sin local strategy
   passport.use(new LocalStrategy({
       usernameField: 'email',
       passReqToCallback: true
@@ -19,10 +19,21 @@ const User = require('./userSchema'),
       });
     })
   )
-
+// laget sjekker som sjekker hvilken rolle du har og tar det med i passport fieldet i session
   passport.serializeUser(function(user, cb) {
     process.nextTick(function() {
-      cb(null, { id: user.id, email: user.email });
+      // en helt elendig sjekk på roller som sjekker hva som skal bli sendt til passport fielden i session
+      if(user.rootMember){
+        if(user.admin){
+          cb(null, { id: user.id, email: user.email, rootMember: user.rootMember, admin: user.admin});
+        } else {
+          cb(null, { id: user.id, email: user.email, rootMember: user.rootMember});
+        }
+      } else if(user.admin){
+        cb(null, { id: user.id, email: user.email, admin: user.admin});
+      } else{
+        cb(null, { id: user.id, email: user.email });
+      }
     });
   });
 

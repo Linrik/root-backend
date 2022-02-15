@@ -5,8 +5,7 @@ const express = require('express'),
       session = require('express-session'),
       mongoose = require('mongoose')
 
-const conn = process.env.DB_STRING;
-
+// laget api som registrerer bruker med encryptet hash passord
 router.route('/signup')
     .post(async (req, res, next) => {
         //registrer bruker
@@ -21,20 +20,24 @@ router.route('/signup')
         next()
     })
 
+// laget login som bruker localstrategy fra passport
 router.route('/')
-        //login
+    //login (funker men vil se litt mer på)
     .post(passport.authenticate('local'), (req, res, next) => {next()})
+    // endre på bruker (ikke ferdig)
     .put(async (req, res, next) => {
-        
         await User.updateOne({email: req.user.email}, {email: req.body.email})
         req.session.passport.user.email = req.body.email
         next()
     })
+    // slett bruker (ikke ferdig)
     .delete((res, req, next) => {
         req.logout()
         req.session.destroy()
         next()
     })
+    //laget logg ut funksjon til bruker
+    // logge ut. (ferdig)
     router.route('/logout')
     .post((req,res,next)=>{
         req.logout()
