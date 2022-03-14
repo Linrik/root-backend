@@ -8,12 +8,13 @@ const session = require('express-session'),
     const runSession = session({
         secret: key,
         resave: false,
-        saveUninitialized: false, // lagrer ikke session med mindre du gjør endringer
+        saveUninitialized: true, // lagrer ikke session med mindre du gjør endringer
         store: mongoStore.create({
             mongoUrl: conn,
             collectionName: 'session',
             autoRemove: 'native'
         }),
+        name: "neo",
         cookie: {
             maxAge: 1000 * 60 * 60* 24
         }

@@ -10,7 +10,8 @@ router.route('/signup')
     .post(async (req, res, next) => {
         //registrer bruker
         const nyBruker = new User({
-            email: req.body.email,
+            email: req.body.email.toLowerCase(),
+            name: req.body.name,
             password: req.body.password,
         })
         await nyBruker.save((err)=>{
@@ -42,6 +43,7 @@ router.route('/')
     .post((req,res,next)=>{
         req.logout()
         req.session.destroy()
+        res.clearCookie('neo', {path: '/'}).status(200).send('Ok.');
         next()
     })
 
