@@ -43,8 +43,9 @@ router.route('/')
     .post((req,res,next)=>{
         req.logout()
         req.session.destroy()
-        res.clearCookie('neo', {path: '/'}).status(200).send('Ok.');
-        next()
+        res.redirect('/');
+        //res.clearCookie('neo', {path: '/'}).status(200).send('Ok.');
+        //next()
     })
 
 module.exports = router;
