@@ -3,6 +3,7 @@ const User = require('./userSchema'),
       express = require('express'),
       passport = require('passport'),
       bcrypt = require('bcrypt')
+      
 // implementert passport sin local strategy
   passport.use(new LocalStrategy({
       usernameField: 'email',

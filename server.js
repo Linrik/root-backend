@@ -31,7 +31,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 app.use('/user', user) //filen håndterer alt som kommer inn i routen til login
 app.use('/admin', isAdmin, admin)
-//app.use(passport.authenticate('session'))
+app.use(passport.authenticate('session'))
 
 app.use((req, res, next)=>{
     console.log(req.user)
@@ -39,7 +39,7 @@ app.use((req, res, next)=>{
 })
 
 app.get('/', (req, res) => {
-    res.send('hello world');
+    res.json('hello world');
 });
 
 app.listen(port, () => {

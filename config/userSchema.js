@@ -14,7 +14,8 @@ const userSchema = new mongoose.Schema({
         select: false //kommer ikke med på vanlige spørringer med mindru du ber om den
     },
     rootMember: Boolean,
-    admin: Boolean
+    admin: Boolean,
+    editor: Boolean
 })
 
 // hasher passordet før det blir lagret
@@ -23,9 +24,9 @@ userSchema.pre('save', function (next) {
         this.password = hash;
         this.rootMember = false;
         this.admin = false;
+        this.editor = false;
         next();
     })
-    
 });
 
-module.exports = mongoose.model("Bruker", userSchema, "bruker");
+module.exports = mongoose.model("User", userSchema, "user");
