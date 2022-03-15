@@ -3,7 +3,8 @@ const express = require('express'),
       User = require('../config/userSchema'),
       passport = require('passport'),
       session = require('express-session'),
-      mongoose = require('mongoose')
+      mongoose = require('mongoose'),
+      bcrypt = require('bcrypt')
 
 // laget api som registrerer bruker med encryptet hash passord
 router.route('/signup')
@@ -23,16 +24,27 @@ router.route('/signup')
 
 // laget login som bruker localstrategy fra passport
 router.route('/')
-    //login (funker men vil se litt mer på)
+    //login (ferdig)
     .post(passport.authenticate('local'), (req, res, next) => {next()})
-    // endre på bruker (ikke ferdig)
+    // endre på bruker (ferdig, men må testes)
     .put(async (req, res, next) => {
-        await User.updateOne({email: req.user.email}, {email: req.body.email})
-        req.session.passport.user.email = req.body.email
+        User.findOne({ email: email.toLowerCase() }).select("+password").then((user) => {  
+            if (!user) { return done(null, false); }
+            bcrypt.compare(req.body.password, user.password, function(erro, isMatch) {
+                await User.updateOne({email: req.user.email},
+                    {email: req.body.email,
+                    name: req.body.name,
+                    password: req.body.newPassword})
+
+                    req.session.passport.user.email = req.body.email
+                    req.session.passport.user.name = req.body.name
+            })
+          });
         next()
     })
-    // slett bruker (ikke ferdig)
-    .delete((res, req, next) => {
+    // slett bruker (ferdig, men må testes)
+    .delete(async (res, req, next) => {
+        await User.deleteOne({email: req.session.user.email})
         req.logout()
         req.session.destroy()
         next()
@@ -40,12 +52,11 @@ router.route('/')
     //laget logg ut funksjon til bruker
     // logge ut. (ferdig)
     router.route('/logout')
-    .post((req,res,next)=>{
-        req.logout()
+    .get( (req,res,next)=>{
+        req.logout();
         req.session.destroy()
-        res.redirect('/');
-        //res.clearCookie('neo', {path: '/'}).status(200).send('Ok.');
-        //next()
+        res.clearCookie('connect.sid', {path: '/'}).status(200).send('Ok.');
+        next()
     })
 
 module.exports = router;

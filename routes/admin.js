@@ -22,7 +22,6 @@ router.route('/rootMedlem')
     })
 // gi admin rolle
 router.route('/admin')
-    // gi admin
     .put(async (req, res, next)=>{
         await User.updateOne({email: req.body.email}, {admin: true})
         next()

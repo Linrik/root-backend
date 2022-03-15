@@ -26,12 +26,11 @@ const db = mongoose.connect(conn, ()=> {
     console.log("connected to MongoDB")
 }, e => console.error(e));
 
-var corsOptions = {
+const corsOptions = {
     origin: true,
     credentials: true
   }
 
-  
 app.use(cors(corsOptions))
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
@@ -45,6 +44,7 @@ app.use(session({
             collectionName: 'session',
             autoRemove: 'native'
         }),
+        name: 'user',
         cookie: {
             maxAge: 1000 * 60 * 60* 24
         }
@@ -59,7 +59,6 @@ app.use((req, res, next)=>{
     console.log(req.session)
     next()
 })
-
 
 app.get('/', (req, res) =>{
     res.send("123")

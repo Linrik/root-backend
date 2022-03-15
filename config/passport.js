@@ -10,7 +10,7 @@ const User = require('./userSchema'),
       passReqToCallback: true
     },
     function(req, email, password, done) {
-      User.findOne({ email: email }).select("+password").then((user) => {  
+      User.findOne({ email: email.toLowerCase() }).select("+password").then((user) => {  
         if (!user) { return done(null, false); }
         bcrypt.compare(password, user.password, function(erro, isMatch) {
           if (erro) return done(erro);
