@@ -2,8 +2,6 @@ const express = require('express'),
       router = express.Router(),
       User = require('../config/userSchema'),
       passport = require('passport'),
-      session = require('express-session'),
-      mongoose = require('mongoose'),
       bcrypt = require('bcrypt')
 
 // laget api som registrerer bruker med encryptet hash passord

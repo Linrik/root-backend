@@ -3,8 +3,14 @@ const mongoose = require("mongoose"),
       User = require('./userSchema')
 
 const eventSchema = new mongoose.Schema({
+   poster: User,
    tittel: String,
    text: String,
+   dateFrom: Date,
+   dateHourFrom: Number, 
+   dateTo: Date,
+   dateHourTo: Number,
+   bilde: [String],
    participants: [User],
    comments: [Comment]
 })

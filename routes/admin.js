@@ -15,7 +15,7 @@ router.route('/rootMedlem')
         console.log()
         next()
     })
-    // fjern rolle
+// fjern rolle
     .delete(async (req, res, next)=>{
         await User.updateOne({email: req.body.email}, {$set: {rootMember: false}})
         next()
