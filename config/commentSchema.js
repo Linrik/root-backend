@@ -2,9 +2,9 @@ const mongoose = require("mongoose"),
       User = require('./userSchema')
 
 const commentSchema = new mongoose.Schema({
-    user: User,
+    user: [String],
     comment: String,
-    reply: [commentSchema]
+    reply: [String]// lagrer id til andre kommentarer som svarer på kommentaren
 })
 
-module.exports = mongoose.model("Comment", commentSchema, "comment");
+module.exports = commentSchema;

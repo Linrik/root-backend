@@ -14,7 +14,7 @@ router.route('/comment')
     })
     .put(async (req, res, next) => {
         Comment.findOne({_id: req.body.commentid}).then((comment)=>{ //kan lage metode for å verifisere brukeren til kommentaren
-            User.findOne({user: comment.user}).then((user)=>{
+            User.findOne({user: comment.user}).then(async (user)=>{
                 if(comment.user === user){
                     await Comment.updateOne({comment: comment._id},
                         {comment: req.body.newComment})
@@ -25,7 +25,7 @@ router.route('/comment')
     })
     .delete(async (req, res, next)=>{
         Comment.findOne({_id: req.body.commentid}).then((comment)=>{
-            User.findOne({user: comment.user}).then((user)=>{
+            User.findOne({user: comment.user}).then(async(user)=>{
                 if(comment.user === user){
                     await Comment.deleteOne({comment: comment._id})
                 } else{ return done(null, false)}//fikse opp i bedre tilbakemelding

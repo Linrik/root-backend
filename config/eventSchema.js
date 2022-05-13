@@ -3,16 +3,20 @@ const mongoose = require("mongoose"),
       User = require('./userSchema')
 
 const eventSchema = new mongoose.Schema({
-   poster: User,
+   posterid: String,
+   postername: String,
    tittel: String,
-   text: String,
+   text: [{
+      type: Map,
+      of: String
+   }],
    dateFrom: Date,
    dateHourFrom: Number, 
    dateTo: Date,
    dateHourTo: Number,
    bilde: [String],
-   participants: [User],
-   comments: [Comment]
+   participants: [String], // referanse til user
+   comments: [Comment] // referanse til kommentar http://bit.ly/mongoose-schematypes
 })
 
 module.exports = mongoose.model("Event", eventSchema, "event");

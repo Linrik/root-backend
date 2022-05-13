@@ -13,6 +13,7 @@ router.route('/signup')
             name: req.body.name,
             password: req.body.password,
         })
+        onsole.log("sdfgsdfg")
         await nyBruker.save((err)=>{
             if(err) return err;
             console.log("Bruker ble registrert")
@@ -28,7 +29,7 @@ router.route('/')
     .put(async (req, res, next) => {
         User.findOne({ email: email.toLowerCase() }).select("+password").then((user) => {  
             if (!user) { return done(null, false); }
-            bcrypt.compare(req.body.password, user.password, function(erro, isMatch) {
+            bcrypt.compare(req.body.password, user.password, async function(erro, isMatch) {
                 await User.updateOne({email: req.user.email},
                     {email: req.body.email,
                     name: req.body.name,

@@ -26,14 +26,14 @@ const User = require('./userSchema'),
       // en helt elendig sjekk på roller som sjekker hva som skal bli sendt til passport fielden i session
       if(user.rootMember){
         if(user.admin){
-          cb(null, { id: user.id, email: user.email, rootMember: user.rootMember, admin: user.admin});
+          cb(null, { id: user.id, name: user.name, rootMember: user.rootMember, admin: user.admin});
         } else {
-          cb(null, { id: user.id, email: user.email, rootMember: user.rootMember});
+          cb(null, { id: user.id, name: user.name, rootMember: user.rootMember});
         }
       } else if(user.admin){
-        cb(null, { id: user.id, email: user.email, admin: user.admin});
+        cb(null, { id: user.id, name: user.name, admin: user.admin});
       } else{
-        cb(null, { id: user.id, email: user.email });
+        cb(null, { id: user.id, name: user.name });
       }
     });
   });
