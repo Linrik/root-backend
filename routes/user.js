@@ -1,82 +1,73 @@
 const express = require('express'),
       router = express.Router(),
       User = require('../config/userSchema'),
-      mongoose = require('mongoose')
+      passport = require('passport'),
+      bcrypt = require('bcrypt')
 
-/*
-router.use((req, res, next) =>{
-    console.log("hey");
-})*/
+const mailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<;>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const isEmail = (email)=> {
+    return email.match(mailRegex)
+}
 
+// laget api som registrerer bruker med encryptet hash passord
 router.route('/signup')
-    .post(async (req, res) => {
-        //registrer bruker
-        const nyBruker = new Bruker({
-            username: req.body.username,
-            passord: req.body.passord,
-        })
-        await nyBruker.save((err)=>{
-            if(err) return handleError(err);
-            console.log("Bruker ble registrert")
-        })
-    })
-
-
-router.route('/')
-    .post(async (req, res) => {
-        //logge inn bruker
-        await Bruker.findOne({email: req.body.username}, (err, bruker)=>{
-            if(err){
-                res.send("Noe gikk galt")
-            } else {
-                bcrypt.compare(req.body.passord, bruker.passord, (err, res) => {
-                    if(err){
-                        res.send("Noe gikk galt")
-                    } else if(res){
-             
-                    } else{
-                        res.send("Noe gikk galt")
-                    }
+    .post(async (req, res, next) => {
+        if(isEmail(req.body.email.toLowerCase())){
+            if(true){
+                //registrer bruker
+                const nyBruker = new User({
+                    email: req.body.email.toLowerCase(),
+                    name: req.body.name,
+                    password: req.body.password,
                 })
+                await nyBruker.save((err)=>{
+                    if(err) return err;
+                    console.log("Bruker ble registrert")
+                })
+                res.send("Bruker registrert")
+            }else{
+                res.send("E-post allerede i bruk")
             }
-       })
-    })
-    .get(async (req, res) => {
-        //hente bruker
-        if(req.isAuthenticated){
-            const user = await User.findOne({brukernavn: req.body.username}).select("-password");
-            res.json(user)
         } else{
-            res.send("du er ikke logget inn")
+            res.send("Ugyldig Emailsdfg")        
         }
     })
-    .put(async (req, res) => {
-        const id = req.session.cookie
-        const user = await User.findOne
+
+// laget login som bruker localstrategy fra passport
+router.route('/')
+    //login (ferdig)
+    .post(passport.authenticate('local'), (req, res, next) => {next()})
+    // endre på bruker (ferdig, men må testes)
+    .put(async (req, res, next) => {
+        User.findOne({ email: email.toLowerCase() }).select("+password").then((user) => {  
+            if (!user) { return done(null, false); }
+            bcrypt.compare(req.body.password, user.password, async function(erro, isMatch) {
+                await User.updateOne({email: req.user.email},
+                    {email: req.body.email,
+                    name: req.body.name,
+                    password: req.body.newPassword})
+
+                    req.session.passport.user.email = req.body.email
+                    req.session.passport.user.name = req.body.name
+            })
+          });
+        next()
     })
-    .delete((res, req) => {
-        //slette bruker
+    // slett bruker (ferdig, men må testes)
+    .delete(async (res, req, next) => {
+        await User.deleteOne({email: req.session.user.email})
+        req.logout()
+        req.session.destroy()
+        next()
+    })
+    //laget logg ut funksjon til bruker
+    // logge ut. (ferdig)
+    router.route('/logout')
+    .get( (req,res,next)=>{
+        req.logout();
+        req.session.destroy()
+        res.clearCookie('connect.sid', {path: '/'}).status(200).send('Ok.');
+        next()
     })
 
 module.exports = router;
-
-
-
-
-/*
-router
-    .route('/')
-    .post((req, res) => {
-        
-    })
-    .get((req, res) => {
-
-    })
-    .put((req, res) => {
-
-    })
-    .delete((res, req) => {
-
-    })
-module.exports = router;
-*/
