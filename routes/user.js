@@ -29,7 +29,7 @@ router.route('/signup')
                 res.send("E-post allerede i bruk")
             }
         } else{
-            res.send("Ugyldig Email")        
+            res.send("Ugyldig Emailsdfg")        
         }
     })
 
