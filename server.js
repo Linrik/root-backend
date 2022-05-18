@@ -13,7 +13,7 @@ const user = require('./routes/user'),
       event = require('./routes/event'),
       lang = require('./routes/languague'),
       app = express(),
-      port = 3080,
+      port = 3080,//process.env.PORT;
       { isAdmin, isUser, isRoot } = require('./routes/AuthMiddelware');
 
 const dbOptions = {
@@ -21,7 +21,7 @@ const dbOptions = {
     useUnifiedToppology: true
 }
 
-const conn = process.env.DB_STRING;
+const conn = process.env.DB_ONLINE;
 const key = process.env.SECRET;
 
 const db = mongoose.connect(conn, ()=> {

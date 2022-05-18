@@ -4,21 +4,33 @@ const express = require('express'),
       passport = require('passport'),
       bcrypt = require('bcrypt')
 
+const mailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<;>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const isEmail = (email)=> {
+    return email.match(mailRegex)
+}
+
 // laget api som registrerer bruker med encryptet hash passord
 router.route('/signup')
     .post(async (req, res, next) => {
-        //registrer bruker
-        const nyBruker = new User({
-            email: req.body.email.toLowerCase(),
-            name: req.body.name,
-            password: req.body.password,
-        })
-        onsole.log("sdfgsdfg")
-        await nyBruker.save((err)=>{
-            if(err) return err;
-            console.log("Bruker ble registrert")
-        })
-        next()
+        if(isEmail(req.body.email.toLowerCase())){
+            if(true){
+                //registrer bruker
+                const nyBruker = new User({
+                    email: req.body.email.toLowerCase(),
+                    name: req.body.name,
+                    password: req.body.password,
+                })
+                await nyBruker.save((err)=>{
+                    if(err) return err;
+                    console.log("Bruker ble registrert")
+                })
+                res.send("Bruker registrert")
+            }else{
+                res.send("E-post allerede i bruk")
+            }
+        } else{
+            res.send("Ugyldig Email")        
+        }
     })
 
 // laget login som bruker localstrategy fra passport
