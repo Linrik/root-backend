@@ -6,7 +6,7 @@ const express = require('express'),
       passport = require('passport'),
       user = require('./routes/user'),
       app = express(),
-      port = 3000
+      port = process.env.PORT
 
 
 const dbOptions = {
