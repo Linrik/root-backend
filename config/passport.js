@@ -1,28 +1,40 @@
-const User = require('./user'),
-      passportLocal = require('passport-local'),
+const User = require('./userSchema'),
+      LocalStrategy = require('passport-local').Strategy,
+      express = require('express'),
       passport = require('passport'),
       bcrypt = require('bcrypt')
-//endring
-passport.use(new LocalStrategy(
-    function(username, password, done) {
-      User.findOne({ username: username }, function (err, user) {
-        if (err) { return done(err); }
+      
+// implementert passport sin local strategy
+  passport.use(new LocalStrategy({
+      usernameField: 'email',
+      passReqToCallback: true
+    },
+    function(req, email, password, done) {
+      User.findOne({ email: email.toLowerCase() }).select("+password").then((user) => {  
         if (!user) { return done(null, false); }
-        if (!bcrypt.compare(password, user.password)) { return done(null, false); }
+        bcrypt.compare(password, user.password, function(erro, isMatch) {
+          if (erro) return done(erro);
+          if(!isMatch) return done(null, false)
+        })
         return done(null, user);
       });
-    }
-  ));
-
-  app.post('/login', 
-  passport.authenticate('local', { failureRedirect: '/login' }),
-  function(req, res) {
-    res.redirect('/');
-  });
-
+    })
+  )
+// laget sjekker som sjekker hvilken rolle du har og tar det med i passport fieldet i session
   passport.serializeUser(function(user, cb) {
     process.nextTick(function() {
-      cb(null, { id: user.id, username: user.username });
+      // en helt elendig sjekk på roller som sjekker hva som skal bli sendt til passport fielden i session
+      if(user.rootMember){
+        if(user.admin){
+          cb(null, { id: user.id, name: user.name, rootMember: user.rootMember, admin: user.admin});
+        } else {
+          cb(null, { id: user.id, name: user.name, rootMember: user.rootMember});
+        }
+      } else if(user.admin){
+        cb(null, { id: user.id, name: user.name, admin: user.admin});
+      } else{
+        cb(null, { id: user.id, name: user.name });
+      }
     });
   });
 
@@ -31,3 +43,5 @@ passport.use(new LocalStrategy(
       return cb(null, user);
     });
   });
+
+
