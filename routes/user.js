@@ -33,17 +33,44 @@ router.route('/signup')
         }
     })
 
+// router.route('/getsignup')
+//     .get(async (req, res, next) => {
+//         const nyBruker = new User({
+//             email: "aa@bb.cc",
+//             name: "Krister Iversen Admin",
+//             password: "Pass*123",
+//         })
+//         await nyBruker.save((err)=>{
+//             if(err) return err;
+//             console.log("Bruker ble registrert")
+//         })
+//         res.send("Bruker registrert")
+//     })
+
 // laget login som bruker localstrategy fra passport
 router.route('/')
     //login (ferdig)
-    .post(passport.authenticate('local'), (req, res, next) => {next()})
+    .get((req, res, next)=>{
+        if(req.session.passport===undefined){
+            res.json({loginStatus:"loggedOut"});
+        } else {
+            res.json({
+                loginStatus:"loggedIn",
+                user: req.session.passport.user
+            })
+        }
+    })
+    .post(passport.authenticate('local'), (req, res, next) => {
+        res.json({user:req.session.passport.user})
+        next()
+    })
     // endre på bruker (ferdig, men må testes)
     .put(async (req, res, next) => {
         User.findOne({ email: email.toLowerCase() }).select("+password").then((user) => {  
             if (!user) { return done(null, false); }
             bcrypt.compare(req.body.password, user.password, async function(erro, isMatch) {
                 await User.updateOne({email: req.user.email},
-                    {email: req.body.email,
+                    {email: req.body.email, 
                     name: req.body.name,
                     password: req.body.newPassword})
 
