@@ -13,9 +13,7 @@ const express = require('express'),
 const admin = require('./routes/admin'),
       event = require('./routes/event'),
       lang = require('./routes/languague'),
-      article = require('./routes/article'),
       port = process.env.PORT,
-      
       { isAdmin, isUser, isRoot } = require('./routes/AuthMiddelware');
 
 const dbOptions = {
@@ -32,7 +30,6 @@ const db = mongoose.connect(conn, ()=> {
 
 const corsOptions = {
     origin: true,
-    optionSuccesStatus: 200,
     credentials: true
   }
 
@@ -57,12 +54,11 @@ app.use(passport.initialize())
 app.use(passport.session())
 app.use(passport.authenticate('session'))
 app.use('/user', user) //filen håndterer alt som kommer inn i routen til login
-app.use('/event', event)
-app.use('/post', article)
+app.use('/event', isRoot, event)
 app.use('/languague', lang)
 app.use('/admin', isAdmin, admin)
 app.use((req, res, next)=>{
-    // console.log(req.session.passport)
+    console.log(req.session.passport)
     next()
 })
 app.get('/', (req, res) =>{
