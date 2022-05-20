@@ -33,6 +33,17 @@ router.route('/admin')
         next()
     })
 
+router.route('/editor')
+    .put(async (req, res, next)=>{
+        await User.updateOne({email: req.body.email}, {editor: true})
+        next()
+    })
+    // fjern rolle
+    .delete(async (req, res, next)=>{
+        await User.updateOne({email: req.body.email}, {$set: {editor: false}})
+        next()
+    })
+
 router.route('/languague')
     .post(async (req, res, next)=>{
         const getEng = await Langstatic.findOne({'languague': 'eng'})

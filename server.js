@@ -62,7 +62,7 @@ app.use('/post', article)
 app.use('/languague', lang)
 app.use('/admin', isAdmin, admin)
 app.use((req, res, next)=>{
-    // console.log(req.session.passport)
+    console.log(req.session.passport)
     next()
 })
 app.get('/', (req, res) =>{

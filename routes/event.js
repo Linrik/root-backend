@@ -1,35 +1,56 @@
 const express = require('express'),
       router = express.Router(),
       Event = require('../config/eventSchema'),
-      comment = require('./comment')
+      comment = require('./comment'),
+      User = require('../config/userSchema'),
+      { isAdmin, isUser, isRoot, isEditor } = require('../routes/AuthMiddelware');
 
 router.route('/')
-    .post(async (req, res, next)=>{
-        console.log(req.body.user)
-        const text = req.body.text;
+    .post( isEditor, async (req, res, next)=>{
         const nyEvent = new Event({
-            posterid: req.session.passport.user.id,//må deserialisere brukeren for å hente relevant info
-            postername: req.session.passport.user.name,
+            poster: await User.findOne({  _id: req.session.passport.user.id}),
             tittel: req.body.tittel,
             text: req.body.text,
             dateFrom: req.body.dateFrom,
-            dateHourFrom: req.body.hourFrom,
             dateTo: req.body.dateTo,
-            dateHourTo: req.body.hourTo,
             bilde: req.body.bilde
         })
         await nyEvent.save((err) =>{
-            if(err) return err;
+            if(err) return err
             console.log("Event ble registrert")
         })
         next()
     })
-    .put(async (req, res, next)=>{
-        
+    .put(async (req, res, next) =>{
+        await Event.updateOne({_id: req.body.eventid}, 
+            {
+                tittel: req.body.tittel,
+                text: req.body.text,
+                dateFrom: req.body.dateFrom,
+                dateTo: req.body.dateTo
+            })
+        next()
     })
-    .delete(async (rew, res, next)=>{
+    .delete(async (req, res, next)=>{
+        await Event.deleteOne({_id: req.body.eventid})
+        next()
+    })
 
-    })
+    router.route('/participants')
+        .put(isUser, async (req, res, next)=>{
+            await Event.updateOne(
+                {_id: req.body.eventid},
+                {$push: {participants: await User.findById(req.session.passport.user.id)}}
+            )
+            next()
+        })
+        .delete(isUser, async (req, res, next)=>{
+            await Event.updateOne(
+                {_id: req.body.eventid},
+                {$pull: {participants: req.session.passport.user.id}}
+            )
+            next()
+        })
 
 //Router.route('/comment', comment)
 module.exports = router

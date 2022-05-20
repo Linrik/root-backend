@@ -15,6 +15,14 @@ module.exports.isRoot = (req, res, next)=>{
     }
 }
 
+module.exports.isEditor = (req, res, next) => {
+    if(this.isUser && req.user.editor){
+        next()
+    } else{
+        res.status(401).json({msg:"du må være editor for denne handlingen"})
+    }
+}
+
 module.exports.isAdmin = (req, res, next) => {
     if(this.isUser && req.user.admin){
         next()
