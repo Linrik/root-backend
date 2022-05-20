@@ -52,16 +52,19 @@ router.route('/')
     //login (ferdig)
     .get((req, res, next)=>{
         if(req.session.passport===undefined){
-            res.json({loginStatus:"loggedOut"});
+            res.json({loginStatus:false});
         } else {
             res.json({
-                loginStatus:"loggedIn",
+                loginStatus:true,
                 user: req.session.passport.user
             })
         }
     })
     .post(passport.authenticate('local'), (req, res, next) => {
-        res.json({user:req.session.passport.user})
+        res.json({
+            loginStatus:true,
+            user:req.session.passport.user
+        })
         next()
     })
     // endre på bruker (ferdig, men må testes)
