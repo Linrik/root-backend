@@ -4,7 +4,8 @@ const mongoose = require("mongoose"),
 const commentSchema = new mongoose.Schema({
     user: [String],
     comment: String,
-    reply: [String]// lagrer id til andre kommentarer som svarer på kommentaren
+    reply: [String],// lagrer id til andre kommentarer som svarer på kommentaren
+    postedAt: {type: Date, default: Date.now}
 })
 
 module.exports = commentSchema;

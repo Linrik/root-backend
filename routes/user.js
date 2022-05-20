@@ -49,7 +49,6 @@ router.route('/signup')
 
 // laget login som bruker localstrategy fra passport
 router.route('/')
-    //login (ferdig)
     .get((req, res, next)=>{
         if(req.session.passport===undefined){
             res.json({loginStatus:false});
@@ -60,11 +59,13 @@ router.route('/')
             })
         }
     })
+    //login (ferdig)
     .post(passport.authenticate('local'), (req, res, next) => {
         res.json({
             loginStatus:true,
             user:req.session.passport.user
         })
+ 
         next()
     })
     // endre på bruker (ferdig, men må testes)

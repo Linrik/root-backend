@@ -3,11 +3,15 @@ const mongoose = require("mongoose"),
       User = require('./userSchema')
 
 const articleSchema = new mongoose.Schema({
-   poster: User,
+   poster: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: User
+   },
    tittel: String,
    text: String,
-   bilde: [String],
-   comments: [Comment]
+   image: [String],
+   comments: [Comment],
+   postedAt: {type: Date, default: Date.now}
 })
 
-module.exports = mongoose.model("Article", articleSchema, "artivle");
+module.exports = mongoose.model("Article", articleSchema, "article");
