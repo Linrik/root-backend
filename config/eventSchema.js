@@ -16,7 +16,8 @@ const eventSchema = new mongoose.Schema({
    dateHourTo: Number,
    bilde: [String],
    participants: [String], // referanse til user
-   comments: [Comment] // referanse til kommentar http://bit.ly/mongoose-schematypes
+   comments: [Comment], // referanse til kommentar http://bit.ly/mongoose-schematypes
+   postedAt: {type: Date, default: Date.now}
 })
 
 module.exports = mongoose.model("Event", eventSchema, "event");

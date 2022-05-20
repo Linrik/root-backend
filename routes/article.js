@@ -1,10 +1,11 @@
 const express = require('express'),
       router = express.Router(),
-      Event = require('../config/eventSchema'),
-      comment = require('./comment')
-
+      User = require('../config/userSchema'),
+      passport = require('passport')
+    
+// laget api som registrerer bruker med encryptet hash passord
 router.route('/')
-    .post(async (req, res, next)=>{
+    .post(async (req, res, next) => {
         console.log(req.body.user)
         const text = req.body.text;
         const nyEvent = new Event({
@@ -24,13 +25,12 @@ router.route('/')
         })
         next()
     })
-    .put(async (req, res, next)=>{
+    .get(async (req, res, next) =>{
         
     })
-    .delete(async (rew, res, next)=>{
+    .update(async (req, res, next) =>{
 
     })
+    .delete(async (req, res, next)=>{
 
-//Router.route('/comment', comment)
-module.exports = router
-//sjekk løsninger på poster
+    })

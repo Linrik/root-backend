@@ -7,7 +7,8 @@ const articleSchema = new mongoose.Schema({
    tittel: String,
    text: String,
    bilde: [String],
-   comments: [Comment]
+   comments: [Comment],
+   postedAt: {type: Date, default: Date.now}
 })
 
 module.exports = mongoose.model("Article", articleSchema, "artivle");
