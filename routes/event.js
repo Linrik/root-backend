@@ -29,10 +29,13 @@ router.route('/')
             dateTo: req.body.dateTo
         })
         await nyEvent.save((err) =>{
-            if(err) return err
+            if(err) {
+                return err
+            } else {
+                res.json({status: "200"});
+            }
             console.log("Event ble registrert")
         })
-        res.json({status: "200"});
         next()
     })
     .put(isEditor, async (req, res, next) =>{
