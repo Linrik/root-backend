@@ -10,7 +10,7 @@ router.route('/')
     .post(isEditor, async (req, res, next) => {
         const newArticle = new Article({
             user: await User.findOne({  _id: req.session.passport.user.id}),
-            tittel: req.body.tittel,
+            title: req.body.title,
             description: req.body.description,
             image: req.body.image
         })
@@ -36,7 +36,7 @@ router.route('/')
     .put(isEditor, async (req, res, next) =>{
         await Article.updateOne({_id: req.body.articletid}, 
             {
-                tittel: req.body.tittel,
+                title: req.body.title,
                 description: req.body.description,
                 image: req.body.image
             })

@@ -23,7 +23,7 @@ router.route('/')
     .post( isEditor, async (req, res, next)=>{
         const nyEvent = new Event({
             user: await User.findOne({  _id: req.session.passport.user.id}),
-            tittel: req.body.tittel,
+            title: req.body.title,
             description: req.body.description,
             dateFrom: req.body.dateFrom,
             dateTo: req.body.dateTo,
@@ -38,7 +38,7 @@ router.route('/')
     .put(isEditor, async (req, res, next) =>{
         await Event.updateOne({_id: req.body.eventid}, 
             {
-                tittel: req.body.tittel,
+                title: req.body.title,
                 description: req.body.description,
                 dateFrom: req.body.dateFrom,
                 dateTo: req.body.dateTo
