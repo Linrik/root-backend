@@ -11,7 +11,7 @@ const eventSchema = new mongoose.Schema({
    text: String,
    dateFrom: Date,
    dateTo: Date,
-   image: [String],
+   image: String,
    participants: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: User

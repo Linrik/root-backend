@@ -6,6 +6,11 @@ const express = require('express'),
       { isAdmin, isUser, isRoot, isEditor } = require('../routes/AuthMiddelware');
 
 router.route('/')
+    .get(async (req, res, next)=>{
+        const events = await  Event.find({}).sort({dateFrom: 1})
+        res.json(events)
+        next()
+    })
     .post( isEditor, async (req, res, next)=>{
         const nyEvent = new Event({
             poster: await User.findOne({  _id: req.session.passport.user.id}),
@@ -21,7 +26,7 @@ router.route('/')
         })
         next()
     })
-    .put(async (req, res, next) =>{
+    .put(isEditor, async (req, res, next) =>{
         await Event.updateOne({_id: req.body.eventid}, 
             {
                 tittel: req.body.tittel,
@@ -31,10 +36,18 @@ router.route('/')
             })
         next()
     })
-    .delete(async (req, res, next)=>{
+    .delete(isEditor, async (req, res, next)=>{
         await Event.deleteOne({_id: req.body.eventid})
         next()
     })
+
+    router.route('/:id')
+        .get(async (req, res, next)=>{
+           await Event.findById({_id: req.params.id}, (err, doc) =>{
+                if(err) return res.json("Event ikke funnet")
+                res.json(doc)
+            })
+        })
 
     router.route('/participants')
         .put(isUser, async (req, res, next)=>{

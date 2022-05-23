@@ -3,7 +3,7 @@ module.exports.isUser = (req, res, next)=>{
     if(req.isAuthenticated()){
         next()
     } else{
-        res.status(401).json({msg:"du må være logget inn for dette"})
+        res.status(401).json({msg:"du må være logget inn for denne handlingen"})
     }
 }
 
@@ -11,7 +11,7 @@ module.exports.isRoot = (req, res, next)=>{
     if(this.isUser && req.user.rootMember){
         next()
     } else{
-        res.status(401).json({msg:"du må være Root medlem for å se dette"})
+        res.status(401).json({msg:"du må være Root medlem for denne handlingen"})
     }
 }
 
@@ -27,6 +27,6 @@ module.exports.isAdmin = (req, res, next) => {
     if(this.isUser && req.user.admin){
         next()
     } else{
-        res.status(401).json({msg:"du må være admin får å se dette"})
+        res.status(401).json({msg:"du må være admin for denne handlingen"})
     }
 }

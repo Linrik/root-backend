@@ -9,7 +9,7 @@ const articleSchema = new mongoose.Schema({
    },
    tittel: String,
    text: String,
-   image: [String],
+   image: String,
    comments: [Comment],
    postedAt: {type: Date, default: Date.now}
 })
