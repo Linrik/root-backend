@@ -9,10 +9,10 @@ const express = require('express'),
 router.route('/')
     .post(isEditor, async (req, res, next) => {
         const newArticle = new Article({
-            poster: await User.findOne({  _id: req.session.passport.user.id}),
+            user: await User.findOne({  _id: req.session.passport.user.id}),
             tittel: req.body.tittel,
-            text: req.body.text,
-            image: req.body.bilde
+            description: req.body.description,
+            image: req.body.image
         })
         await newArticle.save((err) =>{
             if(err) return err;
@@ -21,7 +21,15 @@ router.route('/')
         next()
     })
     .get(async (req, res, next)=>{
-        const articles = await  Article.find({}).sort({postedAt: -1})
+        const articles = await Article.find({}).sort({postedAt: -1})
+        .populate('user', 'name')
+        .populate({
+            path: 'comments',
+            populate: {
+                path: 'user',
+                select: 'name'
+            },
+        })
         res.json(articles)
         next()
     })
@@ -29,8 +37,8 @@ router.route('/')
         await Article.updateOne({_id: req.body.articletid}, 
             {
                 tittel: req.body.tittel,
-                text: req.body.text,
-                image: req.body.bilde
+                description: req.body.description,
+                image: req.body.image
             })
     })
     .delete(isEditor, async (req, res, next)=>{

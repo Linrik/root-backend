@@ -7,18 +7,27 @@ const express = require('express'),
 
 router.route('/')
     .get(async (req, res, next)=>{
-        const events = await  Event.find({}).sort({dateFrom: 1})
+        const events = await Event.find({}).sort({dateFrom: 1})
+        .populate('user', 'name')
+        .populate('participants', 'name')
+        .populate({
+            path: 'comments',
+            populate: {
+                path: 'user',
+                select: 'name'
+            },
+        })
         res.json(events)
         next()
     })
     .post( isEditor, async (req, res, next)=>{
         const nyEvent = new Event({
-            poster: await User.findOne({  _id: req.session.passport.user.id}),
+            user: await User.findOne({  _id: req.session.passport.user.id}),
             tittel: req.body.tittel,
-            text: req.body.text,
+            description: req.body.description,
             dateFrom: req.body.dateFrom,
             dateTo: req.body.dateTo,
-            bilde: req.body.bilde
+            description: req.body.description
         })
         await nyEvent.save((err) =>{
             if(err) return err
@@ -30,7 +39,7 @@ router.route('/')
         await Event.updateOne({_id: req.body.eventid}, 
             {
                 tittel: req.body.tittel,
-                text: req.body.text,
+                description: req.body.description,
                 dateFrom: req.body.dateFrom,
                 dateTo: req.body.dateTo
             })
@@ -67,4 +76,3 @@ router.route('/')
 
 //Router.route('/comment', comment)
 module.exports = router
-//sjekk løsninger på poster

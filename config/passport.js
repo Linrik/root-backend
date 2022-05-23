@@ -23,7 +23,7 @@ const User = require('./userSchema'),
 // laget sjekker som sjekker hvilken rolle du har og tar det med i passport fieldet i session
   passport.serializeUser(function(user, cb) {
     process.nextTick(function() {
-      cb(null, {id:user.id, name:user.name, email:user.email, rootMember: user.rootMember, admin: user.admin, editor: user.editor})
+      cb(null, {id:user.id, firstname:user.firstname, lastname: user.lastname, email:user.email, rootMember: user.rootMember, admin: user.admin, editor: user.editor})
     });
   });
 

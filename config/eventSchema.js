@@ -3,12 +3,12 @@ const mongoose = require("mongoose"),
       User = require('./userSchema')
 
 const eventSchema = new mongoose.Schema({
-   poster: {
+   user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: User
    },
    tittel: String,
-   text: String,
+   description: String,
    dateFrom: Date,
    dateTo: Date,
    image: String,
@@ -16,8 +16,11 @@ const eventSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: User
    }], // referanse til user
-   comments: [Comment], // referanse til kommentar http://bit.ly/mongoose-schematypes
-   postedAt: {type: Date, default: Date.now}
+   comments: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: Comment
+   }],
+   postedAt: {type: Date, default: Date.now}// tiden lagres på utc ikke utc+2
 })
 
 module.exports = mongoose.model("Event", eventSchema, "event");
