@@ -32,6 +32,7 @@ router.route('/')
             if(err) return err
             console.log("Event ble registrert")
         })
+        res.json({status: "200"});
         next()
     })
     .put(isEditor, async (req, res, next) =>{
