@@ -16,8 +16,8 @@ router.route('/signup')
             //registrer bruker
             const nyBruker = new User({
                 email: req.body.email.toLowerCase(),
-                // bytte til fornavn etternavn
-                name: req.body.name,
+                firstname: req.body.firstname,
+                lastname: req.body.lastname,
                 password: req.body.password,
             })
             const exists = false;
@@ -30,19 +30,20 @@ router.route('/signup')
         }
     })
 
-// router.route('/getsignup')
-//     .get(async (req, res, next) => {
-//         const nyBruker = new User({
-//             email: "aa@bb.cc",
-//             name: "Krister Iversen Admin",
-//             password: "Pass*123",
-//         })
-//         await nyBruker.save((err)=>{
-//             if(err) return err;
-//             console.log("Bruker ble registrert")
-//         })
-//         res.send("Bruker registrert")
-//     })
+router.route('/getsignup')
+    .get(async (req, res, next) => {
+        const nyBruker = new User({
+            email: "aa@bb.cc",
+            firstname: "Krister \"Bjelke\"",
+            lastname: "Iversen",
+            password: "Pass*123",
+        })
+        await nyBruker.save((err)=>{
+            if(err) return err;
+            console.log("Bruker ble registrert")
+        })
+        res.send("Bruker registrert")
+    })
 
 // laget login som bruker localstrategy fra passport
 router.route('/')
