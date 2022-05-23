@@ -30,7 +30,7 @@ router.route('/')
         })
         await nyEvent.save((err) =>{
             if(err) {
-                return err
+                res.json({err: err});
             } else {
                 res.json({status: "200"});
             }
