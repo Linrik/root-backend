@@ -7,7 +7,7 @@ const eventSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: User
    },
-   tittel: String,
+   title: String,
    description: String,
    dateFrom: Date,
    dateTo: Date,

@@ -19,6 +19,6 @@ const logger = winston.createLogger({
     ]
 })
 logger.log({
-    level: levels[0],
-
+    level: 'info',
+    message: 'dette er en test'
 })
