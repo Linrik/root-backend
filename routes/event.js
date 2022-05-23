@@ -26,8 +26,7 @@ router.route('/')
             title: req.body.title,
             description: req.body.description,
             dateFrom: req.body.dateFrom,
-            dateTo: req.body.dateTo,
-            description: req.body.description
+            dateTo: req.body.dateTo
         })
         await nyEvent.save((err) =>{
             if(err) return err
