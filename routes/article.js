@@ -1,12 +1,13 @@
+const { isEditor } = require('./AuthMiddelware');
+
 const express = require('express'),
       router = express.Router(),
       User = require('../config/userSchema'),
       passport = require('passport'),
       Article = require('../config/articleSchema')
-    
 // laget api som registrerer bruker med encryptet hash passord
 router.route('/')
-    .post(async (req, res, next) => {
+    .post(isEditor, async (req, res, next) => {
         const newArticle = new Article({
             poster: await User.findOne({  _id: req.session.passport.user.id}),
             tittel: req.body.tittel,
@@ -19,23 +20,29 @@ router.route('/')
         })
         next()
     })
-    .get(async (req, res, next) =>{
-        
+    .get(async (req, res, next)=>{
+        const articles = await  Article.find({}).sort({postedAt: -1})
+        res.json(articles)
+        next()
     })
-    .put(async (req, res, next) =>{
-        const article = new Article({
-            tittel: req.body.tittel,
-            text: req.body.text,
-            image: req.body.bilde
+    .put(isEditor, async (req, res, next) =>{
+        await Article.updateOne({_id: req.body.articletid}, 
+            {
+                tittel: req.body.tittel,
+                text: req.body.text,
+                image: req.body.bilde
+            })
+    })
+    .delete(isEditor, async (req, res, next)=>{
+        await Article.deleteOne({_id: req.body.articleid})
+        next()
+    })
+
+    router.route('/:id')
+        .get(async (req, res, next)=>{
+           await Article.findById({_id: req.params.id}, (err, doc) =>{
+                if(err) return res.json("Artikkel ikke funnet")
+                res.json(doc)
+            })
         })
-        await Article.findByIdAndUpdate(req.body.postid, {article})
-    })
-    .delete(async (req, res, next)=>{
-        await Article.findById(req.body.postid, function(err){
-            if (err){
-                return err;
-            }
-            article.deleteOne({_id: req.body.postid})
-        })
-    })
     module.exports = router

@@ -2,7 +2,6 @@ require('dotenv').config();
 require('./config/passport')
 const express = require('express'),
       mongoose = require('mongoose'),
-      bcrypt = require('bcrypt'),
       passport = require('passport'),
       user = require('./routes/user'),
       app = express(),
@@ -15,7 +14,6 @@ const admin = require('./routes/admin'),
       lang = require('./routes/languague'),
       article = require('./routes/article'),
       port = process.env.PORT,
-      
       { isAdmin, isUser, isRoot } = require('./routes/AuthMiddelware');
 
 const dbOptions = {
@@ -58,7 +56,7 @@ app.use(passport.session())
 app.use(passport.authenticate('session'))
 app.use('/user', user) //filen håndterer alt som kommer inn i routen til login
 app.use('/event', event)
-app.use('/post', article)
+app.use('/article', article)
 app.use('/languague', lang)
 app.use('/admin', isAdmin, admin)
 app.use((req, res, next)=>{

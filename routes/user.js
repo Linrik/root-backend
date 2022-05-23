@@ -13,23 +13,20 @@ const isEmail = (email)=> {
 router.route('/signup')
     .post(async (req, res, next) => {
         if(isEmail(req.body.email.toLowerCase())){
-            if(true){
-                //registrer bruker
-                const nyBruker = new User({
-                    email: req.body.email.toLowerCase(),
-                    name: req.body.name,
-                    password: req.body.password,
-                })
-                await nyBruker.save((err)=>{
-                    if(err) return err;
-                    console.log("Bruker ble registrert")
-                })
-                res.send("Bruker registrert")
-            }else{
-                res.send("E-post allerede i bruk")
-            }
+            //registrer bruker
+            const nyBruker = new User({
+                email: req.body.email.toLowerCase(),
+                // bytte til fornavn etternavn
+                name: req.body.name,
+                password: req.body.password,
+            })
+            const exists = false;
+            await nyBruker.save((err)=>{
+                if(err) return res.json("E-post allerede i bruk")
+                res.json("Bruker registrert")
+            })
         } else{
-            res.send("Ugyldig Email")        
+            res.json("Ugyldig Email")
         }
     })
 
@@ -65,7 +62,6 @@ router.route('/')
             loginStatus:true,
             user:req.session.passport.user
         })
- 
         next()
     })
     // endre på bruker (ferdig, men må testes)
@@ -75,7 +71,8 @@ router.route('/')
             bcrypt.compare(req.body.password, user.password, async function(erro, isMatch) {
                 await User.updateOne({email: req.user.email},
                     {email: req.body.email, 
-                    name: req.body.name,
+                    firstname: req.body.firstname,
+                    lastname: req.body.lastname,
                     password: req.body.newPassword})
 
                     req.session.passport.user.email = req.body.email

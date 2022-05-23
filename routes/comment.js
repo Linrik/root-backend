@@ -1,4 +1,3 @@
-const { deleteOne } = require('../config/userSchema')
 
 const express = require('express'),
       router = express.Router(),
