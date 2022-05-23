@@ -29,7 +29,11 @@ router.route('/')
             dateTo: req.body.dateTo
         })
         await nyEvent.save((err) =>{
-            if(err) return err
+            if(err) {
+                res.json({err: err});
+            } else {
+                res.json({status: "200"});
+            }
             console.log("Event ble registrert")
         })
         next()

@@ -30,6 +30,9 @@ const db = mongoose.connect(conn, ()=> {
 }, e => console.error(e));
 
 const corsOptions = {
+    "Access-Control-Allow-Origin": "http://localhost:3000",
+    "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "Access-Control-Allow-Methods": "PUT, GET, POST, DELETE, OPTIONS",
     origin: true,
     optionSuccesStatus: 200,
     credentials: true
