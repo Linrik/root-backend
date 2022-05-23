@@ -32,6 +32,7 @@ router.route('/')
             if(err) return err
             console.log("Event ble registrert")
         })
+        res.json('sdfg')
         next()
     })
     .put(isEditor, async (req, res, next) =>{
