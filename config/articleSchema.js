@@ -3,14 +3,17 @@ const mongoose = require("mongoose"),
       User = require('./userSchema')
 
 const articleSchema = new mongoose.Schema({
-   poster: {
+   user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: User
    },
    tittel: String,
-   text: String,
+   description: String,
    image: String,
-   comments: [Comment],
+   comments: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: Comment
+   }],
    postedAt: {type: Date, default: Date.now}
 })
 

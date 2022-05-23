@@ -2,10 +2,16 @@ const mongoose = require("mongoose"),
       User = require('./userSchema')
 
 const commentSchema = new mongoose.Schema({
-    user: [String],
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: User
+     },
     comment: String,
-    reply: [String],// lagrer id til andre kommentarer som svarer på kommentaren
+    reply: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: this
+    }],// lagrer id til andre kommentarer som svarer på kommentaren
     postedAt: {type: Date, default: Date.now}
 })
 
-module.exports = commentSchema;
+module.exports = mongoose.model("Comment", commentSchema, "comment");
