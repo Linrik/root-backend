@@ -43,7 +43,8 @@ router.route('/')
                 dateFrom: req.body.dateFrom,
                 dateTo: req.body.dateTo
             })
-        next()
+        // next()
+        res.json({status: 200})
     })
     .delete(isEditor, async (req, res, next)=>{
         await Event.deleteOne({_id: req.body.eventid})
