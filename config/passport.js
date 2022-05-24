@@ -9,8 +9,8 @@ const User = require('./userSchema'),
       usernameField: 'email',
       passReqToCallback: true
     },
-    function(req, email, password, done) {
-      User.findOne({ email: email.toLowerCase() }).select("+password").then((user) => {  
+    async function(req, email, password, done) {
+      await User.findOne({ email: email.toLowerCase() }).select("+password").then((user) => {  
         if (!user) { return done(null, false); }
         bcrypt.compare(password, user.password, function(erro, isMatch) {
           if (erro) return done(erro);

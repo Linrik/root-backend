@@ -68,7 +68,6 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(passport.authenticate('session'))
-
 app.use('/user', user, appLog) //filen håndterer alt som kommer inn i routen til login
 app.use('/event', event, appLog)
 app.use('/article', article, appLog)
@@ -76,11 +75,12 @@ app.use('/comment', comment, appLog)
 app.use('/languague', lang, appLog)
 app.use('/admin', isAdmin, admin, appLog)
 app.use((req, res, next)=>{
-    console.log(req.user)
+    //console.log(req.session.passport.user)
     next()
 })
 
 app.get('/', (req, res) =>{
+    console.log(req.session.passport.user)
     res.send("123")
 })
 
