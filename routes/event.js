@@ -49,6 +49,16 @@ router.route('/')
             event.save()
         })
         next()
+        /*        
+        await Event.updateOne({_id: req.body.eventid}, 
+            {
+                title: req.body.title,
+                description: req.body.description,
+                dateFrom: req.body.dateFrom,
+                dateTo: req.body.dateTo
+            })
+        // next()
+        res.json({status: 200})*/ 
     })
     .delete(isEditor, async (req, res, next)=>{
         await Event.deleteOne({_id: req.body.eventid})
