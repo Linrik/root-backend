@@ -14,7 +14,7 @@ const admin = require('./routes/admin'),
       article = require('./routes/article'),
       user = require('./routes/user'),
       comment = require('./routes/comment'),
-      logger = require('./config/logger'),
+      { appLog } = require('./routes/logMiddleware'),
       port = process.env.PORT,
       { isAdmin, isUser, isRoot } = require('./routes/AuthMiddelware');
 
@@ -68,25 +68,17 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(passport.authenticate('session'))
-app.use('/user', user) //filen håndterer alt som kommer inn i routen til login
-app.use('/event', event)
-app.use('/article', article)
-app.use('/comment', comment)
-app.use('/languague', lang)
-app.use('/admin', isAdmin, admin)
+
+app.use('/user', user, appLog) //filen håndterer alt som kommer inn i routen til login
+app.use('/event', event, appLog)
+app.use('/article', article, appLog)
+app.use('/comment', comment, appLog)
+app.use('/languague', lang, appLog)
+app.use('/admin', isAdmin, admin, appLog)
 app.use((req, res, next)=>{
     console.log(req.user)
     next()
 })
-/*
-app.use((req, res, next)=>{
-    logger.log({
-        level: 'info',
-        email: req.session.passport.user.email,
-        message: 'dette er en test'
-    })
-    next()
-})*/
 
 app.get('/', (req, res) =>{
     res.send("123")
