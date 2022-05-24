@@ -36,18 +36,15 @@ router.route('/')
         res.json({status: 200})
     })
     .put(isEditor, async (req, res, next) =>{
-
-        await Event.findById({_id: req.body.eventid},  (err, event) =>{
-            if (err) res.json('kunne ikke finne event')
-            console.log(event)
-            event.title = req.body.title
-            event.description = req.body.description
-            event.dateFrom = req.body.dateFrom
-            event.dateTo = req.body.dateTo
-            event.save()
-        })
+        await Event.updateOne({_id: req.body.eventid}, 
+            {
+                title: req.body.title,
+                description: req.body.description,
+                dateFrom: req.body.dateFrom,
+                dateTo: req.body.dateTo
+            })
+        res.json({status: 200})
         next()
-
     })
     .delete(isEditor, async (req, res, next)=>{
         await Event.deleteOne({_id: req.body.eventid})
