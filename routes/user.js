@@ -31,7 +31,10 @@ router.route('/signup')
                 } else{
                     res.locals.level = 'info'
                     res.locals.message = 'Bruker ble registrert'
-                    res.json("Bruker registrert")
+                    req.login(nyBruker, function(err) {
+                    if (err) { return next(err); }
+                        res.redirect('/');
+                    });
                 }
             })
         } else{
