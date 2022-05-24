@@ -14,6 +14,7 @@ const admin = require('./routes/admin'),
       article = require('./routes/article'),
       user = require('./routes/user'),
       comment = require('./routes/comment'),
+      logger = require('./config/logger'),
       port = process.env.PORT,
       { isAdmin, isUser, isRoot } = require('./routes/AuthMiddelware');
 
@@ -74,12 +75,23 @@ app.use('/comment', comment)
 app.use('/languague', lang)
 app.use('/admin', isAdmin, admin)
 app.use((req, res, next)=>{
-    console.log(req.session.passport)
+    console.log(req.user)
     next()
 })
+/*
+app.use((req, res, next)=>{
+    logger.log({
+        level: 'info',
+        email: req.session.passport.user.email,
+        message: 'dette er en test'
+    })
+    next()
+})*/
+
 app.get('/', (req, res) =>{
     res.send("123")
 })
+
 
 app.listen(port, () => {
     console.log(`Listening to ${port}`)
