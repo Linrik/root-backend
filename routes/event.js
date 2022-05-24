@@ -29,16 +29,14 @@ router.route('/')
             dateTo: req.body.dateTo
         })
         await nyEvent.save((err) =>{
-            if(err) {
-                res.json({err: err});
-            } else {
-                res.json({status: "200"});
-            }
+            if(err) return err
             console.log("Event ble registrert")
         })
-        next()
+        // next()
+        res.json({status: 200})
     })
     .put(isEditor, async (req, res, next) =>{
+
         await Event.findById({_id: req.body.eventid},  (err, event) =>{
             if (err) res.json('kunne ikke finne event')
             console.log(event)
@@ -49,6 +47,7 @@ router.route('/')
             event.save()
         })
         next()
+
     })
     .delete(isEditor, async (req, res, next)=>{
         await Event.deleteOne({_id: req.body.eventid})
