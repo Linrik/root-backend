@@ -48,7 +48,8 @@ router.route('/')
     })
     .delete(isEditor, async (req, res, next)=>{
         await Event.deleteOne({_id: req.body.eventid})
-        next()
+        // next()
+        res.json({status: 200})
     })
 
     router.route('/:id')
