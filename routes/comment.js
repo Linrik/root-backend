@@ -14,31 +14,48 @@ router.route('/:type')
             comment: req.body.comment
         })
         await comment.save((err)=>{
-            if(err) return res.json(err)
+            if(err){
+                res.locals.level = 'info'
+                res.locals.message = 'skjedde feil under lagring av kommentar'
+                next()
+                return res.json(err)
+            } 
         })
         if(req.params.type === 'event'){
-        await Event.updateOne({_id: req.body.postid},
-            {$push: {comments: comment}} )
+            await Event.updateOne({_id: req.body.postid},
+                {$push: {comments: comment}} )
+                res.locals.level = 'info'
+                res.locals.message = 'Bruker har kommentert på event'
+                next()
         } else if(req.params.type === 'article'){
             await Article.updateOne({_id: req.body.postid},
                 {$push: {comments: comment}} )
+                res.locals.level = 'info'
+                res.locals.message = 'Bruker har kommentert på artikkel'
+                next()
         }
-        next()
     })
     .put(async (req, res, next) => {
-        Comment.findOne({_id: req.body.commentid}).then((comment)=>{ //kan lage metode for å verifisere brukeren til kommentaren
+        Comment.findOne({_id: req.body.commentid}).then((comment)=>{ 
             User.findOne({user: comment.user}).then(async (user)=>{
-                if(comment.user === user){
+                if(comment.user === req.session.passport.user){
                     await Comment.updateOne({comment: comment._id},
                         {comment: req.body.newComment})
-                } else{ return done(null, false)}//fikse opp i bedre tilbakemelding
+                        res.locals.level = 'info'
+                        res.locals.message = 'Bruker har endret kommentar'
+                        next()
+                } else{ 
+                    res.locals.level = 'info'
+                    res.locals.message = 'Kan ikke endre andres kommentarer'
+                    next()
+                    return done(null, false)
+                }
             })
         })
-        next()
+        
     })
     .delete(isUser, async (req, res, next)=>{
         const comment = await Comment.findById({_id: req.body.commentid})
-        console.log(comment)
         if(req.session.passport.user.id == comment.user){
             if(req.params.type === 'event'){
                 await Event.updateOne(
@@ -52,6 +69,8 @@ router.route('/:type')
                 )
             }
             await Comment.deleteOne({_id: req.body.commentid})
+            res.locals.level = 'info'
+            res.locals.message = 'Bruker slettet komentaren sin'
         }
         next()
     })
