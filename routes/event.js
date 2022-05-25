@@ -83,6 +83,7 @@ router.route('/')
             res.locals.level = 'info'
             res.locals.message = `Event slettet ${doc}`
             await Event.deleteOne({_id: req.body.eventid})
+            res.json({status: 200})
             next()
         })
     })

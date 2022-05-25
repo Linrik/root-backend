@@ -60,7 +60,9 @@ router.route('/')
                     return err
                 }
                 res.locals.level = 'info'
+
                 res.locals.message = `Artikkel endret ${change}`
+                res.json({status: 200})
                 next()
             })
             
@@ -77,6 +79,7 @@ router.route('/')
             res.locals.level = 'info'
             res.locals.message = `Artikkel slettet ${doc}`
             await Article.deleteOne({_id: req.body.articleid})
+            res.json({status: 200})
             next()
         })
     })
