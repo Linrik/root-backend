@@ -3,7 +3,9 @@ const express = require('express'),
       Event = require('../config/eventSchema'),
       comment = require('./comment'),
       User = require('../config/userSchema'),
-      { isAdmin, isUser, isRoot, isEditor } = require('../routes/AuthMiddelware');
+      { isAdmin, isUser, isRoot, isEditor } = require('../routes/AuthMiddelware'),
+      {upload} = require('../config/storageSetup');
+
 
 router.route('/')
     .get(async (req, res, next)=>{
@@ -20,7 +22,8 @@ router.route('/')
         res.json(events)
         next()
     })
-    .post( isEditor, async (req, res, next)=>{
+    .post( isEditor, upload.single('file'), async (req, res, next)=>{
+        console.log(req.file)
         const nyEvent = new Event({
             user: await User.findOne({  _id: req.session.passport.user.id}),
             title: req.body.title,
@@ -35,7 +38,7 @@ router.route('/')
         // next()
         res.json({status: 200})
     })
-    .put(isEditor, async (req, res, next) =>{
+    .put(isEditor, upload.single('file'), async (req, res, next) =>{
         await Event.updateOne({_id: req.body.eventid}, 
             {
                 title: req.body.title,

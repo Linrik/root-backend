@@ -68,6 +68,9 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(passport.authenticate('session'))
+
+app.use('/resources', express.static('resources'))
+
 app.use('/user', user, appLog) //filen håndterer alt som kommer inn i routen til login
 app.use('/event', event, appLog)
 app.use('/article', article, appLog)
