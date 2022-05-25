@@ -34,7 +34,7 @@ router.route('/')
         next()
     })
     .put(isEditor, async (req, res, next) =>{
-        await Article.updateOne({_id: req.body.articletid}, 
+        await Article.updateOne({_id: req.body.articleid}, 
             {
                 title: req.body.title,
                 description: req.body.description,
