@@ -53,6 +53,21 @@ router.route('/editor')
         res.locals.message = `Admin fjernet editor rettigheter til ${req.body.email}`
         next()
     })
+router.route('/log')
+    // skru på
+    .put(async (req, res, next)=>{
+        await User.updateOne({email: req.body.email}, {editor: true})
+        res.locals.level = 'info'
+        res.locals.message = `Admin ga editor rettigheter til ${req.body.email}`
+        next()
+    })
+    // skru av
+    .delete(async (req, res, next)=>{
+        await User.updateOne({email: req.body.email}, {$set: {editor: false}})
+        res.locals.level = 'info'
+        res.locals.message = `Admin fjernet editor rettigheter til ${req.body.email}`
+        next()
+    })
 
 module.exports = router;
 

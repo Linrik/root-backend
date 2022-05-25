@@ -16,7 +16,7 @@ router.route('/:type')
         await comment.save((err)=>{
             if(err){
                 res.locals.level = 'info'
-                res.locals.message = 'skjedde feil under lagring av kommentar'
+                res.locals.message = `skjedde feil under lagring av kommentar ${err}`
                 next()
                 return res.json(err)
             } 
@@ -25,13 +25,13 @@ router.route('/:type')
             await Event.updateOne({_id: req.body.postid},
                 {$push: {comments: comment}} )
                 res.locals.level = 'info'
-                res.locals.message = 'Bruker har kommentert på event'
+                res.locals.message = `Bruker har kommentert på event ${comment}`
                 next()
         } else if(req.params.type === 'article'){
             await Article.updateOne({_id: req.body.postid},
                 {$push: {comments: comment}} )
                 res.locals.level = 'info'
-                res.locals.message = 'Bruker har kommentert på artikkel'
+                res.locals.message = `Bruker har kommentert på artikkel ${comment}`
                 next()
         }
     })
@@ -42,11 +42,11 @@ router.route('/:type')
                     await Comment.updateOne({comment: comment._id},
                         {comment: req.body.newComment})
                         res.locals.level = 'info'
-                        res.locals.message = 'Bruker har endret kommentar'
+                        res.locals.message = `Bruker har endret kommentar ${req.body.newComment}`
                         next()
                 } else{ 
                     res.locals.level = 'info'
-                    res.locals.message = 'Kan ikke endre andres kommentarer'
+                    res.locals.message = `Kan ikke endre andres kommentarer`
                     next()
                     return done(null, false)
                 }
@@ -68,11 +68,12 @@ router.route('/:type')
                     {$pull: {comments: req.body.commentid}}
                 )
             }
-            await Comment.deleteOne({_id: req.body.commentid})
-            res.locals.level = 'info'
-            res.locals.message = 'Bruker slettet komentaren sin'
+            await Comment.deleteOne({_id: req.body.commentid}, (err, doc)=>{
+                res.locals.level = 'info'
+                res.locals.message = `Bruker slettet komentaren sin ${doc}`
+                next()
+            })  
         }
-        next()
     })
         
 

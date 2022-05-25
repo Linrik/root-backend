@@ -31,15 +31,15 @@ router.route('/')
             dateFrom: req.body.dateFrom,
             dateTo: req.body.dateTo
         })
-        nyEvent.save((err) =>{
+        nyEvent.save((err, doc) =>{
             if(err){
                 res.locals.level = 'error'
-                res.locals.message = 'feil under lagring av event'
+                res.locals.message = `feil under lagring av event ${err}`
                 next()
                 return err
             }
             res.locals.level = 'info'
-            res.locals.message = 'Event laget'
+            res.locals.message = `Event laget ${doc}`
             next()
         })
         res.json({status: 200})
@@ -52,19 +52,27 @@ router.route('/')
                 description: req.body.description,
                 dateFrom: req.body.dateFrom,
                 dateTo: req.body.dateTo
+            }, (err, doc)=>{
+                res.locals.level = 'info'
+                res.locals.message = `Event endret ${doc}`
+                res.json({status: 200})
+                next()
             })
-        res.locals.level = 'info'
-        res.locals.message = 'Event endret'
-        res.json({status: 200})
-        next()
+        
     })
     .delete(isEditor, async (req, res, next)=>{
-        await Event.deleteOne({_id: req.body.eventid})
-
-        res.locals.level = 'info'
-        res.locals.message = 'Event slettet'
-        next()
-
+         Event.findById({_id: req.body.eventid}, async (err, doc)=>{
+            if(err){
+                res.locals.level = 'error'
+                res.locals.message = `Noe gikk galt ${err}`
+                next()
+                return err
+            }
+            res.locals.level = 'info'
+            res.locals.message = `Event slettet ${doc}`
+            await Event.deleteOne({_id: req.body.eventid})
+            next()
+        })
     })
 
     router.route('/:id')
@@ -72,7 +80,7 @@ router.route('/')
            await Event.findById({_id: req.params.id}, (err, doc) =>{
                 if(err){
                     res.locals.level = 'info'
-                    res.locals.message = 'Event ikke funnet'
+                    res.locals.message = `Event ikke funnet ${err}`
                     next()
                     return res.json("Event ikke funnet")
                 } 
@@ -90,20 +98,24 @@ router.route('/')
         .put(isUser, async (req, res, next)=>{
             await Event.updateOne(
                 {_id: req.body.eventid},
-                {$push: {participants: await User.findById(req.session.passport.user.id)}}
+                {$push: {participants: await User.findById(req.session.passport.user.id)}}, 
+                (err, doc)=>{
+                    res.locals.level = 'info'
+                    res.locals.message = `Bruker meldte seg på event ${doc}`
+                    next()
+                }
             )
-            res.locals.level = 'info'
-            res.locals.message = 'Bruker meldte seg på event'
-            next()
         })
         .delete(isUser, async (req, res, next)=>{
             await Event.updateOne(
                 {_id: req.body.eventid},
-                {$pull: {participants: req.session.passport.user.id}}
+                {$pull: {participants: req.session.passport.user.id}}, 
+                (err, doc)=>{
+                    res.locals.level = 'info'
+                    res.locals.message = `Bruker meldte seg på event ${doc}`
+                    next()
+                }
             )
-            res.locals.level = 'info'
-            res.locals.message = 'Bruker meldte seg av event'
-            next()
         })
 
 //Router.route('/comment', comment)
