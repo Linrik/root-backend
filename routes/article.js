@@ -54,27 +54,17 @@ router.route('/')
             })
             await doc.save((err, change)=>{
                 if(err){
-                    res.locals.level = 'info'
-                    res.locals.message = `Event endret ${err}`
+                    res.locals.level = 'error'
+                    res.locals.message = `Feil under endring av artikkel ${err}`
                     next()
                     return err
                 }
                 res.locals.level = 'info'
-                res.locals.message = `Event endret ${change}`
+                res.locals.message = `Artikkel endret ${change}`
                 next()
             })
             
-        })/*
-        await Article.updateOne({_id: req.body.articleid}, 
-            {
-                title: req.body.title,
-                description: req.body.description,
-                image: req.body.image
-            }, (err, doc)=>{
-                res.locals.level = 'info'
-                res.locals.message = `Artikkel endret ${doc}`
-                next()
-            })*/
+        })
     })
     .delete(isEditor, async (req, res, next)=>{
         Article.findById({_id: req.body.articleid}, async (err, doc)=>{
@@ -85,7 +75,7 @@ router.route('/')
                 return err
             }
             res.locals.level = 'info'
-            res.locals.message = `Event slettet ${doc}`
+            res.locals.message = `Artikkel slettet ${doc}`
             await Article.deleteOne({_id: req.body.articleid})
             next()
         })
