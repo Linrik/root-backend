@@ -14,15 +14,15 @@ router.route('/')
             description: req.body.description,
             image: req.body.image
         })
-        await newArticle.save((err) =>{
+        await newArticle.save((err, doc) =>{
             if(err){
-                res.locals.level = 'info'
-                res.locals.message = 'Noe gikk galt under lagring av artikkel'
+                res.locals.level = 'error'
+                res.locals.message = `Noe gikk galt under lagring av artikkel ${err}`
                 next()
                 return err;
             }
             res.locals.level = 'info'
-            res.locals.message = 'Artikkel lagret' 
+            res.locals.message = `Artikkel lagret ${doc}` 
             next()
         })
     })
@@ -40,21 +40,30 @@ router.route('/')
         next()
     })
     .put(isEditor, async (req, res, next) =>{
-        await Article.updateOne({_id: req.body.articletid}, 
+        await Article.updateOne({_id: req.body.articleid}, 
             {
                 title: req.body.title,
                 description: req.body.description,
                 image: req.body.image
+            }, (err, doc)=>{
+                res.locals.level = 'info'
+                res.locals.message = `Artikkel endret ${doc}`
+                next()
             })
-            res.locals.level = 'info'
-            res.locals.message = 'Artikkel endret'
-            next()
     })
     .delete(isEditor, async (req, res, next)=>{
-        await Article.deleteOne({_id: req.body.articleid})
-        res.locals.level = 'info'
-        res.locals.message = 'Artikkel slettet' 
-        next()
+        Article.findById({_id: req.body.articleid}, async (err, doc)=>{
+            if(err){
+                res.locals.level = 'error'
+                res.locals.message = `Noe gikk galt ${err}`
+                next()
+                return err
+            }
+            res.locals.level = 'info'
+            res.locals.message = `Event slettet ${doc}`
+            await Article.deleteOne({_id: req.body.articleid})
+            next()
+        })
     })
 
     router.route('/:id')
