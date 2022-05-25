@@ -2,6 +2,8 @@ const express = require('express'),
       router = express.Router(),
       User = require('../config/userSchema'),
       Langstatic = require('../config/langStatSchema'),
+      logger = require('../config/logger'),
+      loggerMid = require('./logMiddleware'),
       passport = require('passport'),
       session = require('express-session'),
       mongoose = require('mongoose'),
@@ -53,21 +55,38 @@ router.route('/editor')
         res.locals.message = `Admin fjernet editor rettigheter til ${req.body.email}`
         next()
     })
-router.route('/log')
-    // skru på
+router.route('/log/:state')
+    // skru avog på logging
     .put(async (req, res, next)=>{
-        await User.updateOne({email: req.body.email}, {editor: true})
-        res.locals.level = 'info'
-        res.locals.message = `Admin ga editor rettigheter til ${req.body.email}`
+        if(req.params.state === 'on'){
+            logger.configure({
+                silent: false
+            })
+            res.json('Skrudd på logging')
+        } else if(req.params.state ===  'off'){
+            logger.configure({
+                silent: true
+            })
+            res.json('Skrudd av logging')
+        }
         next()
     })
-    // skru av
-    .delete(async (req, res, next)=>{
-        await User.updateOne({email: req.body.email}, {$set: {editor: false}})
-        res.locals.level = 'info'
-        res.locals.message = `Admin fjernet editor rettigheter til ${req.body.email}`
+    .get(async (req, res, next)=>{
+        if(logger.silent){
+            res.json('off')
+        }else{
+            res.json('on')
+        }
         next()
     })
+    .post(async (req, res, next)=>{
+        logger.configure({
+            level: req.body.level
+        })
+        res.json(`endret nivå til ${req.body.level}`)
+        next()
+    })
+    
 
 module.exports = router;
 

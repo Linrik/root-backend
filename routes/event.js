@@ -6,7 +6,6 @@ const express = require('express'),
       { isAdmin, isUser, isRoot, isEditor } = require('../routes/AuthMiddelware'),
       {upload} = require('../config/storageSetup');
 
-
 router.route('/')
     .get(async (req, res, next)=>{
         const events = await Event.find({}).sort({dateFrom: 1})
@@ -46,19 +45,32 @@ router.route('/')
         
     })
     .put(isEditor, upload.single('file'), async (req, res, next) =>{
-        await Event.updateOne({_id: req.body.eventid}, 
-            {
+        Event.findById({_id: req.body.eventid}, async (err, doc)=>{
+            if(err){
+                res.locals.level = 'error'
+                res.locals.message = `Noe gikk galt ${err}`
+                next()
+                return err
+            }
+            doc.overwrite({
                 title: req.body.title,
                 description: req.body.description,
                 dateFrom: req.body.dateFrom,
                 dateTo: req.body.dateTo
-            }, (err, doc)=>{
+            })
+            await doc.save((err, change)=>{
+                if(err){
+                    res.locals.level = 'error'
+                    res.locals.message = `Feil under endring av event ${err}`
+                    next()
+                    return err
+                }
                 res.locals.level = 'info'
-                res.locals.message = `Event endret ${doc}`
-                res.json({status: 200})
+                res.locals.message = `Event endret ${change}`
                 next()
             })
-        
+            
+        })
     })
     .delete(isEditor, async (req, res, next)=>{
          Event.findById({_id: req.body.eventid}, async (err, doc)=>{
