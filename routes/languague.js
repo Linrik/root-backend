@@ -53,12 +53,16 @@ router.route('/')
         next()
     })
     .put(isAdmin, async (req, res, next)=>{
-        await Langstatic.updateOne({_id: req.body.langstatic}, 
-            {
-                tittel: req.body.tittel,
-                text: req.body.text,
-                image: req.body.bilde
-            })
+        await Langstatic.findOne({_id: req.body.lng}, async (err, doc)=>{
+            if(err){
+                res.locals.level = 'error'
+                res.locals.message = `Noe gikk galt ${err}`
+                next()
+                return err
+            }
+            doc.overwri
+        })
+       
         next()
     })
     .delete(isAdmin, async (req, res, next)=>{
