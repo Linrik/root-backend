@@ -87,7 +87,7 @@ router.route('/')
         })
     })
 
-    router.route('/:id')
+    router.route('/id/:id')
         .get(async (req, res, next)=>{
            await Event.findById({_id: req.params.id}, (err, doc) =>{
                 if(err){
@@ -99,24 +99,23 @@ router.route('/')
                 res.json(doc)
             })
         })
-    router.route('/getparticipants')
-    .get(async (req,res,next)=>{
-        console.log('sdfgsdfg')
-        /*const events = await Event.find({}).sort({dateFrom: 1})
-        .populate('user', 'firstname lastname')
-        .populate('participants', 'firstname lastname')
-        .populate({
-        path: 'comments',
-        populate: {
-            path: 'user',
-            select: 'firstname lastname'
-        }
-    })
-    res.json(events)*/
-   
-    })
 
     router.route('/participants')
+        .get(async (req,res,next)=>{
+            const events = await Event.find({participants: req.session.passport.user.id}).sort({dateFrom: 1})
+            .populate('user', 'firstname lastname')
+            .populate('participants', 'firstname lastname')
+            .populate({
+                path: 'comments',
+                populate: {
+                    path: 'user',
+                    select: 'firstname lastname'
+                }
+            })
+            res.json(events)
+            next()
+    
+        })
         .put(isUser, async (req, res, next)=>{
            const event = await Event.findByIdAndUpdate({_id: req.body.eventid}, 
                 {$push: {participants: req.session.passport.user.id}})
