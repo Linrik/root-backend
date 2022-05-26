@@ -123,6 +123,7 @@ router.route('/')
 
                 res.locals.level = 'info'
                 res.locals.message = `Bruker meldte seg på event ${event}`
+                res.json({status: 200})
                 next()
         })
         .delete(isUser, async (req, res, next)=>{
