@@ -14,36 +14,74 @@ router.route('/')
             description: req.body.description,
             image: req.body.image
         })
-        await newArticle.save((err) =>{
-            if(err) return err;
-            console.log("Artikkel ble registrert")
+        await newArticle.save((err, doc) =>{
+            if(err){
+                res.locals.level = 'error'
+                res.locals.message = `Noe gikk galt under lagring av artikkel ${err}`
+                next()
+                return err;
+            }
+            res.locals.level = 'info'
+            res.locals.message = `Artikkel lagret ${doc}` 
+            next()
         })
-        next()
     })
     .get(async (req, res, next)=>{
         const articles = await Article.find({}).sort({postedAt: -1})
-        .populate('user', 'name')
+        .populate( 'user', 'firstname lastname')
         .populate({
             path: 'comments',
             populate: {
                 path: 'user',
-                select: 'name'
-            },
+                select: 'firstname lastname'
+            }
         })
         res.json(articles)
         next()
     })
     .put(isEditor, async (req, res, next) =>{
-        await Article.updateOne({_id: req.body.articletid}, 
-            {
+        Article.findById({_id: req.body.articleid}, async (err, doc)=>{
+            if(err){
+                res.locals.level = 'error'
+                res.locals.message = `Noe gikk galt ${err}`
+                next()
+                return err
+            }
+            doc.overwrite({
                 title: req.body.title,
                 description: req.body.description,
                 image: req.body.image
             })
+            await doc.save((err, change)=>{
+                if(err){
+                    res.locals.level = 'error'
+                    res.locals.message = `Feil under endring av artikkel ${err}`
+                    next()
+                    return err
+                }
+                res.locals.level = 'info'
+
+                res.locals.message = `Artikkel endret ${change}`
+                res.json({status: 200})
+                next()
+            })
+            
+        })
     })
     .delete(isEditor, async (req, res, next)=>{
-        await Article.deleteOne({_id: req.body.articleid})
-        next()
+        Article.findById({_id: req.body.articleid}, async (err, doc)=>{
+            if(err){
+                res.locals.level = 'error'
+                res.locals.message = `Noe gikk galt ${err}`
+                next()
+                return err
+            }
+            res.locals.level = 'info'
+            res.locals.message = `Artikkel slettet ${doc}`
+            await Article.deleteOne({_id: req.body.articleid})
+            res.json({status: 200})
+            next()
+        })
     })
 
     router.route('/:id')

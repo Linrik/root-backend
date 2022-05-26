@@ -22,40 +22,22 @@ router.route('/signup')
                 lastname: req.body.lastname,
                 password: req.body.password,
             })
-            await nyBruker.save((err)=>{
-                res.locals.level = 'error'
+            await nyBruker.save((err, doc)=>{
+                if(err)return res.json("E-post allerede i bruk")
+               
+                res.locals.level = 'info'
                 res.locals.email = req.body.email
-                if(err){
-                    res.locals.message = 'E-post er allerede i bruk'
-                    return res.json("E-post allerede i bruk")
-                } else{
-                    res.locals.level = 'info'
-                    res.locals.message = 'Bruker ble registrert'
-                    req.login(nyBruker, function(err) {
-                    if (err) { return next(err); }
-                        res.redirect('/');
-                    });
-                }
+                res.locals.message = `Bruker ble registrert ${doc}`
+                req.login(nyBruker, function(err) {
+                if (err) { return next(err); }
+                    res.redirect('/');
+                    next()
+                });
+                
             })
         } else{
-            res.locals.message = 'Ugyldig email ble brukt i registrering'
             res.json("Ugyldig Email")
         }
-    })
-
-router.route('/getsignup')
-    .get(async (req, res, next) => {
-        const nyBruker = new User({
-            email: "aa@bb.cc",
-            firstname: "Krister \"Bjelke\"",
-            lastname: "Iversen",
-            password: "Pass*123",
-        })
-        await nyBruker.save((err)=>{
-            if(err) return err;
-            console.log("Bruker ble registrert")
-        })
-        res.send("Bruker registrert")
     })
 
 router.route('/')
@@ -73,9 +55,6 @@ router.route('/')
     // laget login som bruker localstrategy fra passport
     //login (ferdig)
     .post(passport.authenticate('local'), (req, res, next) => {
-        res.locals.level = 'info'
-        res.locals.email = req.session.passport.user.email
-        res.locals.message = 'Bruker logget inn'
         res.json({
             loginStatus:true,
             user:req.session.passport.user
@@ -86,47 +65,38 @@ router.route('/')
     .put(isUser, async (req, res, next) => {
         User.findOne({ email: email.toLowerCase() }).select("+password").then((user) => {  
             if (!user) {
-                logger.log({
-                    level: 'info',
-                    email: req.session.passport.user.email,
-                    message: 'Bruker logget inn'
-                })
-                 return done(null, false); 
+                delete user.password
+                res.locals.level = 'error'
+                res.locals.message = `fant ikke brukeren ${user}`
+                next()
+                return done(null, false); 
                 }
             bcrypt.compare(req.body.password, user.password, async function(err, isMatch) {
                 if(err){
-                    logger.log({
-                        level: 'error',
-                        email: req.session.passport.user.email,
-                        message: 'noe gikk galt under sammeligning av passord'
-                    })
+                    res.locals.level = 'error'
+                    res.locals.message = `skjedde en feil under sammenligning av passord ${err}`
+                    next()
                     return res.json("noe gikk galt")
-                }else if(isMatch){
+                } 
+                if(isMatch){
                     await User.updateOne({email: req.user.email},
                     {email: req.body.email, 
                     firstname: req.body.firstname,
                     lastname: req.body.lastname,
                     password: req.body.newPassword})
-
-                    logger.log({
-                        level: 'info',
-                        email: req.session.passport.user.email,
-                        message: 'Bruker endret på brukerinformasjon'
-                    })
-
+                    
+                    res.locals.level = 'info'
+                    res.locals.message = `Bruker endret på brukerinformasjon ${req.body.firstname} - ${req.body.lastname}`
+                    
                     req.session.passport.user.email = req.body.email
                     req.session.passport.user.name = req.body.name
+                    next()
                 } else{
-                    logger.log({
-                        level: 'info',
-                        email: req.session.passport.user.email,
-                        message: 'Bruker brukte feil passord for endring av brukerinformasjon'
-                    })
-                }
-                
+                    res.json()
+                }   
             })
           });
-        next()
+        
     })
     // slett bruker (ferdig, men må testes)
     .delete(isUser, async (res, req, next) => {
@@ -134,19 +104,15 @@ router.route('/')
 
         res.locals.level = 'info'
         res.locals.email = req.session.passport.user.email
-        res.locals.message = 'Bruker slettet brukeren sin'
+        res.locals.message = `Bruker slettet brukeren sin ${req.session.passport.user.email}`
 
         req.logout()
         req.session.destroy()
         next()
     })
-    //laget logg ut funksjon til bruker
     // logge ut. (ferdig)
     router.route('/logout')
     .get(isUser, (req,res,next)=>{
-        res.locals.level = 'info'
-        res.locals.email = req.session.passport.user.email
-        res.locals.message = 'Bruker logget ut'
         req.logout();
         req.session.destroy()
         res.clearCookie('connect.sid', {path: '/'}).status(200).send('Ok.');
