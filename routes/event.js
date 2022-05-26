@@ -22,8 +22,9 @@ router.route('/')
         res.json(events)
         next()
     })
-    .post( isEditor, upload.single('file'), async (req, res, next)=>{
-        console.log(req.file)
+    .post( isEditor, upload.single('image'), async (req, res)=>{
+        console.log(req.body)
+        console.log(req.body.image.name)
         const nyEvent = new Event({
             user: await User.findOne({  _id: req.session.passport.user.id}),
             title: req.body.title,
