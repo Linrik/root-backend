@@ -23,7 +23,7 @@ router.route('/')
     })
     .post( isEditor, upload.single('image'), async (req, res)=>{
         console.log(req.body)
-        console.log(req.body.image.name)
+        console.log(typeof req.file) 
         const nyEvent = new Event({
             user: await User.findOne({  _id: req.session.passport.user.id}),
             title: req.body.title,
@@ -35,12 +35,12 @@ router.route('/')
             if(err){
                 res.locals.level = 'error'
                 res.locals.message = `feil under lagring av event ${err}`
-                next()
+                //next()
                 return err
             }
             res.locals.level = 'info'
             res.locals.message = `Event laget ${doc}`
-            next()
+            //next()
         })
         res.json({status: 200})
         
@@ -126,12 +126,17 @@ router.route('/')
                 next()
         })
         .delete(isUser, async (req, res, next)=>{
-            const event = await Event.findByIdAndUpdate({_id: req.body.eventid}, 
-                {$pull: {participants:req.session.passport.user.id}})
-
-                res.locals.level = 'info'
-                res.locals.message = `Bruker meldte seg av event ${event}`
-                next()
+            try {
+                const event = await Event.findByIdAndUpdate({_id: req.body.eventid}, 
+                    {$pull: {participants:req.session.passport.user.id}})
+                    res.locals.level = 'info'
+                    res.locals.message = `Bruker meldte seg av event ${event}`
+                res.json({status: 200})
+            } catch(error){
+                err = true;
+                res.json({status: 500})
+            }
+            next()
         })
         
 
