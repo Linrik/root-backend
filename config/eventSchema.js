@@ -20,7 +20,7 @@ const eventSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: Comment
    }],
-   postedAt: {type: Date, default: Date.now}// tiden lagres på utc ikke utc+2
+   postedAt: {type: Date, default: Date.now}// tiden lagres på utc ikke lokal tid (utc+2)
 })
 
 module.exports = mongoose.model("Event", eventSchema, "event");
