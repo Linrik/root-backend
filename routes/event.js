@@ -105,7 +105,7 @@ router.route('/')
 
     router.route('/participants')
         .get(async (req,res,next)=>{
-            const events = await Event.find({participants: req.session.passport.user.id}).sort({dateFrom: 1})
+            await Event.find({participants: req.session.passport.user.id}).sort({dateFrom: 1})
             .populate('user', 'firstname lastname')
             .populate('participants', 'firstname lastname')
             .populate({
@@ -119,14 +119,24 @@ router.route('/')
             next()
     
         })
-        .put(isUser, async (req, res, next)=>{
-           const event = await Event.findByIdAndUpdate({_id: req.body.eventid}, 
-                {$push: {participants: req.session.passport.user.id}})
 
-                res.locals.level = 'info'
-                res.locals.message = `Bruker meldte seg på event ${event}`
-                res.json({status: 200})
-                next()
+        .put(isUser, (req, res, next)=>{
+            Event.findById({_id: req.body.eventid}, (err, doc)=>{
+                if(err){
+                    res.locals.level = 'error'
+                    res.locals.message = `det skjedde noe galt under påmelding ${err}`
+                }
+                if(doc.participants.indexOf(req.session.passport.user.id) === -1){
+                    doc.participants.push(req.session.passport.user.id)
+                    doc.save()
+                    res.locals.level = 'info'
+                    res.locals.message = `Bruker meldte seg på event ${doc}`
+                    res.json({status:200})
+                    next()
+                } else {
+                    res.json({status:210})
+                }
+            })
         })
         .delete(isUser, async (req, res, next)=>{
             try {
