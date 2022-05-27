@@ -28,16 +28,9 @@ router.route('/')
             res.json({status:200})
             next()
         })
-        
-    })
-    router.route('/id/:lng')
-    .get(async (req, res, next)=>{
-        const lang = await Langstatic.find({language: req.params.lng})
-        res.json(lang)
-        next()
     })
     .put(isAdmin, (req, res, next)=>{
-        Langstatic.updateOne({language: req.params.lng},
+        Langstatic.updateOne({language: req.body.lng},
             {
                 language: req.body.lng,
                 languagename: req.body.lngName,
@@ -55,6 +48,12 @@ router.route('/')
                 res.json({status:200})
                 next()
             })
+    })
+    router.route('/id/:lng')
+    .get(async (req, res, next)=>{
+        const lang = await Langstatic.find({language: req.params.lng})
+        res.json(lang)
+        next()
     })
     .delete(isAdmin, (req, res, next)=>{
         Langstatic.deleteOne({language: req.params.lng}, (err)=>{
