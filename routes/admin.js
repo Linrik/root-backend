@@ -72,11 +72,11 @@ router.route('/log/:state')
         next()
     })
     .get(async (req, res, next)=>{
-        if(logger.silent){
-            res.json('off')
-        }else{
-            res.json('on')
+        const status = {
+            logger: logger.silent,
+            level: logger.level
         }
+        res.json(status)
         next()
     })
     .post(async (req, res, next)=>{
