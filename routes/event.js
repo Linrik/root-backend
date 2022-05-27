@@ -118,14 +118,19 @@ router.route('/')
         })
         .put(isUser, (req, res, next)=>{
             Event.findById({_id: req.body.eventid}, (err, doc)=>{
+                if(err){
+                    res.locals.level = 'error'
+                    res.locals.message = `det skjedde noe galt under påmelding ${err}`
+                }
                 if(doc.participants.indexOf(req.session.passport.user.id) === -1){
                     doc.participants.push(req.session.passport.user.id)
                     doc.save()
                     res.locals.level = 'info'
                     res.locals.message = `Bruker meldte seg på event ${doc}`
+                    res.json({status:200})
                     next()
                 } else {
-                    res.json('du er allerede registrert')
+                    res.json({status:210})
                 }
             })
         })
