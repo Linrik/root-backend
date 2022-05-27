@@ -14,18 +14,58 @@ router.route('/')
             language: req.body.lng,
             translate: req.body.translate
         })
-        await lng.save((err) =>{
-            if(err) res.json(err)
-            console.log("språk ble lagt til")
+        await lng.save((err, doc) =>{
+            if(err) {
+                res.locals.level = 'error'
+                res.locals.message = `noe gikk galt under lagring av språk ${err}`
+                res.json({status:210})
+                next()
+                return err;
+            }
+            res.locals.level = 'info'
+            res.locals.message = `Språk ble lagt til ${doc}`
+            res.json({status:200})
+            next()
         })
-        res.json('asdfg')
-        next()
+        
     })
     router.route('/:lng')
     .get(async (req, res, next)=>{
-        const lang = await Langstatic.find()
+        const lang = await Langstatic.find({language: req.params.lng})
         res.json(lang)
         next()
+    })
+    .put(isAdmin, (req, res, next)=>{
+        Langstatic.updateOne({language: req.params.lng},
+            {
+                translate: req.body.translate
+            }, (err, doc)=>{
+                if(err){
+                    res.locals.level = 'error'
+                    res.locals.message = `Noe gikk galt ${err}`
+                    next()
+                    return err;
+                } 
+                res.locals.level = 'info'
+                res.locals.message = `Språket har blitt endret ${doc}`
+                res.json({status:200})
+                next()
+            })
+    })
+    .delete(isAdmin, (req, res, next)=>{
+        Langstatic.deleteOne({language: req.params.lng}, (err)=>{
+            if(err) {
+                res.locals.level = 'error'
+                res.locals.message = `noe gikk galt under sletting av språk ${err}`
+                res.json({status:210})
+                next()
+                return err;
+            }
+            res.locals.level = 'info'
+            res.locals.message = `Språket har blitt slettet ${req.params.lng}`
+            res.json({status:200})
+            next()
+        })
     })
 
 module.exports = router;
