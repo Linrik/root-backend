@@ -10,9 +10,13 @@ router.route('/')
         next()
     })
     .post(isAdmin, async (req, res, next)=>{
+        const object = {
+            norge: 'Norway',
+            sverige: 'Sweden'
+        }
         const lng = new Langstatic({
             languague: req.body.lng,
-            translate: req.body.translate
+            translate: object
         })
         await lng.save((err) =>{
             if(err) res.json(err)
