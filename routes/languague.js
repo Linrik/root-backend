@@ -11,7 +11,7 @@ router.route('/')
     })
     .post(isAdmin, async (req, res, next)=>{
         const lng = new Langstatic({
-            languague: req.body.lng,
+            language: req.body.lng,
             translate: req.body.translate
         })
         await lng.save((err, doc) =>{
@@ -31,12 +31,12 @@ router.route('/')
     })
     router.route('/:lng')
     .get(async (req, res, next)=>{
-        const lang = await Langstatic.find({languague: req.params.lng})
+        const lang = await Langstatic.find({language: req.params.lng})
         res.json(lang)
         next()
     })
     .put(isAdmin, (req, res, next)=>{
-        Langstatic.updateOne({languague: req.params.lng},
+        Langstatic.updateOne({language: req.params.lng},
             {
                 translate: req.body.translate
             }, (err, doc)=>{
@@ -53,7 +53,7 @@ router.route('/')
             })
     })
     .delete(isAdmin, (req, res, next)=>{
-        Langstatic.deleteOne({languague: req.params.lng}, (err)=>{
+        Langstatic.deleteOne({language: req.params.lng}, (err)=>{
             if(err) {
                 res.locals.level = 'error'
                 res.locals.message = `noe gikk galt under sletting av språk ${err}`
