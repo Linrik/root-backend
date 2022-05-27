@@ -30,7 +30,7 @@ router.route('/')
         })
         
     })
-    router.route('/:lng')
+    router.route('/id/:lng')
     .get(async (req, res, next)=>{
         const lang = await Langstatic.find({language: req.params.lng})
         res.json(lang)
@@ -69,6 +69,12 @@ router.route('/')
             res.json({status:200})
             next()
         })
+    })
+    router.route('/i18/:lng')
+    .get(async (req, res, next)=>{
+        const lang = await Langstatic.find({language: req.params.lng})
+        res.json(lang[0].translate)
+        next()
     })
 
 module.exports = router;
