@@ -12,6 +12,7 @@ router.route('/')
     .post(isAdmin, async (req, res, next)=>{
         const lng = new Langstatic({
             language: req.body.lng,
+            languagename: req.body.lngName,
             translate: req.body.translate
         })
         await lng.save((err, doc) =>{

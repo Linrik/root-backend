@@ -7,6 +7,11 @@ const langStatSchema = new mongoose.Schema({
         unique: true,
         required: true
     },
+    languagename: {
+        type: String,
+        unique: true,
+        required: true
+    },
     translate: {
         type: Object,
         required: true
