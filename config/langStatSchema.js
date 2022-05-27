@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 
 const langStatSchema = new mongoose.Schema({
-    languague: {
+    language: {
         type: String,
         unique: true
     },
