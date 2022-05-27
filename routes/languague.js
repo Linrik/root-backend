@@ -39,6 +39,8 @@ router.route('/')
     .put(isAdmin, (req, res, next)=>{
         Langstatic.updateOne({language: req.params.lng},
             {
+                language: req.body.lng,
+                languagename: req.body.lngName,
                 translate: req.body.translate
             }, (err, doc)=>{
                 if(err){
