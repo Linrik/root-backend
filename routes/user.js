@@ -52,8 +52,7 @@ router.route('/')
             })
         }
     })
-    // laget login som bruker localstrategy fra passport
-    //login (ferdig)
+    //login som bruker localstrategy fra passport
     .post(passport.authenticate('local'), (req, res, next) => {
         res.json({
             loginStatus:true,
@@ -80,19 +79,20 @@ router.route('/')
                 } 
                 if(isMatch){
                     await User.updateOne({email: req.user.email},
-                    {email: req.body.email, 
-                    firstname: req.body.firstname,
-                    lastname: req.body.lastname,
-                    password: req.body.newPassword})
+                    {
+                        firstname: req.body.firstname,
+                        lastname: req.body.lastname,
+                    })
                     
                     res.locals.level = 'info'
                     res.locals.message = `Bruker endret på brukerinformasjon ${req.body.firstname} - ${req.body.lastname}`
                     
-                    req.session.passport.user.email = req.body.email
-                    req.session.passport.user.name = req.body.name
+                    req.session.passport.user.firstname = req.body.firstname
+                    req.session.passport.user.lastname = req.body.lastname
+                    res.json('brukerinformasjon endret')
                     next()
                 } else{
-                    res.json()
+                    res.json('Feil passord')
                 }   
             })
           });
@@ -110,7 +110,7 @@ router.route('/')
         req.session.destroy()
         next()
     })
-    // logge ut. (ferdig)
+    // logge ut.
     router.route('/logout')
     .get(isUser, (req,res,next)=>{
         req.logout();
