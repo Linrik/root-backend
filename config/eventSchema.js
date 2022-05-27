@@ -14,8 +14,7 @@ const eventSchema = new mongoose.Schema({
    image: String,
    participants: [{
       type: mongoose.Schema.Types.ObjectId,
-      ref: User,
-      unique: true
+      ref: User
    }], // referanse til user
    comments: [{
       type: mongoose.Schema.Types.ObjectId,
