@@ -18,4 +18,4 @@ const langStatSchema = new mongoose.Schema({
     }
 })
 
-module.exports = mongoose.model("Lang", langStatSchema, "langstatic");
+module.exports = mongoose.model("Lang", langStatSchema, "language");
