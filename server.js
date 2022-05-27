@@ -75,7 +75,7 @@ app.use('/user', user, appLog) //filen håndterer alt som kommer inn i routen ti
 app.use('/event', event, appLog)
 app.use('/article', article, appLog)
 app.use('/comment', comment, appLog)
-app.use('/languague', lang, appLog)
+app.use('/language', lang, appLog)
 app.use('/admin', isAdmin, admin, appLog)
 app.use((req, res, next)=>{
     //console.log(req.session.passport.user)
