@@ -21,8 +21,11 @@ router.route('/')
         res.json(events)
         next()
     })
-    .post( isEditor, upload.single('file'), async (req, res, next)=>{
-        console.log(req.file)
+    .post( isEditor, async (req, res, next)=>{
+        // upload.single('image'),
+        // console.log(req.body)
+        // console.log(typeof req.file) 
+        console.log(req.body)
         const nyEvent = new Event({
             user: await User.findOne({  _id: req.session.passport.user.id}),
             title: req.body.title,
@@ -34,12 +37,12 @@ router.route('/')
             if(err){
                 res.locals.level = 'error'
                 res.locals.message = `feil under lagring av event ${err}`
-                next()
+                //next()
                 return err
             }
             res.locals.level = 'info'
             res.locals.message = `Event laget ${doc}`
-            next()
+            //next()
         })
         res.json({status: 200})
         
@@ -116,6 +119,7 @@ router.route('/')
             next()
     
         })
+
         .put(isUser, (req, res, next)=>{
             Event.findById({_id: req.body.eventid}, (err, doc)=>{
                 if(err){
@@ -135,12 +139,17 @@ router.route('/')
             })
         })
         .delete(isUser, async (req, res, next)=>{
-            const event = await Event.findByIdAndUpdate({_id: req.body.eventid}, 
-                {$pull: {participants:req.session.passport.user.id}})
-
-                res.locals.level = 'info'
-                res.locals.message = `Bruker meldte seg av event ${event}`
-                next()
+            try {
+                const event = await Event.findByIdAndUpdate({_id: req.body.eventid}, 
+                    {$pull: {participants:req.session.passport.user.id}})
+                    res.locals.level = 'info'
+                    res.locals.message = `Bruker meldte seg av event ${event}`
+                res.json({status: 200})
+            } catch(error){
+                err = true;
+                res.json({status: 500})
+            }
+            next()
         })
         
 
