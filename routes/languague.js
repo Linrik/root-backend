@@ -46,6 +46,7 @@ router.route('/')
                 if(err){
                     res.locals.level = 'error'
                     res.locals.message = `Noe gikk galt ${err}`
+                    res.json({status:210})
                     next()
                     return err;
                 } 
