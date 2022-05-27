@@ -3,9 +3,14 @@ const mongoose = require("mongoose")
 const langStatSchema = new mongoose.Schema({
     language: {
         type: String,
-        unique: true
+        index: true,
+        unique: true,
+        required: true
     },
-    translate: Object
+    translate: {
+        type: Object,
+        required: true
+    }
 })
 
 module.exports = mongoose.model("Lang", langStatSchema, "langstatic");
