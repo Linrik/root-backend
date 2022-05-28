@@ -105,7 +105,7 @@ router.route('/')
 
     router.route('/participants')
         .get(async (req,res,next)=>{
-            await Event.find({participants: req.session.passport.user.id}).sort({dateFrom: 1})
+            const events = await Event.find({participants: req.session.passport.user.id}).sort({dateFrom: 1})
             .populate('user', 'firstname lastname')
             .populate('participants', 'firstname lastname')
             .populate({
