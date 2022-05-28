@@ -18,7 +18,7 @@ router.route('/:type')
                 res.locals.level = 'info'
                 res.locals.message = `skjedde feil under lagring av kommentar ${err}`
                 next()
-                return res.json(err)
+                return res.json({status:210})
             } 
         })
         if(req.params.type === 'event'){
@@ -71,6 +71,7 @@ router.route('/:type')
             await Comment.deleteOne({_id: req.body.commentid}, (err, doc)=>{
                 res.locals.level = 'info'
                 res.locals.message = `Bruker slettet komentaren sin ${doc}`
+                res.json({status:200})
                 next()
             })  
         }

@@ -67,6 +67,7 @@ router.route('/')
                 delete user.password
                 res.locals.level = 'error'
                 res.locals.message = `fant ikke brukeren ${user}`
+                res.json({status:210})
                 next()
                 return done(null, false); 
                 }
@@ -75,7 +76,7 @@ router.route('/')
                     res.locals.level = 'error'
                     res.locals.message = `skjedde en feil under sammenligning av passord ${err}`
                     next()
-                    return res.json("noe gikk galt")
+                    return res.json({status:210})
                 } 
                 if(isMatch){
                     await User.updateOne({email: req.user.email},
@@ -89,10 +90,10 @@ router.route('/')
                     
                     req.session.passport.user.firstname = req.body.firstname
                     req.session.passport.user.lastname = req.body.lastname
-                    res.json('brukerinformasjon endret')
+                    res.json({status:200})
                     next()
                 } else{
-                    res.json('Feil passord')
+                    res.json({status:210})
                 }   
             })
           });
@@ -105,9 +106,9 @@ router.route('/')
         res.locals.level = 'info'
         res.locals.email = req.session.passport.user.email
         res.locals.message = `Bruker slettet brukeren sin ${req.session.passport.user.email}`
-
         req.logout()
         req.session.destroy()
+        res.json({status:200})
         next()
     })
     // logge ut.

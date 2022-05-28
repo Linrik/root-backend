@@ -16,6 +16,7 @@ router.route('/rootmedlem')
         await User.updateOne({email: req.body.email}, {rootMember: true})
         res.locals.level = 'info'
         res.locals.message = `Admin ga root medlem rettigheter til ${req.body.email}`
+        res.json({status:200})
         next()
     })
 // fjern rolle
@@ -23,6 +24,7 @@ router.route('/rootmedlem')
         await User.updateOne({email: req.body.email}, {$set: {rootMember: false}})
         res.locals.level = 'info'
         res.locals.message = `Admin fjermet root medlem rettigheter til ${req.body.email}`
+        res.json({status:200})
         next()
     })
 // gi admin rolle
@@ -31,6 +33,7 @@ router.route('/admin')
         await User.updateOne({email: req.body.email}, {admin: true})
         res.locals.level = 'info'
         res.locals.message = `Admin ga admin rettigheter til ${req.body.email}`
+        res.json({status:200})
         next()
     })
     // fjern rolle
@@ -38,6 +41,7 @@ router.route('/admin')
         await User.updateOne({email: req.body.email}, {$set: {admin: false}})
         res.locals.level = 'info'
         res.locals.message = `Admin fjernet admin rettigheter til ${req.body.email}`
+        res.json({status:200})
         next()
     })
 
@@ -46,6 +50,7 @@ router.route('/editor')
         await User.updateOne({email: req.body.email}, {editor: true})
         res.locals.level = 'info'
         res.locals.message = `Admin ga editor rettigheter til ${req.body.email}`
+        res.json({status:200})
         next()
     })
     // fjern rolle
@@ -53,6 +58,7 @@ router.route('/editor')
         await User.updateOne({email: req.body.email}, {$set: {editor: false}})
         res.locals.level = 'info'
         res.locals.message = `Admin fjernet editor rettigheter til ${req.body.email}`
+        res.json({status:200})
         next()
     })
 router.route('/log/:state')

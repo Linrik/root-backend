@@ -21,7 +21,7 @@ router.route('/')
                 res.locals.message = `Noe gikk galt under lagring av artikkel ${err}`
                 res.json({status:210})
                 next()
-                return err;
+                return res.json({status:210})
             }
             res.locals.level = 'info'
             res.locals.message = `Artikkel lagret ${doc}` 
@@ -48,7 +48,7 @@ router.route('/')
                 res.locals.level = 'error'
                 res.locals.message = `Noe gikk galt ${err}`
                 next()
-                return err
+                return res.json({status:210})
             }
             doc.overwrite({
                 title: req.body.title,
@@ -60,7 +60,7 @@ router.route('/')
                     res.locals.level = 'error'
                     res.locals.message = `Feil under endring av artikkel ${err}`
                     next()
-                    return err
+                    return res.json({status:210})
                 }
                 res.locals.level = 'info'
 
@@ -77,7 +77,7 @@ router.route('/')
                 res.locals.level = 'error'
                 res.locals.message = `Noe gikk galt ${err}`
                 next()
-                return err
+                return res.json({status:210})
             }
             res.locals.level = 'info'
             res.locals.message = `Artikkel slettet ${doc}`
