@@ -1,9 +1,9 @@
 require('dotenv').config();
 require('./config/passport')
 const express = require('express'),
+      app = express(),
       mongoose = require('mongoose'),
       passport = require('passport'),
-      app = express(),
       session = require('express-session'),
       mongoStore = require('connect-mongo'),
       cors = require('cors')
@@ -16,7 +16,7 @@ const admin = require('./routes/admin'),
       comment = require('./routes/comment'),
       { appLog } = require('./routes/logMiddleware'),
       port = process.env.PORT,
-      { isAdmin, isUser, isRoot } = require('./routes/AuthMiddelware');
+      { isAdmin } = require('./routes/AuthMiddelware');
 
 const dbOptions = {
     useNewUrslParser: true,
@@ -33,7 +33,21 @@ const db = mongoose.connect(conn, ()=> {
 var allowedOrigins = ['http://localhost:3000',
                       'https://localhost:3000'
 ];
-
+const sessionOptions = {
+    secret: key,
+        resave: false,
+        saveUninitialized: true, // lagrer ikke session med mindre du gjør endringer
+        store: mongoStore.create({
+            mongoUrl: conn,
+            collectionName: 'session',
+            autoRemove: 'native'
+        }),
+        name: 'user',
+        cookie: {
+            secure: false,
+            maxAge: 1000 * 60 * 60* 24
+        }
+}
 const corsOptions = {
     // origin: true,
     origin: function(origin, callback){
@@ -51,41 +65,22 @@ const corsOptions = {
 app.use(cors(corsOptions))
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
-app.use(session({
-        secret: key,
-        resave: false,
-        saveUninitialized: true, // lagrer ikke session med mindre du gjør endringer
-        store: mongoStore.create({
-            mongoUrl: conn,
-            collectionName: 'session',
-            autoRemove: 'native'
-        }),
-        name: 'user',
-        cookie: {
-            secure: false,
-            maxAge: 1000 * 60 * 60* 24
-        }
-    }))
+app.use(session(sessionOptions))
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(passport.authenticate('session'))
-
 app.use('/resources', express.static('resources'))
-
-app.use('/user', user, appLog) //filen håndterer alt som kommer inn i routen til login
+app.use('/user', user, appLog)
 app.use('/event', event, appLog)
 app.use('/article', article, appLog)
 app.use('/comment', comment, appLog)
 app.use('/language', lang, appLog)
 app.use('/admin', isAdmin, admin, appLog)
-app.use((req, res, next)=>{
-    //console.log(req.session.passport.user)
-    next()
-})
+
 
 app.get('/', (req, res) =>{
     console.log(req.session.passport.user)
-    res.send("123")
+    res.send("Nothing to see here")
 })
 
 
