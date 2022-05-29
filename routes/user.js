@@ -119,5 +119,9 @@ router.route('/')
         res.clearCookie('connect.sid', {path: '/'}).status(200).send('Ok.');
         next()
     })
+    router.route('/newpassword')
+        .put(isUser, async (req, res, next)=>{
+            
+        })
 
 module.exports = router;
