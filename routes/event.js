@@ -21,14 +21,27 @@ router.route('/')
         res.json(events)
         next()
     })
-    .post( isEditor, async (req, res, next)=>{
-        const nyEvent = new Event({
-            user: await User.findOne({  _id: req.session.passport.user.id}),
-            title: req.body.title,
-            description: req.body.description,
-            dateFrom: req.body.dateFrom,
-            dateTo: req.body.dateTo
-        })
+    .post(upload.single('image'), isEditor, async (req, res, next)=>{
+        let nyEvent;
+        if(req.file===undefined){
+            nyEvent = new Event({
+                user: await User.findOne({  _id: req.session.passport.user.id}),
+                title: req.body.title,
+                description: req.body.description,
+                dateFrom: req.body.dateFrom,
+                dateTo: req.body.dateTo
+            })
+        } else {
+            nyEvent = new Event({
+                user: await User.findOne({  _id: req.session.passport.user.id}),
+                title: req.body.title,
+                description: req.body.description,
+                dateFrom: req.body.dateFrom,
+                dateTo: req.body.dateTo,
+                image: req.file.filename
+            })    
+        }
+        
         nyEvent.save((err, doc) =>{
             if(err){
                 res.locals.level = 'error'
@@ -43,7 +56,7 @@ router.route('/')
         res.json({status: 200})
         
     })
-    .put(isEditor, upload.single('file'), async (req, res, next) =>{
+    .put(upload.single('image'), isEditor, async (req, res, next) =>{
         Event.findById({_id: req.body.eventid}, async (err, doc)=>{
             if(err){
                 res.locals.level = 'error'
@@ -51,12 +64,22 @@ router.route('/')
                 next()
                 return res.json({status:210})
             }
-            doc.overwrite({
-                title: req.body.title,
-                description: req.body.description,
-                dateFrom: req.body.dateFrom,
-                dateTo: req.body.dateTo
-            })
+            if(req.file===undefined){
+                doc.overwrite({
+                    title: req.body.title,
+                    description: req.body.description,
+                    dateFrom: req.body.dateFrom,
+                    dateTo: req.body.dateTo
+                })
+            } else {
+                doc.overwrite({
+                    title: req.body.title,
+                    description: req.body.description,
+                    dateFrom: req.body.dateFrom,
+                    dateTo: req.body.dateTo,
+                    image: req.body.image
+                })
+            }
             await doc.save((err, change)=>{
                 if(err){
                     res.locals.level = 'error'
