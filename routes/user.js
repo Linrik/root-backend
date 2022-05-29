@@ -137,12 +137,10 @@ router.route('/')
                     
                     if(isMatch){
                         const saltRounds = 10
-                        let hashNewPassword; 
                         bcrypt.hash(req.body.newPassword, saltRounds, async (err, hash) =>{
-                            hashNewPassword = hash;
                             await User.updateOne({email: req.user.email},
                                 {
-                                    password: hashNewPassword
+                                    password: hash
                                 })
                         })
                         console.log
