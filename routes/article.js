@@ -9,12 +9,21 @@ const express = require('express'),
 // laget api som registrerer bruker med encryptet hash passord
 router.route('/')
     .post(upload.single('image'),isEditor, async (req, res, next) => {
-        const newArticle = new Article({
-            user: await User.findOne({  _id: req.session.passport.user.id}),
-            title: req.body.title,
-            description: req.body.description,
-            image: req.file.filename
-        })
+        let newArticle;
+        if(req.file===undefined){
+            newArticle = new Article({
+                user: await User.findOne({  _id: req.session.passport.user.id}),
+                title: req.body.title,
+                description: req.body.description
+            })
+        } else {
+            newArticle = new Article({
+                user: await User.findOne({  _id: req.session.passport.user.id}),
+                title: req.body.title,
+                description: req.body.description,
+                image: req.file.filename
+            })
+        }
         await newArticle.save((err, doc) =>{
             if(err){
                 res.locals.level = 'error'
@@ -42,7 +51,7 @@ router.route('/')
         res.json(articles)
         next()
     })
-    .put(isEditor, async (req, res, next) =>{
+    .put(upload.single('image'),isEditor, async (req, res, next) =>{
         Article.findById({_id: req.body.articleid}, async (err, doc)=>{
             if(err){
                 res.locals.level = 'error'
@@ -50,11 +59,18 @@ router.route('/')
                 next()
                 return res.json({status:210})
             }
-            doc.overwrite({
-                title: req.body.title,
-                description: req.body.description,
-                image: req.body.image
-            })
+            if(req.file===undefined){
+                doc.overwrite({
+                    title: req.body.title,
+                    description: req.body.description
+                })
+            } else {
+                doc.overwrite({
+                    title: req.body.title,
+                    description: req.body.description,
+                    image: req.body.image
+                })
+            }
             await doc.save((err, change)=>{
                 if(err){
                     res.locals.level = 'error'
