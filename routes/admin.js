@@ -8,6 +8,8 @@ const express = require('express'),
       session = require('express-session'),
       mongoose = require('mongoose'),
       isAdmin = require('./AuthMiddelware').isAdmin
+const { route } = require('express/lib/application');
+const path = require('path');
 // laget api til å gi å fjerne rolle med en admin sjekk
 // gi root rolle
 router.route('/rootmedlem')
@@ -61,6 +63,19 @@ router.route('/editor')
         res.json({status:200})
         next()
     })
+router.route('/fulllog')
+    .get((req, res, next)=>{
+        res.sendFile(path.join(__dirname, '../collection.log'))
+    })
+router.route('/log')
+    .get(async (req, res, next)=>{
+        const status = {
+            logger: logger.silent,
+            level: logger.level
+        }
+        res.json(status)
+        next()
+    })
 router.route('/log/:state')
     // skru avog på logging
     .put(async (req, res, next)=>{
@@ -77,19 +92,11 @@ router.route('/log/:state')
         }
         next()
     })
-    .get(async (req, res, next)=>{
-        const status = {
-            logger: logger.silent,
-            level: logger.level
-        }
-        res.json(status)
-        next()
-    })
     .post(async (req, res, next)=>{
         logger.configure({
-            level: req.body.level
+            level: req.params.state
         })
-        res.json(`endret nivå til ${req.body.level}`)
+        res.json(`endret nivå til ${req.params.state}`)
         next()
     })
     
