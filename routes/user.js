@@ -99,7 +99,7 @@ router.route('/')
         
     })
     // slett bruker (ferdig, men må testes)
-    .delete(isUser, async (res, req, next) => {
+    .delete(isUser, async (req, res, next) => {
         await User.findOne({ email: req.session.passport.user.email }).select("+password").then((user) => {  
             if (!user) {
                 res.locals.level = 'error'
@@ -115,21 +115,21 @@ router.route('/')
                     return res.json({status:210})
                 } 
                 if(isMatch){
-                    res.locals.level = 'info'
-                    res.locals.email = req.session.passport.user.email
-                    res.locals.message = `Bruker slettet brukeren sin ${req.session.passport.user.email}`
-                    User.deleteOne({email: req.session.passport.user.email})
-                    
-                    req.logout()
-                    req.session.destroy()
-                    res.json({status:200})
-                    next()
+                    console.log(req.session.passport.user.email)
+                    User.deleteOne({email: req.session.passport.user.email}, (err)=>{
+                        res.locals.level = 'info'
+                        res.locals.email = req.session.passport.user.email
+                        res.locals.message = `Bruker slettet brukeren sin ${req.session.passport.user.email}`
+                        req.logout()
+                        req.session.destroy()
+                        res.json({status:200})
+                        next()
+                    })
                 } else{
                     res.json({status:210})
                 }   
             })
           })
-        
     })
     // logge ut.
     router.route('/logout')
