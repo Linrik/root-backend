@@ -64,7 +64,6 @@ router.route('/')
     .put(isUser, async (req, res, next) => {
         User.findOne({ email: email.toLowerCase() }).select("+password").then((user) => {  
             if (!user) {
-                delete user.password
                 res.locals.level = 'error'
                 res.locals.message = `fant ikke brukeren ${user}`
                 res.json({status:210})
@@ -96,7 +95,7 @@ router.route('/')
                     res.json({status:210})
                 }   
             })
-          });
+          })
         
     })
     // slett bruker (ferdig, men må testes)
@@ -121,7 +120,34 @@ router.route('/')
     })
     router.route('/newpassword')
         .put(isUser, async (req, res, next)=>{
-            
+            User.findOne({ email: email.toLowerCase() }).select("+password").then((user) => {  
+                if (!user) {
+                    res.locals.level = 'error'
+                    res.locals.message = `fant ikke brukeren ${user}`
+                    next()
+                    return res.json({status:210})
+                    }
+                bcrypt.compare(req.body.password, user.password, async function(err, isMatch) {
+                    if(err){
+                        res.locals.level = 'error'
+                        res.locals.message = `skjedde en feil under sammenligning av passord ${err}`
+                        next()
+                        return res.json({status:210})
+                    } 
+                    if(isMatch){
+                        await User.updateOne({email: req.user.email},
+                        {
+                            password: req.body.newPassword
+                        })
+                        res.locals.level = 'info'
+                        res.locals.message = `Bruker endret på passord ${user}`
+                        res.json({status:200})
+                        next()
+                    } else{
+                        res.json({status:210})
+                    }   
+                })
+              })
         })
 
 module.exports = router;
