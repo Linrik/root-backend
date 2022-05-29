@@ -100,8 +100,28 @@ router.route('/')
     })
     // slett bruker (ferdig, men må testes)
     .delete(isUser, async (res, req, next) => {
-        await User.deleteOne({email: req.session.passport.user.email})
-
+        await User.findOne({ email: req.session.passport.user.email }).select("+password").then((user) => {  
+            if (!user) {
+                res.locals.level = 'error'
+                res.locals.message = `fant ikke brukeren ${user}`
+                next()
+                return res.json({status:210})
+                }
+            bcrypt.compare(req.body.password, user.password, async function(err, isMatch) {
+                if(err){
+                    res.locals.level = 'error'
+                    res.locals.message = `skjedde en feil under sletting av bruker ${err}`
+                    next()
+                    return res.json({status:210})
+                } 
+                if(isMatch){
+                    await User.deleteOne({email: req.session.passport.user.email})
+                    res.json({status:200})
+                } else{
+                    res.json({status:210})
+                }   
+            })
+          })
         res.locals.level = 'info'
         res.locals.email = req.session.passport.user.email
         res.locals.message = `Bruker slettet brukeren sin ${req.session.passport.user.email}`
