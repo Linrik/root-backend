@@ -120,7 +120,7 @@ router.route('/')
     })
     router.route('/newpassword')
         .put(isUser, async (req, res, next)=>{
-            User.findOne({ email: req.session.passport.user.email }).select("+password").then((user) => {  
+            await User.findOne({ email: req.session.passport.user.email }).select("+password").then((user) => {  
                 if (!user) {
                     res.locals.level = 'error'
                     res.locals.message = `fant ikke brukeren ${user}`
@@ -134,16 +134,19 @@ router.route('/')
                         next()
                         return res.json({status:210})
                     } 
+                    
                     if(isMatch){
                         const saltRounds = 10
                         let hashNewPassword; 
-                        bcrypt.hash(req.body.newPassword, saltRounds, (err, hash) =>{
+                        bcrypt.hash(req.body.newPassword, saltRounds, async (err, hash) =>{
                             hashNewPassword = hash;
+                            await User.updateOne({email: req.user.email},
+                                {
+                                    password: hashNewPassword
+                                })
                         })
-                        await User.updateOne({email: req.user.email},
-                        {
-                            password: hashNewPassword
-                        })
+                        console.log
+                        
                         res.locals.level = 'info'
                         res.locals.message = `Bruker endret på passord ${user}`
                         res.json({status:200})
