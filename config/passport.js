@@ -15,8 +15,8 @@ const User = require('./userSchema'),
         bcrypt.compare(password, user.password, function(erro, isMatch) {
           if (erro) return done(erro);
           if(!isMatch) return done(null, false)
+          return done(null, user);
         })
-        return done(null, user);
       });
     })
   )
