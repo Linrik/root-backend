@@ -120,7 +120,7 @@ router.route('/')
     })
     router.route('/newpassword')
         .put(isUser, async (req, res, next)=>{
-            User.findOne({ email: email.toLowerCase() }).select("+password").then((user) => {  
+            User.findOne({ email: req.session.passport.user.email }).select("+password").then((user) => {  
                 if (!user) {
                     res.locals.level = 'error'
                     res.locals.message = `fant ikke brukeren ${user}`

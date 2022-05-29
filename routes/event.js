@@ -113,9 +113,7 @@ router.route('/')
             })
             res.json(events)
             next()
-    
         })
-
         .put(isUser, (req, res, next)=>{
             Event.findById({_id: req.body.eventid}, (err, doc)=>{
                 if(err){
