@@ -78,7 +78,7 @@ router.route('/')
                     return res.json({status:210})
                 } 
                 if(isMatch){
-                    await User.updateOne({email: req.user.email},
+                    await User.updateOne({email: req.session.passport.user.email},
                     {
                         firstname: req.body.firstname,
                         lastname: req.body.lastname,
