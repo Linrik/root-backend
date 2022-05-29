@@ -175,5 +175,10 @@ router.route('/')
                 })
               })
         })
+    router.route('/all')
+            .get(isAdmin, async (req, res, next)=>{
+                const users = await User.find();
+                res.json(users).status(200)
+            })
 
 module.exports = router;
