@@ -54,7 +54,6 @@ router.route('/')
             next()
         })
         res.json({status: 200})
-        
     })
     .put(upload.single('image'), isEditor, async (req, res, next) =>{
         Event.findById({_id: req.body.eventid}, async (err, doc)=>{
