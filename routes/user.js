@@ -62,7 +62,7 @@ router.route('/')
     })
     // endre på bruker (ferdig, men må testes)
     .put(isUser, async (req, res, next) => {
-        User.findOne({ email: email.toLowerCase() }).select("+password").then((user) => {  
+        User.findOne({ email: req.session.passport.user.email}).select("+password").then((user) => {  
             if (!user) {
                 res.locals.level = 'error'
                 res.locals.message = `fant ikke brukeren ${user}`
@@ -100,7 +100,7 @@ router.route('/')
     })
     // slett bruker (ferdig, men må testes)
     .delete(isUser, async (res, req, next) => {
-        await User.deleteOne({email: req.session.user.email})
+        await User.deleteOne({email: req.session.passport.user.email})
 
         res.locals.level = 'info'
         res.locals.email = req.session.passport.user.email
