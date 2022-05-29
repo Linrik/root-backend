@@ -23,6 +23,7 @@ router.route('/')
             }
             res.locals.level = 'info'
             res.locals.message = `Artikkel lagret ${doc}` 
+            res.json({status: 200})
             next()
         })
     })
