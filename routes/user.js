@@ -135,9 +135,14 @@ router.route('/')
                         return res.json({status:210})
                     } 
                     if(isMatch){
+                        const saltRounds = 10
+                        let hashNewPassword; 
+                        bcrypt.hash(req.body.newPassword, saltRounds, (err, hash) =>{
+                            hashNewPassword = hash;
+                        })
                         await User.updateOne({email: req.user.email},
                         {
-                            password: req.body.newPassword
+                            password: hashNewPassword
                         })
                         res.locals.level = 'info'
                         res.locals.message = `Bruker endret på passord ${user}`

@@ -30,11 +30,4 @@ userSchema.pre('save', function (next) {
         next();
     })
 });
-userSchema.pre('updateOne', function (next) {
-    bcrypt.hash(this.password, saltRounds, (err, hash) => {
-        this.password = hash;
-        next();
-    })
-});
-
 module.exports = mongoose.model("User", userSchema, "user");
