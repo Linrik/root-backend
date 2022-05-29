@@ -4,26 +4,28 @@ const express = require('express'),
       router = express.Router(),
       User = require('../config/userSchema'),
       passport = require('passport'),
-      Article = require('../config/articleSchema')
+      Article = require('../config/articleSchema'),
+      {upload} = require('../config/storageSetup');
 // laget api som registrerer bruker med encryptet hash passord
 router.route('/')
-    .post(isEditor, async (req, res, next) => {
+    .post(upload.single('image'),isEditor, async (req, res, next) => {
         const newArticle = new Article({
             user: await User.findOne({  _id: req.session.passport.user.id}),
             title: req.body.title,
             description: req.body.description,
-            image: req.body.image
+            image: req.file.filename
         })
         await newArticle.save((err, doc) =>{
             if(err){
                 res.locals.level = 'error'
                 res.locals.message = `Noe gikk galt under lagring av artikkel ${err}`
+                res.json({status:210})
                 next()
-                return err;
+                return res.json({status:210})
             }
             res.locals.level = 'info'
             res.locals.message = `Artikkel lagret ${doc}` 
-            res.json({status: 200})
+            res.json({status:200})
             next()
         })
     })
@@ -46,7 +48,7 @@ router.route('/')
                 res.locals.level = 'error'
                 res.locals.message = `Noe gikk galt ${err}`
                 next()
-                return err
+                return res.json({status:210})
             }
             doc.overwrite({
                 title: req.body.title,
@@ -58,7 +60,7 @@ router.route('/')
                     res.locals.level = 'error'
                     res.locals.message = `Feil under endring av artikkel ${err}`
                     next()
-                    return err
+                    return res.json({status:210})
                 }
                 res.locals.level = 'info'
 
@@ -75,7 +77,7 @@ router.route('/')
                 res.locals.level = 'error'
                 res.locals.message = `Noe gikk galt ${err}`
                 next()
-                return err
+                return res.json({status:210})
             }
             res.locals.level = 'info'
             res.locals.message = `Artikkel slettet ${doc}`

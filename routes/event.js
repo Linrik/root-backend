@@ -22,10 +22,6 @@ router.route('/')
         next()
     })
     .post( isEditor, async (req, res, next)=>{
-        // upload.single('image'),
-        // console.log(req.body)
-        // console.log(typeof req.file) 
-        console.log(req.body)
         const nyEvent = new Event({
             user: await User.findOne({  _id: req.session.passport.user.id}),
             title: req.body.title,
@@ -37,12 +33,12 @@ router.route('/')
             if(err){
                 res.locals.level = 'error'
                 res.locals.message = `feil under lagring av event ${err}`
-                //next()
-                return err
+                next()
+                return res.json({status:210})
             }
             res.locals.level = 'info'
             res.locals.message = `Event laget ${doc}`
-            //next()
+            next()
         })
         res.json({status: 200})
         
@@ -53,7 +49,7 @@ router.route('/')
                 res.locals.level = 'error'
                 res.locals.message = `Noe gikk galt ${err}`
                 next()
-                return err
+                return res.json({status:210})
             }
             doc.overwrite({
                 title: req.body.title,
@@ -66,10 +62,11 @@ router.route('/')
                     res.locals.level = 'error'
                     res.locals.message = `Feil under endring av event ${err}`
                     next()
-                    return err
+                    return res.json({status:210})
                 }
                 res.locals.level = 'info'
                 res.locals.message = `Event endret ${change}`
+                res.json({status:200})
                 next()
             })
         })
@@ -80,7 +77,7 @@ router.route('/')
                 res.locals.level = 'error'
                 res.locals.message = `Noe gikk galt ${err}`
                 next()
-                return err
+                return res.json({status:210})
             }
             res.locals.level = 'info'
             res.locals.message = `Event slettet ${doc}`
@@ -97,7 +94,7 @@ router.route('/')
                     res.locals.level = 'info'
                     res.locals.message = `Event ikke funnet ${err}`
                     next()
-                    return res.json("Event ikke funnet")
+                    return res.json({status:210})
                 } 
                 res.json(doc)
             })
@@ -105,7 +102,7 @@ router.route('/')
 
     router.route('/participants')
         .get(async (req,res,next)=>{
-            await Event.find({participants: req.session.passport.user.id}).sort({dateFrom: 1})
+            const events = await Event.find({participants: req.session.passport.user.id}).sort({dateFrom: 1})
             .populate('user', 'firstname lastname')
             .populate('participants', 'firstname lastname')
             .populate({
@@ -125,6 +122,8 @@ router.route('/')
                 if(err){
                     res.locals.level = 'error'
                     res.locals.message = `det skjedde noe galt under påmelding ${err}`
+                    next()
+                    return res.json({status:210})
                 }
                 if(doc.participants.indexOf(req.session.passport.user.id) === -1){
                     doc.participants.push(req.session.passport.user.id)

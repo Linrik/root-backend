@@ -1,6 +1,6 @@
 const mongoose = require("mongoose")
 
-const langStatSchema = new mongoose.Schema({
+const languageSchema = new mongoose.Schema({
     language: {
         type: String,
         index: true,
@@ -18,4 +18,4 @@ const langStatSchema = new mongoose.Schema({
     }
 })
 
-module.exports = mongoose.model("Lang", langStatSchema, "language");
+module.exports = mongoose.model("Language", languageSchema, "language");

@@ -19,9 +19,8 @@ router.route('/')
             if(err) {
                 res.locals.level = 'error'
                 res.locals.message = `noe gikk galt under lagring av språk ${err}`
-                res.json({status:210})
                 next()
-                return err;
+                return res.json({status:210})
             }
             res.locals.level = 'info'
             res.locals.message = `Språk ble lagt til ${doc}`
@@ -39,9 +38,8 @@ router.route('/')
                 if(err){
                     res.locals.level = 'error'
                     res.locals.message = `Noe gikk galt ${err}`
-                    res.json({status:210})
                     next()
-                    return err;
+                    return res.json({status:210})
                 } 
                 res.locals.level = 'info'
                 res.locals.message = `Språket har blitt endret ${doc}`
@@ -60,9 +58,8 @@ router.route('/')
             if(err) {
                 res.locals.level = 'error'
                 res.locals.message = `noe gikk galt under sletting av språk ${err}`
-                res.json({status:210})
                 next()
-                return err;
+                return res.json({status:210})
             }
             res.locals.level = 'info'
             res.locals.message = `Språket har blitt slettet ${req.params.lng}`
