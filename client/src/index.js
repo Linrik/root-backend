@@ -10,12 +10,16 @@ import HttpApi from 'i18next-http-backend';
 
 import Loading from './pages/Loading';
 
+//NPM i18next og alle hjelpe pakkene til den initialiseres. Vi bruker LanguageDetector for automatisk sjekke standardspråk
+//på datamaskinen, ellers sjekker siden etter en cookie som bruker kan oppdatere gjennom gui.
+//i18Next brukes i koden som {t('nøkkelord')}
+//Løsningen er bygget på følgende guide: https://www.youtube.com/watch?v=w04LXKlusCQ og dokumentasjon
+
 i18n 
     .use(HttpApi)
     .use(LanguageDetector)
     .use(initReactI18next)
     .init({
-        // supportedLngs: langs,
         fallbackLng: "no",
         detection: {
             order: ['cookie',],
@@ -27,6 +31,8 @@ i18n
         },
     });
 
+//Suspense blir brukt i tilfelle hvor nettsiden ikke klarer eller venter å lastes inn, her har vi definert det som en loading bar.
+//CookiesProvider er en pakke som gjør det mulig å akksessere cookies over hele appen
 ReactDOM.render(
         <Suspense fallback={<Loading/>}>
             <CookiesProvider>

@@ -38,6 +38,7 @@ import LogoDevIcon from '@mui/icons-material/LogoDev';
 import Sitelog from './pages/Sitelog';
 const axios = require('axios').default;
 
+//Alle nøkkler brukt i språkene i sammenheng med i18Next sine useTranslate kall. {t("nøkkel")}
 export const langContext = React.createContext([
 "news_route",
 "events_route",
@@ -128,6 +129,8 @@ export const langContext = React.createContext([
 "recent_articles"
 
 ])
+
+//De forskjellige gruppene som er definert for Navigation(bar). Disse forskjellige gruppene vises bare til brukere som skal ha tilgang.
 export const pagesContext = React.createContext({
     home: [
         {
@@ -221,6 +224,7 @@ export const pagesContext = React.createContext({
     ],
 });
 
+//Axios kall for å hente info om inlogget bruker
 export const fetchLogin = async () => {
     try {
         const request = await axios({
@@ -248,7 +252,6 @@ const App = () => {
             {routes.loggedOut.map(page=>(<Route key={page.name} path={page.route} element={page.content} />))}
             {routes.admin.map(page=>(<Route key={page.name} path={page.route} element={page.content} />))}
             {routes.editor.map(page=>(<Route key={page.name} path={page.route} element={page.content} />))}
-            {/* <Route path={"/page2"} element={page.element} /> */}
             <Route path="*" element={<Nopage />} />
         </Route>
         </Routes>

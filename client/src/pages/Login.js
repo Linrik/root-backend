@@ -51,13 +51,14 @@ const Login = () => {
             {t('login')}
             </Typography>
 
+            {/* Skjema for inlogging */}
             <form onSubmit={handleSubmit}>
                 <Defaultbox>
                     <TextField onChange={(e) => setUserEmail(e.target.value)} required fullWidth id="login_username" type="email"  label={t('email')} variant="outlined" />
                     <TextField onChange={(e) => setUserPassword(e.target.value)} required type="password" fullWidth id="login_password" label={t('password')} variant="outlined" />
 
                     <Button fullWidth type='submit' variant="contained" sx={{p:1}}>
-                    {t('login')}
+                        {t('login')}
                     </Button>
                 </Defaultbox>
             </form>
@@ -65,6 +66,8 @@ const Login = () => {
                 flexDirection: 'row',
                 width: "100%"
             }}>
+
+            {/* Link til registrerings siden */}
             <Button
                 component={Link}
                 to={'/register'}

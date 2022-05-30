@@ -161,15 +161,17 @@ const ProfileCard = (props) => {
         })
 
     }
-
+    //Returnerer en brukerprofil 
     return (
         <Card sx={{ maxWidth: '960px', width: '100%', borderRadius: 0}}>
+            {/* Bagrunnsbilde til profil */}
             <CardMedia
                 component="img"
                 height="280"
                 image={'https://1.bp.blogspot.com/-jGzEyxRo5lA/Xu-gD2pjeCI/AAAAAAAAU90/oXBIHt6sXKc0vQp0_3CIxRzxTU3GpLMKwCK4BGAsYHg/w976-h549/DESKTOP-BACKGROUND-HEROSCREEN.CC-UHD-16-9-ASPECT.png'}
                 alt="BannerImage"
             />
+            {/* Sirkel med forbokstav til innlogget bruker*/}
             <Avatar
                 sx={{
                     width: 102, height: 102,
@@ -179,15 +181,20 @@ const ProfileCard = (props) => {
             >
                 {user.firstname.substring(0,1)}
             </Avatar>
+
             <CardContent sx={{
                 p:4
             }}>
+                
                 <Typography gutterBottom variant="h4" component="h4" sx={{ textDecoration: 'underline'}}>
                     {user.firstname}
                 </Typography>
                 <Typography  color="text.secondary">
                 {t('roles')}
                 </Typography>
+
+                
+                {/* Liste med roller til bruker */}
                 <List sx={{
                     padding: '0',
                     margin: '5px 0', listStyle:'inside'
@@ -209,6 +216,8 @@ const ProfileCard = (props) => {
                 }
                 </List>
 
+                {/* Visning av fornavn og etternavn til bruker i diabled tekstfelt, eller et form for å håndtere enring av navn ved riktig (editName) state.
+                    Viser også  felt for endring av passord om editPassword state er true*/}
                 <Defaultbox sx={{
                     pt:5,m:0,
                     justifyContent: 'flex-start'
@@ -243,6 +252,11 @@ const ProfileCard = (props) => {
                     </Defaultbox>
                 </Defaultbox>
             </CardContent>
+            
+            {/* Knapper for: 
+                endring / bekreftelse av endring for navn basert på editName state.
+                ending / bekreftelse av endring av passord basert på editPassword state.
+                åpning av modal for sletting av bruker*/}
             <CardActions sx={{
                 display: 'flex',
                 justifyContent: 'space-evenly'
@@ -260,6 +274,7 @@ const ProfileCard = (props) => {
 
 
             </CardActions>
+        {/* Modal for sletting av bruker basert på state "openConfirmDelete" */}
         <Dialog
                 open={openConfirmDelete}
                 onClose={handleCloseDialog}
@@ -287,8 +302,8 @@ const ProfileCard = (props) => {
     );
 }
 
+// returnerer hele profilsiden basert på login informasjon
 const Profile = () => {
-    
     const {login, loginMode} = React.useContext(LoginContext);
 
     return (

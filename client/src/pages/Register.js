@@ -21,6 +21,8 @@ const Register = () => {
     const [regPass, setRegPass] = React.useState("");
     const [regPassRep, setRegPassRep] = React.useState("");
 
+    // Axios request for mot databasen mot login informasjonen, ved suksess vil bruker bli logget inn,
+    //  sendes til "hjem" siden og oppdaterer navbar
     const handleSubmit = async(event) => {
         event.preventDefault();
         if(regPass === regPassRep){
@@ -53,25 +55,28 @@ const Register = () => {
             {t('new_user')}
             </Typography>
 
+            {/* Skjema for input av firnavn, etternavn, email, passord og bekreftelse av passord. */}
             <form onSubmit={handleSubmit}>
             <Defaultbox sx={{
             m:0,p:0
             }}>
-            <TextField onChange={(e) => setRegFirstName(e.target.value)} required fullWidth id="reg_firstname" label={t('first_name')} variant="outlined" />
-            <TextField onChange={(e) => setRegLastName(e.target.value)} required fullWidth id="reg_lastname" label={t('last_name')} variant="outlined" />
-            <TextField onChange={(e) => setRegMail(e.target.value)} required type="email" fullWidth id="reg_mail" label={t('email')} variant="outlined" />
-            <TextField onChange={(e) => setRegPass(e.target.value)} required type="password" fullWidth id="reg_pass" label={t('password')} variant="outlined" />
-            <TextField onChange={(e) => setRegPassRep(e.target.value)} required type="password" fullWidth id="reg_pass_rep" label={t('repeat_password')} variant="outlined" />
+                <TextField onChange={(e) => setRegFirstName(e.target.value)} required fullWidth id="reg_firstname" label={t('first_name')} variant="outlined" />
+                <TextField onChange={(e) => setRegLastName(e.target.value)} required fullWidth id="reg_lastname" label={t('last_name')} variant="outlined" />
+                <TextField onChange={(e) => setRegMail(e.target.value)} required type="email" fullWidth id="reg_mail" label={t('email')} variant="outlined" />
+                <TextField onChange={(e) => setRegPass(e.target.value)} required type="password" fullWidth id="reg_pass" label={t('password')} variant="outlined" />
+                <TextField onChange={(e) => setRegPassRep(e.target.value)} required type="password" fullWidth id="reg_pass_rep" label={t('repeat_password')} variant="outlined" />
 
-            <Button fullWidth type='submit' variant="contained" sx={{p:1}}>
-            Registrer
-            </Button>
+                <Button fullWidth type='submit' variant="contained" sx={{p:1}}>
+                    {t('register')}
+                </Button>
             </Defaultbox>
             </form>
             <Defaultbox sx={{
                 flexDirection: 'row',
                 width: "100%"
             }}>
+                
+            {/* Knapp som sender bruker til  innloggins siden*/}
             <Button
                 component={Link}
                 to={'/login'}
@@ -82,21 +87,6 @@ const Register = () => {
                 >
                 {t('login')}
             </Button>
-
-            {/* <Link
-            component="button"
-            variant="body2"
-            underline="none"
-            width="45%"
-            sx={{
-            // color: 
-            }}
-            onClick={() => {
-            console.info("I'm a button.");
-            }}
-            >
-            {t('forgot_password')}
-            </Link> */}
             </Defaultbox>
             
         </Smallcenterbox>
