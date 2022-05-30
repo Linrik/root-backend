@@ -31,9 +31,9 @@ const db = mongoose.connect(conn, ()=> {
     console.log("connected to MongoDB")
 }, e => console.error(e));
 
-var allowedOrigins = ['http://localhost:3000',
-                      'https://localhost:3000'
-];
+// var allowedOrigins = ['http://localhost:3000',
+//                       'https://localhost:3000'
+// ];
 const sessionOptions = {
     secret: key,
         resave: false,
@@ -45,7 +45,7 @@ const sessionOptions = {
         }),
         name: 'user',
         cookie: {
-            secure: false,
+            secure: process.env.SECURECOOKIE === 'true' ? true : false,
             maxAge: 1000 * 60 * 60* 24
         }
 }
@@ -63,7 +63,7 @@ const corsOptions = {
     optionSuccesStatus: 200,
     credentials: true
   }
-
+app.set('trust proxy', 1);
 app.use(cors(corsOptions))
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))

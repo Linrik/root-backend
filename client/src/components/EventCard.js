@@ -8,7 +8,7 @@ import CardActions from '@mui/material/CardActions';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { blue, green, pink, red } from '@mui/material/colors';
+import { blue, green, pink, red, grey } from '@mui/material/colors';
 import Switch from '@mui/material/Switch';
 import GroupsIcon from '@mui/icons-material/Groups';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -19,10 +19,11 @@ import {useTranslation} from "react-i18next";
 import Fade from '@mui/material/Fade';
 import { Box } from '@mui/system';
 import Defaultbox from './helper/DefaultBox';
-import { List, Modal } from '@mui/material';
+import { List, Modal, Avatar } from '@mui/material';
 import Paper1200p from './helper/Paper1200p';
 import Backdrop from '@mui/material/Backdrop';
 import Defaultboxcol from './helper/DefaultBoxCol';
+import CloseIcon from '@mui/icons-material/Close';
 const axios = require('axios').default
 
 const ExpandMore = styled((post) => {
@@ -186,6 +187,13 @@ const handleCancelEvent = async () => {
       <Box sx={{  position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',  p: 4, outline:0, width:'100%', maxWidth:'1200px'}}>
         <Paper1200p>
           <Box sx={{boxShadow: 24, backgroundImage: `url("${cardImage}")`, backgroundRepeat:'no-repeat', backgroundAttachment:'fixed', backgroundSize:'cover', width:'100%', height:'300px', backgroundPosition:'center center'}}>
+          <IconButton 
+              aria-label="close" 
+              onClick={handleClose} >
+                <Avatar sx={{backgroundColor: grey[500],}}> 
+                  <CloseIcon />
+                </Avatar>
+          </IconButton>
           </Box>
           <Defaultbox sx={{flexDirection:'column', alignContent:'center'}}>            
             <Typography variant="h3" component="h2" sx={{borderBottom:'1px solid'}}>
