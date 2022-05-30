@@ -22,7 +22,6 @@ const Sitelog = () => {
         }).then((response)=>{
             setLogLevel(response.data.level)
             setLogActive(!response.data.logger)
-            console.log(response.data)
         })
         .catch(function (error){
             console.log(error)
