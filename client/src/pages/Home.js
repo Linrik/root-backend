@@ -1,6 +1,5 @@
 import React from 'react';
 
-import TextField from '@mui/material/TextField';
 import Defaultbox from '../components/helper/DefaultBox';
 import { Box, Button, Grid, Typography } from '@mui/material';
 import {useTranslation} from "react-i18next";
@@ -9,24 +8,6 @@ import Article from '../components/Article';
 import { Link } from 'react-router-dom';
 import { LoginContext } from '../routerTemplate/Template';
 const axios = require('axios').default
-
-function getImage() {
-    var random = parseInt(Math.random()*6);
-    return itemData[random];
-}  
-const itemData = 
-[
-    'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
-    'https://images.unsplash.com/photo-1551782450-a2132b4ba21d',
-    'https://images.unsplash.com/photo-1522770179533-24471fcdba45',
-    'https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c',
-    'https://images.unsplash.com/photo-1533827432537-70133748f5c8',
-    'https://images.unsplash.com/photo-1558642452-9d2a7deb7f62'    
-];
-
-const sizeSequence = [
-    12, 6, 6, 5, 7, 6, 6, 7, 5, 12, 5, 7
-];
 
 const Home = () => {
     
@@ -37,7 +18,8 @@ const Home = () => {
     const [myEventList, setMyEventList] = React.useState([]);
 
     const {login} = React.useContext(LoginContext);
-
+    
+    // Hendter påmeldte arrangementer for innlogget bruker, og alle arrangementer og artikler for fremvisning av top 5 nyeste.
     React.useEffect( () => {
         const fetchMyEvents = async () =>{
             try {

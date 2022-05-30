@@ -8,6 +8,7 @@ import FAQTable from '../components/FAQTable';
 import Defaultboxcol from '../components/helper/DefaultBoxCol';
 import {useTranslation} from "react-i18next";
 
+// Statisk data for alle predefinerte personer
 const rootPeople =[
     {
         firstName: 'Henrik',
@@ -25,7 +26,7 @@ const rootPeople =[
     },    {
         firstName: 'Olav Pålerud',
         lastName: 'Lille-Østerholt',
-        image: 'https://i.ytimg.com/vi/VcI4-ZCN4NA/maxresdefault.jpg',
+        image: 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/c51beb5e-7411-4732-8524-b4466919d0fb/dcbhv3o-e8840e3a-2745-43be-a1f2-a4c2782340e2.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2M1MWJlYjVlLTc0MTEtNDczMi04NTI0LWI0NDY2OTE5ZDBmYlwvZGNiaHYzby1lODg0MGUzYS0yNzQ1LTQzYmUtYTFmMi1hNGMyNzgyMzQwZTIuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.WmFAY04vb1n1SocRxmlfkT1epUF3PFYyAfsE0FgNU84',
         role: 'Sponsor Ansvarlig',
         comment: 'Mekker mad cash for root',
     },
@@ -45,6 +46,7 @@ const rootPeople =[
     }
 ]
 
+//Viser returnerer et statisk kort om en person basert på konstanten "rootPeoplle" over
 const PersonCard = ({firstName, lastName, image, role, comment, t}) => {
     
     return(
@@ -74,6 +76,7 @@ const PersonCard = ({firstName, lastName, image, role, comment, t}) => {
     );
 }
 
+//Returnerer kort om alle predefinerte personer gjennom en .map loop og en FAQ i bunnen
 const About = () => {
 
     const {t} = useTranslation(); 

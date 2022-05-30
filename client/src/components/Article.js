@@ -31,20 +31,13 @@ const Article = ({in_post, margin}) => {
     const s={padding:3, fontWeight: 700,
     letterSpacing: '-0.02em', lineHeight: 1.2, margin: 0}
   
+    // Returnerer ferdig artikkel komponent basert på informasjon i "in_post" variabelen, og margin basert på innput variabel "margin" 
   return (
     <Paper elevation={5} sx={{m: {margin}, borderRadius:3, overflow:'hidden', width: "100%", maxHeight:'500px'}}>
       <Box onClick={handleOpen}
         sx={{display:'flex', flexWrap:'wrap', flexDirection:'row'}}
       >
-      {/* <Box sx={{
-          display:'flex',
-          maxHeight: '200px',
-          overflow: 'hidden',
-          justifyContent:'center'
-        }}>
-        <img src={`${cardImage}`} alt='' loading="lazy" style={{ width: '100%',minHeight:'200px' }} />
-
-        </Box> */}
+        
         <Box sx={{boxShadow: 24,
           backgroundImage: `url("${cardImage}")`,
           backgroundRepeat:'no-repeat',

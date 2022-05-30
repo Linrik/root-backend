@@ -10,21 +10,7 @@ import Paper1200p from '../components/helper/Paper1200p';
 import Spacebetween from '../components/helper/SpaceBetween';
 const axios = require('axios').default
 
-
-const itemData = 
-[
-    'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
-    'https://images.unsplash.com/photo-1551782450-a2132b4ba21d',
-    'https://images.unsplash.com/photo-1522770179533-24471fcdba45',
-    'https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c',
-    'https://images.unsplash.com/photo-1533827432537-70133748f5c8',
-    'https://images.unsplash.com/photo-1558642452-9d2a7deb7f62'    
-];
-function getImage() {
-    var random = parseInt(Math.random()*6);
-    return itemData[random];
-}
-
+// Adminside for redigering av eksisterende arrangementer og opretting av nye
 const ArticleAdmin = () => {
 
     const { t } = useTranslation();
@@ -35,6 +21,7 @@ const ArticleAdmin = () => {
 
     const [search, setSearch] = React.useState("");
 
+    // Metode for sletting av arrangement, sender delete request til backend med eventID og fjerner komponentet fra frontend
     const handleDelete = async (postID) => {
         const newPostList = articleList.filter((item) => item._id !== postID);
 
@@ -56,6 +43,8 @@ const ArticleAdmin = () => {
         setArticleList(newPostList);
     }
 
+    
+    // Metode for redigering av arrangement: opretter og åpner en redigeringsboks med info om arrangementet og en metode for backend 
     function handleEdit(postID) {
         const postItem = articleList.find((item) => item._id === postID);
         console.log('"Edit Post" Clicked', postItem.id)
@@ -69,10 +58,10 @@ const ArticleAdmin = () => {
                 fetch={fetchArticles}
             />
         );
-        setShowForm(!showForm);
-        // .scrollIntoView()
-        
+        setShowForm(!showForm);        
     }
+
+    // Metode som henter alle artikler fra backend med et axios kall og oppdaterer liste med artikler med "setArticleList"
     const fetchArticles = async () =>{
         try {
             const request = await axios({
@@ -89,6 +78,7 @@ const ArticleAdmin = () => {
         fetchArticles();
     }, [setArticleList, t]);
     
+    // Metode for hente  
     function handleNewPost() {
         setForm(<ArticleForm fetch={fetchArticles} setShowForm = {setShowForm} in_isNewPost={true} isEvent={false}/>);
         setShowForm(true);
@@ -115,6 +105,7 @@ const ArticleAdmin = () => {
         );
 };
 
+// Komponent med tekstfelt for å søke etter artikkel tittel
 const SearchBox = ({setSearch, t}) => {
     const changeSearch = (e) => {
         setSearch(e.target.value);
