@@ -16,7 +16,7 @@ import { LoginContext } from '../routerTemplate/Template';
 import { blue, grey} from '@mui/material/colors';
 import CloseIcon from '@mui/icons-material/Close';
 
-const Article = ({in_post, margin}) => {  
+const Article = ({in_post, margin, fetch}) => {  
   const {_id, comments, image, description, title} = in_post;  
   const [open, setOpen] = React.useState(false); 
   const [openComments, setOpenComments] = React.useState(false);
@@ -37,7 +37,8 @@ const Article = ({in_post, margin}) => {
       <Box onClick={handleOpen}
         sx={{display:'flex', flexWrap:'wrap', flexDirection:'row'}}
       >
-        <Box sx={{boxShadow: 24,
+        
+        <Box sx={{
           backgroundImage: `url("${cardImage}")`,
           backgroundRepeat:'no-repeat',
           backgroundSize:'cover',
@@ -66,7 +67,7 @@ const Article = ({in_post, margin}) => {
         <Fade Fade in={open}>
           <Box sx={{m:0, p:0}}>
             <Paper sx={{ maxWidth:'1200px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', outline:0, width:'100%', maxHeight:'100vh', overflow:'scroll'}}>
-              <Box sx={{boxShadow: 24,
+              <Box sx={{
                 backgroundImage: `url("${cardImage}")`,
                 backgroundRepeat:'no-repeat', 
                 backgroundAttachment:'fixed', 
@@ -94,7 +95,7 @@ const Article = ({in_post, margin}) => {
                 </IconButton>
               </Defaultboxcol>
               
-              <CommentSection openComments={openComments} commentList={comments} postID={in_post._id} isLoggedIn={login.loginStatus}/>
+              <CommentSection openComments={openComments} fetch={fetch} commentList={comments} postID={in_post._id} isLoggedIn={login.loginStatus}/>
             </Paper>
         </Box>
       </Fade>

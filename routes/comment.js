@@ -27,12 +27,14 @@ router.route('/:type')
                 res.locals.level = 'info'
                 res.locals.message = `Bruker har kommentert på event ${comment}`
                 next()
+                res.send({status:200})
         } else if(req.params.type === 'article'){
             await Article.updateOne({_id: req.body.postid},
                 {$push: {comments: comment}} )
                 res.locals.level = 'info'
                 res.locals.message = `Bruker har kommentert på artikkel ${comment}`
                 next()
+                res.send({status:200})
         }
     })
     .put(async (req, res, next) => {

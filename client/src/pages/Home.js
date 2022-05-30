@@ -19,6 +19,26 @@ const Home = () => {
 
     const {login} = React.useContext(LoginContext);
     
+    /*Axios reqiest for å hente alle artikler, kortet ned til maks 5 */
+    const fetchArticles = async () =>{
+        try {
+            const request = await axios({
+                method: 'get',
+                url: '/api/article',
+                withCredentials: true,
+            })
+            var fullArticleList = request.data;
+            const newArticleList = [];
+            
+            for (let index = 0; index < (fullArticleList.length < 5? fullArticleList.length : 5); index++) {
+                newArticleList.push(fullArticleList[index]);
+            }
+            setArticleList(newArticleList);
+        } catch(e){
+            console.log(e);
+        }
+    }
+
     // Hendter påmeldte arrangementer for innlogget bruker, og alle arrangementer og artikler for fremvisning av top 5 nyeste.
     React.useEffect( () => {
         /*Axios reqiest for påmeldte arrangementer av innlogget bruker */
@@ -60,27 +80,6 @@ const Home = () => {
             }
         }
         fetchEvents();
-      
-        /*Axios reqiest for å hente alle artikler, kortet ned til maks 5 */
-        const fetchArticles = async () =>{
-            try {
-                const request = await axios({
-                    method: 'get',
-                    url: '/api/article',
-                    withCredentials: true,
-                })
-                var fullArticleList = request.data;
-                const newArticleList = [];
-                
-                for (let index = 0; index < (fullArticleList.length < 5? fullArticleList.length : 5); index++) {
-                    newArticleList.push(fullArticleList[index]);
-                }
-                setArticleList(newArticleList);
-
-            } catch(e){
-                console.log(e);
-            }
-        }
         fetchArticles();
     
     
@@ -131,7 +130,7 @@ const Home = () => {
                     return (
                         <Eventcard 
                             key={event.title+index} 
-                            post ={event} 
+                            post ={event}
                             myEventList = {myEventList} 
                             in_handlejoinEvent = {handlejoinEvent}
                             in_handleCancelEvent = {handleCancelEvent}
@@ -152,7 +151,6 @@ const Home = () => {
                     {t('recent_articles')}
                 </Typography>
             </Defaultbox>
-
             {/* Viser frem en liste med de alle (0-5) artikler som ble hentet fra backend */}
             <Grid container columns={12}
                 alignItems="stretch" justifyContent={'center'}>
@@ -160,14 +158,12 @@ const Home = () => {
                     {ArticleList.map((article, index) =>{
                         return(
                             <Box key={article.title + index} sx={{width:'275px', maxHeight:'500px', overflow:'hidden'}}>
-                                <Article  className='ArticleTest' in_post={article} margin={0} />
+                                <Article fetch={fetchArticles} className='ArticleTest' in_post={article} margin={0} />
                             </Box>
                         )
                     })}
                 </Defaultbox>
             </Grid>
-
-            {/* Knapp for å sende bruker til event siden */}
             <Defaultbox>
                 <Button component={Link} to={'/articles'}>{t('go_to_page')}</Button>
             </Defaultbox>

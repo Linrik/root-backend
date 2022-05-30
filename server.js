@@ -17,6 +17,7 @@ const admin = require('./routes/admin'),
       { appLog } = require('./routes/logMiddleware'),
       port = process.env.PORT,
       { isAdmin } = require('./routes/AuthMiddelware');
+const path = require('path')
 
 const dbOptions = {
     useNewUrslParser: true,
@@ -79,11 +80,17 @@ app.use('/api/language', lang, appLog)
 app.use('/api/admin', isAdmin, admin, appLog)
 
 
-app.get('/', (req, res) =>{
-    console.log(req.session.passport.user)
-    res.send("Nothing to see here")
+app.use(express.static(path.join(__dirname, 'client/build')));
+app.get('*', (req, res)=>{
+    res.sendFile(__dirname +"/client/build/index.html", function(err) {
+        if (err) {
+            // return res.status(err.status).end();
+            return res.status(404).end();
+        } else {
+            return res.status(200).end();
+        }
+    });
 })
-
 
 app.listen(port, () => {
     console.log(`Listening to ${port}`)

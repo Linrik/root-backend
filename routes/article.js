@@ -45,7 +45,7 @@ router.route('/')
             path: 'comments',
             populate: {
                 path: 'user',
-                select: 'firstname lastname'
+                select: 'firstname lastname',
             }
         })
         res.json(articles)

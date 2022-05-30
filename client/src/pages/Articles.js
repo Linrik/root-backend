@@ -17,20 +17,22 @@ const Articles = () => {
     const {t} = useTranslation();
     const [postList, setPostList] = React.useState([]);
 
+    const fetchArticles = async () =>{
+        try {
+            const request = await axios({
+                method: 'get',
+                url: '/api/article',
+                withCredentials: true,
+            })
+        setPostList(request.data);
+        console.log("article satt 1")
+        } catch(e){
+            console.log(e);
+        }
+    }
+
     React.useEffect( () => {
         /*axios request for å hente artikler fra datbase og lagre i postList*/
-        const fetchArticles = async () =>{
-            try {
-                const request = await axios({
-                    method: 'get',
-                    url: '/api/article',
-                    withCredentials: true,
-                })
-            setPostList(request.data);
-            } catch(e){
-                console.log(e);
-            }
-        }
         fetchArticles();       
 
     }, [setPostList]);
@@ -59,7 +61,7 @@ const Articles = () => {
                     const cardImage = article.image===undefined ? `/api/resources/defaultArticle.png` : `/api/resources/${article.image}`;
                     return(
                     <Grid key={article.title + index} item container xs={12} sm={postList.length-1 === article ? true : sizeSequence[seqIndex++]} alignItems="stretch">
-                        <Article  className='ArticleTest' image={cardImage} in_post={article} margin={'16px'} />
+                        <Article  className='ArticleTest' fetch={fetchArticles} image={cardImage} in_post={article} margin={'16px'} />
                     </Grid>
                     )
                 })}
