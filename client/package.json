@@ -2,6 +2,7 @@
   "name": "root-frontend-2",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:5000",
   "dependencies": {
     "@date-io/luxon": "^2.14.0",
     "@emotion/react": "^11.8.2",

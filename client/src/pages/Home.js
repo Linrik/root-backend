@@ -43,7 +43,7 @@ const Home = () => {
             try {
                 const request = await axios({
                     method: 'get',
-                    url: 'http://localhost:5000/event/participants',
+                    url: '/api/event/participants',
                     withCredentials: true,
                 })
                 setMyEventList(request.data);
@@ -56,7 +56,7 @@ const Home = () => {
             try {
                 const request = await axios({
                     method: 'get',
-                    url: 'http://localhost:5000/event',
+                    url: '/api/event',
                     withCredentials: true,
                 })
                 var fullEventList = request.data;
@@ -78,7 +78,7 @@ const Home = () => {
             try {
                 const request = await axios({
                     method: 'get',
-                    url: 'http://localhost:5000/article',
+                    url: '/api/article',
                     withCredentials: true,
                 })
                 var fullArticleList = request.data;
@@ -105,7 +105,7 @@ const Home = () => {
     const handlejoinEvent = async (event_id) => {            
         await axios({
           method: "put",
-          url: ("http://localhost:5000/event/participants"),
+          url: ("/api/event/participants"),
           data: {eventid: event_id},
           withCredentials: true,
       }).then((response)=>{
@@ -118,7 +118,7 @@ const Home = () => {
     const handleCancelEvent = async (event_id) => {      
         await axios({
           method: "delete",
-          url: ("http://localhost:5000/event/participants"),
+          url: ("/api/event/participants"),
           data: {eventid: event_id},
           withCredentials: true,
       }).then((response)=>{

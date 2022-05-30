@@ -31,7 +31,7 @@ const Login = () => {
         event.preventDefault();
         await axios({
             method: 'post',
-            url: 'http://localhost:5000/user',
+            url: '/api/user',
             data: {
                 email: userEmail,
                 password: userPassword

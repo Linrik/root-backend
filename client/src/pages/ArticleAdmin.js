@@ -38,7 +38,7 @@ const ArticleAdmin = () => {
     const handleDelete = async (postID) => {
         const newPostList = articleList.filter((item) => item._id !== postID);
 
-        const route = "http://localhost:5000/article";
+        const route = "/api/article";
         const dataInput = {articleid: postID}
         console.log(postID);
 
@@ -56,7 +56,7 @@ const ArticleAdmin = () => {
         setArticleList(newPostList);
     }
 
-    function handleEdit(postID, in_isNewPost) {
+    function handleEdit(postID) {
         const postItem = articleList.find((item) => item._id === postID);
         console.log('"Edit Post" Clicked', postItem.id)
         setForm(
@@ -64,9 +64,9 @@ const ArticleAdmin = () => {
                 setShowForm = {setShowForm}
                 in_postTitle = {postItem.title}
                 in_postDescription = {postItem.description}
-                isNewPost = {in_isNewPost}
+                isNewPost = {false}
                 in_id = {postItem._id}
-                isArticle
+                fetch={fetchArticles}
             />
         );
         setShowForm(!showForm);
@@ -77,7 +77,7 @@ const ArticleAdmin = () => {
         try {
             const request = await axios({
                 method: 'get',
-                url: 'http://localhost:5000/article',
+                url: '/api/article',
                 withCredentials: true,
             })
             setArticleList(request.data);

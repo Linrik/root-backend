@@ -19,7 +19,6 @@ import {useTranslation} from "react-i18next";
 import Fade from '@mui/material/Fade';
 import { Box } from '@mui/system';
 import Defaultbox from './helper/DefaultBox';
-import {joinEvent, errorResponse} from '../data'
 import { List, Modal } from '@mui/material';
 import Paper1200p from './helper/Paper1200p';
 import Backdrop from '@mui/material/Backdrop';
@@ -47,7 +46,7 @@ export default function Eventcard({post, in_handlejoinEvent, in_handleCancelEven
   const [cookies, setCookie] = useCookies(["lng"]);
   const [isGoing, setIsGoing] = React.useState(false);
   const [openModal, setOpenModal] = React.useState(false);
-  const cardImage = image===undefined ? `http://localhost:5000/resources/defaultEvent.jpg` : `http://localhost:5000/resources/${image}`;
+  const cardImage = image===undefined ? `/api/resources/defaultEvent.jpg` : `/api/resources/${image}`;
   const handleOpen = () => {
     setOpenModal(true)};
   const handleClose = () => {

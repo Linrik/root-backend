@@ -38,11 +38,6 @@ import LogoDevIcon from '@mui/icons-material/LogoDev';
 import Sitelog from './pages/Sitelog';
 const axios = require('axios').default;
 
-// export const loginSession = React.createContext({
-//     loginStatus:"loggedOut",
-//     user: null,
-//     setLogin: (data) => {}
-// })
 export const langContext = React.createContext([
 "news_route",
 "events_route",
@@ -224,7 +219,7 @@ export const fetchLogin = async () => {
     try {
         const request = await axios({
             method: 'get',
-            url: 'http://localhost:5000/user',
+            url: '/api/user',
             withCredentials: true,
         })
         return request.data;
@@ -234,12 +229,6 @@ export const fetchLogin = async () => {
 }
 
 const App = () => {
-
-    // const {setLogin} = React.useContext(loginSession);
-
-    // useEffect(() => {
-    //     setLogin(fetchLogin());
-    // }, [setLogin]);
 
     const routes = React.useContext(pagesContext);
 

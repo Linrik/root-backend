@@ -21,7 +21,7 @@ const Article = ({in_post, margin}) => {
   const [open, setOpen] = React.useState(false); 
   const [openComments, setOpenComments] = React.useState(false);
   const {login, loginMode} = React.useContext(LoginContext);
-  const cardImage = image===undefined ? `http://localhost:5000/resources/defaultArticle.png` : `http://localhost:5000/resources/${image}`;
+  const cardImage = image===undefined ? `/api/resources/defaultArticle.png` : `/api/resources/${image}`;
   const handleOpen = () => {
     setOpen(true)};
   const handleClose = () => {

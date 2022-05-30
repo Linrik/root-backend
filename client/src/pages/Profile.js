@@ -81,7 +81,7 @@ const ProfileCard = (props) => {
         if(updatedFName !== user.firstname || updatedLName !== user.lastname){
             await axios({
                 method: 'put',
-                url: "http://localhost:5000/user",
+                url: "/api/user",
                 withCredentials: true,
                 data: {
                     password: currPasswordInputN,
@@ -106,7 +106,7 @@ const ProfileCard = (props) => {
         if(newPassword === newPasswordRepeat){
             await axios({
                 method: 'put',
-                url: "http://localhost:5000/user/newpassword",
+                url: "/api/user/newpassword",
                 withCredentials: true,
                 data: {
                     password: currPasswordInputP,
@@ -124,7 +124,7 @@ const ProfileCard = (props) => {
     const handleDeleteUser = async () => {
         await axios({
             method: 'delete',
-            url: "http://localhost:5000/user",
+            url: "/api/user",
             withCredentials: true,
             data: {
                 password: currPasswordInputD,

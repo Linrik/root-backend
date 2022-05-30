@@ -57,7 +57,7 @@ const ArticleForm = ({fetch, setShowForm, in_postTitle, in_image, in_postDescrip
         var method = in_isNewPost ? 'post' : 'put';
         await axios({
             method: method,
-            url: "http://localhost:5000/event",
+            url: "/api/event",
             data: d,
             withCredentials: true,
         }).then((response)=>{
@@ -80,7 +80,7 @@ const ArticleForm = ({fetch, setShowForm, in_postTitle, in_image, in_postDescrip
         var method = in_isNewPost ? 'post' : 'put';
         await axios({
             method: method,
-            url: "http://localhost:5000/article",
+            url: "/api/article",
             data: d,
             withCredentials: true,
         }).then((response)=>{

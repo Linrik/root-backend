@@ -13,7 +13,7 @@ const Logout = () => {
         const fetchLogout = async () => {
             await axios({
                 method: 'get',
-                url: 'http://localhost:5000/user/logout',
+                url: '/api/user/logout',
                 withCredentials: true,
             }).then((response)=>{
                 loginMode.Template();

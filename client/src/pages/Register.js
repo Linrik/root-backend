@@ -26,7 +26,7 @@ const Register = () => {
         if(regPass === regPassRep){
             await axios({
                 method: 'post',
-                url: 'http://localhost:5000/user/signup',
+                url: '/api/user/signup',
                 data: {
                     email: regMail,
                     firstname: regFirstName,

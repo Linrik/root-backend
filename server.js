@@ -52,11 +52,12 @@ const corsOptions = {
     // origin: true,
     origin: function(origin, callback){
         if(!origin) return callback(null, true);
-        if(allowedOrigins.indexOf(origin) === -1){
-          var msg = 'The CORS policy for this site does not ' +
-                    'allow access from the specified Origin.';
-          return callback(new Error(msg), false);
-        }    return callback(null, true);
+        // if(allowedOrigins.indexOf(origin) === -1){
+        //   var msg = 'The CORS policy for this site does not ' +
+        //             'allow access from the specified Origin.';
+        //   return callback(new Error(msg), false);
+        // }
+        return callback(null, true);
       },
     optionSuccesStatus: 200,
     credentials: true
@@ -69,13 +70,13 @@ app.use(session(sessionOptions))
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(passport.authenticate('session'))
-app.use('/resources', express.static('resources'))
-app.use('/user', user, appLog)
-app.use('/event', event, appLog)
-app.use('/article', article, appLog)
-app.use('/comment', comment, appLog)
-app.use('/language', lang, appLog)
-app.use('/admin', isAdmin, admin, appLog)
+app.use('/api/resources', express.static('resources'))
+app.use('/api/user', user, appLog)
+app.use('/api/event', event, appLog)
+app.use('/api/article', article, appLog)
+app.use('/api/comment', comment, appLog)
+app.use('/api/language', lang, appLog)
+app.use('/api/admin', isAdmin, admin, appLog)
 
 
 app.get('/', (req, res) =>{

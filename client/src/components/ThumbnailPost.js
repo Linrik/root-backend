@@ -43,7 +43,7 @@ import { useCookies } from "react-cookie";
         return(
             <Defaultbox sx = {{alignItems: 'center', justifyContent: 'flex-start', borderBottom:1, maxWidth:'1200px'}}>
                 <Box sx ={{}}>
-                    {image!==undefined && <img srcSet={`http://localhost:5000/resources/${image}`} alt='' loading="lazy" style={{ width: '200px', }}/>}
+                    {image!==undefined && <img srcSet={`/api/resources/${image}`} alt='' loading="lazy" style={{ width: '200px', }}/>}
                 </Box>
                 <Defaultbox sx = {{...smallScreenXS, }}>
                     <label>{title}</label>

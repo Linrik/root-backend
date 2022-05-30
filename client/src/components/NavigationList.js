@@ -63,7 +63,7 @@ const LangForm = () => {
     const fetchLangs = async ()=> {
       await axios({
           method: 'get',
-          url: 'http://localhost:5000/language',
+          url: '/api/language',
           withCredentials: true,
       }).then((response)=>{
           setLangList(response.data);

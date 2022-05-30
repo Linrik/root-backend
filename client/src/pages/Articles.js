@@ -43,7 +43,7 @@ const Articles = () => {
             try {
                 const request = await axios({
                     method: 'get',
-                    url: 'http://localhost:5000/article',
+                    url: '/api/article',
                     withCredentials: true,
                 })
             setPostList(request.data);
@@ -74,7 +74,7 @@ const Articles = () => {
                     if(seqIndex===sizeSequence.length){
                         seqIndex = 0;
                     }
-                    const cardImage = article.image===undefined ? `http://localhost:5000/resources/defaultArticle.png` : `http://localhost:5000/resources/${article.image}`;
+                    const cardImage = article.image===undefined ? `/api/resources/defaultArticle.png` : `/api/resources/${article.image}`;
                     return(
                     <Grid key={article.title + index} item container xs={12} sm={postList.length-1 === article ? true : sizeSequence[seqIndex++]} alignItems="stretch">
                         <Article  className='ArticleTest' image={cardImage} in_post={article} margin={'16px'} />

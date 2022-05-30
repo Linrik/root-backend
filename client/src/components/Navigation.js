@@ -127,7 +127,7 @@ const Navigation = ({Outlet}) => {
         
         await axios ({
             method:'get',
-            url:"http://localhost:5000/user/logout",
+            url:"/api/user/logout",
             withCredentials: true
         }).then((response)=>{
             navigate('/login')

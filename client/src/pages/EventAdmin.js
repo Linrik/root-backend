@@ -38,7 +38,7 @@ const EventAdmin = () => {
         
         const newPostList = postList.filter((item) => item._id !== postID);
         
-        const route = "http://localhost:5000/event";
+        const route = "/api/event";
         const dataInput = {eventid: postID}
         
         await axios({
@@ -70,6 +70,7 @@ const EventAdmin = () => {
                 in_endTime = {postItem.endTime}
                 in_isNewPost = {false}
                 in_id = {postItem._id}
+                fetch={fetchEvents}
                 isEvent
             />
         );
@@ -81,7 +82,7 @@ const EventAdmin = () => {
         try {
             const request = await axios({
                 method: 'get',
-                url: 'http://localhost:5000/event',
+                url: '/api/event',
                 withCredentials: true,
             })
         setPostList(request.data);

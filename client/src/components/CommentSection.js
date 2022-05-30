@@ -32,7 +32,7 @@ export default function CommentSection({openComments, commentList, postID, isLog
         event.preventDefault();
         await axios({
             method: 'post',
-            url: "http://localhost:5000/comment/article",
+            url: "/api/comment/article",
             data: {comment: text, postid: postID},
             withCredentials: true,
         }).then((response)=>{

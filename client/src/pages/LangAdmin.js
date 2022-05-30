@@ -25,7 +25,7 @@ const LangAdmin = () => {
         setShowForm(false)
         await axios({
             method: "get",
-            url: "http://localhost:5000/language",
+            url: "/api/language",
             withCredentials: true,
         }).then((response)=>{
             setLangList(response.data)
@@ -36,7 +36,7 @@ const LangAdmin = () => {
     const handleDelete = async (id) => {
         await axios({
             method: "delete",
-            url: "http://localhost:5000/language/id/"+langList[id].language,
+            url: "/api/language/id/"+langList[id].language,
             withCredentials: true,
         }).then((response)=>{
             fetchLang();
@@ -84,7 +84,7 @@ const LangForm = ({langID, langList, fetchLang, t}) => {
         Object.assign(langData, inputFields);
         await axios({
             method: langID<0 ? "post" : "put",
-            url: "http://localhost:5000/language",
+            url: "/api/language",
             data: {
                 lngName: event.target[0].value,
                 lng: event.target[2].value.toLowerCase(),

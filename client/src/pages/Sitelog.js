@@ -17,7 +17,7 @@ const Sitelog = () => {
     const fetchLogLevel = async ()=>{
         await axios ({
             method:'get',
-            url:"http://localhost:5000/admin/log",
+            url:"/api/admin/log",
             withCredentials: true
         }).then((response)=>{
             setLogLevel(response.data.level)
@@ -33,7 +33,7 @@ const Sitelog = () => {
         const fetchLog = async ()=>{
             await axios ({
                 method:'get',
-                url:"http://localhost:5000/admin/fulllog",
+                url:"/api/admin/fulllog",
                 withCredentials: true
             }).then((response)=>{
                 setLog(response.data)
@@ -49,7 +49,7 @@ const Sitelog = () => {
     const changeLevel = async(level) => {
         await axios ({
             method:'post',
-            url:"http://localhost:5000/admin/log/"+level,
+            url:"/api/admin/log/"+level,
             withCredentials: true
         }).then((response)=>{
             fetchLogLevel();
@@ -62,7 +62,7 @@ const Sitelog = () => {
     const toggleLog = async(active) => {
         await axios ({
             method:'put',
-            url:"http://localhost:5000/admin/log/"+(active?"off":"on"),
+            url:"/api/admin/log/"+(active?"off":"on"),
             withCredentials: true
         }).then((response)=>{
             fetchLogLevel();
