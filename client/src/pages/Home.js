@@ -119,7 +119,7 @@ const Home = () => {
     return (
         <Box>      
             <Defaultbox>  
-                <Typography variant="h2" component={'h1'}>
+                <Typography variant="h2" component={'h1'} sx={{wordBreak: "break-all"}}>
                     {t('recent_events')}
                 </Typography>
             </Defaultbox>
