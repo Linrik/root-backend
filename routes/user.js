@@ -135,7 +135,7 @@ router.route('/')
     router.route('/logout')
     .get(isUser, (req,res,next)=>{
         req.logout();
-        req.session.destroy()
+        req.session.destroy();
         res.clearCookie('connect.sid', {path: '/'}).status(200).send('Ok.');
         next()
     })
@@ -164,8 +164,6 @@ router.route('/')
                                     password: hash
                                 })
                         })
-                        console.log
-                        
                         res.locals.level = 'info'
                         res.locals.message = `Bruker endret på passord ${user}`
                         res.json({status:200})

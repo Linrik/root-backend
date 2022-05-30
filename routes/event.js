@@ -121,18 +121,22 @@ router.route('/')
 
     router.route('/participants')
         .get(async (req,res,next)=>{
-            const events = await Event.find({participants: req.session.passport.user.id}).sort({dateFrom: 1})
-            .populate('user', 'firstname lastname')
-            .populate('participants', 'firstname lastname')
-            .populate({
-                path: 'comments',
-                populate: {
-                    path: 'user',
-                    select: 'firstname lastname'
-                }
-            })
-            res.json(events)
-            next()
+            if(req.isAuthenticated && req.session.passport!==undefined){
+                const events = await Event.find({participants: req.session.passport.user.id}).sort({dateFrom: 1})
+                .populate('user', 'firstname lastname')
+                .populate('participants', 'firstname lastname')
+                .populate({
+                    path: 'comments',
+                    populate: {
+                        path: 'user',
+                        select: 'firstname lastname'
+                    }
+                })
+                res.json(events)
+                next()
+                return;
+            }
+            res.json([])
         })
         .put(isUser, (req, res, next)=>{
             Event.findById({_id: req.body.eventid}, (err, doc)=>{

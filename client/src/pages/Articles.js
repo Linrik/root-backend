@@ -25,7 +25,6 @@ const Articles = () => {
                 withCredentials: true,
             })
         setPostList(request.data);
-        console.log("article satt 1")
         } catch(e){
             console.log(e);
         }
