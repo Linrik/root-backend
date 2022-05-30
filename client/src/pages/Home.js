@@ -21,6 +21,7 @@ const Home = () => {
     
     // Hendter påmeldte arrangementer for innlogget bruker, og alle arrangementer og artikler for fremvisning av top 5 nyeste.
     React.useEffect( () => {
+        /*Axios reqiest for påmeldte arrangementer av innlogget bruker */
         const fetchMyEvents = async () =>{
             try {
                 const request = await axios({
@@ -33,7 +34,12 @@ const Home = () => {
                 console.log(e);
             }
         }
+        
+        if(login.loginStatus){
+            fetchMyEvents();
+        }
 
+        /*Axios reqiest for å hente alle arrangementer, kortet ned til maks 5 */
         const fetchEvents = async () =>{
             try {
                 const request = await axios({
@@ -53,9 +59,9 @@ const Home = () => {
                 console.log(e);
             }
         }
+        fetchEvents();
       
-
-
+        /*Axios reqiest for å hente alle artikler, kortet ned til maks 5 */
         const fetchArticles = async () =>{
             try {
                 const request = await axios({
@@ -75,15 +81,12 @@ const Home = () => {
                 console.log(e);
             }
         }
-    
-        fetchEvents();
         fetchArticles();
-        if(login.loginStatus){
-            fetchMyEvents();
-        }
+    
     
     }, [setEventList, setArticleList, setMyEventList, login]);
 
+    // Metode som kjører en axio request til backend om å legge innlogget bruker til et arrangement  
     const handlejoinEvent = async (event_id) => {            
         await axios({
           method: "put",
@@ -97,6 +100,8 @@ const Home = () => {
           return false;
       })
     }
+
+    // Metode som kjører en axio request til backend om å fjerne innlogget bruker fra et arrangement  
     const handleCancelEvent = async (event_id) => {      
         await axios({
           method: "delete",
@@ -120,13 +125,13 @@ const Home = () => {
                 </Typography>
             </Defaultbox>
 
+            {/* Viser frem alle artikler som er hentet fra databasen med innlogget brukers påmeldelses status*/}
             <Defaultbox >
                 {eventList.map((event, index) => {
                     return (
                         <Eventcard 
                             key={event.title+index} 
                             post ={event} 
-                            image={getImage()} 
                             myEventList = {myEventList} 
                             in_handlejoinEvent = {handlejoinEvent}
                             in_handleCancelEvent = {handleCancelEvent}
@@ -135,26 +140,34 @@ const Home = () => {
                     )
                 })}
             </Defaultbox>
+
+            {/* Knapp for å sende bruker til event siden */}
             <Defaultbox>
                 <Button component={Link} to={'/events'} >{t('go_to_page')}</Button>
             </Defaultbox>
+
+
             <Defaultbox>  
                 <Typography variant="h2" component={'h1'} sx={{mt:'30px'}}>
                     {t('recent_articles')}
                 </Typography>
             </Defaultbox>
-                <Grid container columns={12}
-                    alignItems="stretch" justifyContent={'center'}>
-            <Defaultbox >
-                {ArticleList.map((article, index) =>{
-                    return(
-                        <Box key={article.title + index} sx={{width:'275px', maxHeight:'500px', overflow:'hidden'}}>
-                            <Article  className='ArticleTest' image={getImage()} in_post={article} margin={0} />
-                        </Box>
-                    )
-                })}
-            </Defaultbox>
-                </Grid>
+
+            {/* Viser frem en liste med de alle (0-5) artikler som ble hentet fra backend */}
+            <Grid container columns={12}
+                alignItems="stretch" justifyContent={'center'}>
+                <Defaultbox >
+                    {ArticleList.map((article, index) =>{
+                        return(
+                            <Box key={article.title + index} sx={{width:'275px', maxHeight:'500px', overflow:'hidden'}}>
+                                <Article  className='ArticleTest' in_post={article} margin={0} />
+                            </Box>
+                        )
+                    })}
+                </Defaultbox>
+            </Grid>
+
+            {/* Knapp for å sende bruker til event siden */}
             <Defaultbox>
                 <Button component={Link} to={'/articles'}>{t('go_to_page')}</Button>
             </Defaultbox>

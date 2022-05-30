@@ -40,36 +40,56 @@ const ProfileCard = (props) => {
     const {loginMode} = React.useContext(LoginContext);
 
 
+    //Endring av state for å endre navn state til sann
     const handleEditName = () => {
         setEditName(true);
     } 
+
+    //Oppdatering av verdi for nytt fornavn
     const updateFirstName = (value) => {
         setUpdatedFName(value);
     }    
+    //Oppdatering av verdi for nytt etternavn
     const updateLastName = (value) => {
         setUpdatedLName(value);
     }
+
+    //Endring av state for å endre passord state til sann
     const handleEditPass = () => {
         setEditPassword(true);
     }    
+
+    //Oppdatering av verdi for nytt passord
     const handleUpdatePass = (value) => {
         setNewPassword(value);
     }
+    //Oppdatering av verdi for gjenntatt nytt passord
     const handleUpdatePassRepeat = (value) => {
         setNewPasswordRepeat(value);
     }
+
+    
+    //Oppdatering av verdi innskrevet passord til nytt navn
     const handlePasswordChangeN = (value) => {
         setCurrPasswordInputN(value);
     }    
+
+    //Oppdatering av verdi innskrevet passord til nytt passord
     const handlePasswordChangeP = (value) => {
         setCurrPasswordInputP(value);
-    }    
+    }  
+    
+    //Oppdatering av verdi innskrevet passord til å slette bruker
     const handlePasswordChangeD = (value) => {
         setCurrPasswordInputD(value);
     }
+
+    //Oppdatering av verdi innskrevet passord til nytt passord
     const handleCloseDialog = () => {
         setOpenConfirmDelete(false);
     }
+
+    //Setter state for å åpne modal om sletting av bruker til sann
     const handleOpenDialog = () => {
         setOpenConfirmDelete(true);
     }
@@ -121,6 +141,8 @@ const ProfileCard = (props) => {
             })
         }
     }
+
+    //Sender put-request til backend hvor sjekk av nåværende passord skjer. Sletting av brukerkonto, utlogging redirect til hjemmesiden skjer ved sukksess.
     const handleDeleteUser = async () => {
         await axios({
             method: 'delete',

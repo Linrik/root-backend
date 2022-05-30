@@ -6,9 +6,8 @@ const axios = require('axios').default
 const Logout = () => {
     const {login, loginMode} = React.useContext(LoginContext)
     const navigate = useNavigate();
-    
-    
 
+    //Axios request for å jogge inlogget bruker av, ved suksess sendes bruker til hjemmesiden som utlogget.
     React.useEffect(() => {
         const fetchLogout = async () => {
             await axios({

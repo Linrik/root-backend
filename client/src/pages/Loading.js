@@ -1,10 +1,9 @@
 import { Box } from '@mui/material';
 import React from 'react';
 
-import CircularProgress from '@mui/material/CircularProgress';
-
 import LinearProgress from '@mui/material/LinearProgress';
 
+// En loadingbar, brukt på alle sider for å vise at en nettside loader
 const Loading = () => {
     return (
         <Box sx={{
@@ -15,7 +14,6 @@ const Loading = () => {
             <LinearProgress sx={{
                 height: "8px"
             }}/>
-            {/* <CircularProgress /> */}
         </Box>
     );
 };

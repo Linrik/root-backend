@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Scb from '../components/helper/SmallCenterBox';
-import { Box, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 
 import { TextField } from '@mui/material';
 
@@ -22,10 +22,9 @@ const Login = () => {
 
     const [userEmail, setUserEmail] = React.useState("");
     const [userPassword, setUserPassword] = React.useState("");
-
     const {loginMode} = React.useContext(LoginContext);
-    // const {setLogin, loginStatus} = React.useContext(loginSession);
 
+    //Metode som sender axios request for å sjekke med database om innfyllt login informasjon er riktig, og sender bruker til hjemsiden ved suksess
     const handleSubmit = async (event) => {
         
         event.preventDefault();
@@ -45,6 +44,7 @@ const Login = () => {
         })
     }
 
+    //Sentrert login skjema med input for email og passord, og en knapp for redirect til registrerings-siden.
     return (
         <Scb>
             <Typography width="100%" variant="h2" component="h2" align="center">

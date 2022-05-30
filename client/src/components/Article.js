@@ -37,7 +37,6 @@ const Article = ({in_post, margin}) => {
       <Box onClick={handleOpen}
         sx={{display:'flex', flexWrap:'wrap', flexDirection:'row'}}
       >
-        
         <Box sx={{boxShadow: 24,
           backgroundImage: `url("${cardImage}")`,
           backgroundRepeat:'no-repeat',

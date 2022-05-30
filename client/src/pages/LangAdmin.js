@@ -17,10 +17,13 @@ const LangAdmin = () => {
     const [showForm, setShowForm] = React.useState(false);
     const [selectedIndex, setSelectedIndex] = React.useState(-1);
 
+    //Setter selectedIndex state til if for valgt språk og endrer showform state
     const handleEdit = (id) => {
         setSelectedIndex(id);
         setShowForm(!showForm);
     }
+    
+    //Setter showForm state til false, og kjører en axios request som henter alle lagrede språk fra databasen.  
     const fetchLang = async () =>{
         setShowForm(false)
         await axios({
@@ -33,6 +36,8 @@ const LangAdmin = () => {
             console.log("DefinedError: ", error)
         })
     }
+
+    //kjører en axios request som sletter valgt språk og oppdaterer språklisten 
     const handleDelete = async (id) => {
         await axios({
             method: "delete",
@@ -45,17 +50,20 @@ const LangAdmin = () => {
         })
     }
 
+    // Setter sate for valgt språk til ugyldig verdi og setter state for språkskjema til true
     const handleNewLng = () => {
         setSelectedIndex(-1);
         setShowForm(true);
     }
 
+    //Henter språk en gang ved render
     React.useEffect(()=>{
         fetchLang()
     }, []);
     
     return (
         <Defaultbox>
+            {/* Leter gjennom liste av hentede språk og viser dem frem */}
             <Paper sx={{
                 width: '100%',
                 maxWidth: '1200px'
@@ -64,11 +72,14 @@ const LangAdmin = () => {
                     <LangBox langID={k} key={v.language} langName={v.languagename} langInitial={v.language} handleEdit={handleEdit} handleDelete={handleDelete} t={t}/>
                 ))}
             </Paper>
+
+            {/* Conditional visning av enten en knapp for å åpne skjema for nytt språk, eller skjema (LangForm) for nytt språk basert på "showForm" state*/}
             {!showForm && <Button onClick={handleNewLng}>{t('new_language')}</Button>}
             {showForm && <LangForm langID={selectedIndex} langList={langList} fetchLang={fetchLang} t={t}/>}
         </Defaultbox>
     );
 };
+
 
 const LangForm = ({langID, langList, fetchLang, t}) => {
 
