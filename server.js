@@ -36,7 +36,7 @@ var allowedOrigins = ['http://localhost:3000',
 const sessionOptions = {
     secret: key,
         resave: false,
-        saveUninitialized: true, // lagrer ikke session med mindre du gjør endringer
+        saveUninitialized: true,
         store: mongoStore.create({
             mongoUrl: conn,
             collectionName: 'session',
