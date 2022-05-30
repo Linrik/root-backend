@@ -41,7 +41,7 @@ const Articles = () => {
     return (
         <Box>
         <Defaultbox>
-            <Typography variant="h2">{t('articles')}</Typography>
+            <Typography variant="h2" sx={{wordBreak: "break-all"}}>{t('articles')}</Typography>
         </Defaultbox>
         <Defaultbox sx={{
             justifyContent:'center',

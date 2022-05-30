@@ -102,7 +102,7 @@ const Events = () => {
   return ( 
   <Box>        
     <Defaultbox>
-      <Typography variant="h2">{t('events')}</Typography>
+      <Typography variant="h2" sx={{wordBreak: "break-all"}}>{t('events')}</Typography>
     </Defaultbox>
         <Defaultbox sx={{p:0, m:0}}>
           {eventList.map((event, index) => {
