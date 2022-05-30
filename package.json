@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "both": "concurrently \"nodemon server.js\" \"npm start --prefix client\"" 
+    "both": "concurrently \"nodemon server.js\" \"npm start --prefix client\""
   },
   "keywords": [],
   "author": "",
