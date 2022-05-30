@@ -84,7 +84,8 @@ app.use(express.static(path.join(__dirname, 'client/build')));
 app.get('*', (req, res)=>{
     res.sendFile(__dirname +"/client/build/index.html", function(err) {
         if (err) {
-            return res.status(err.status).end();
+            // return res.status(err.status).end();
+            return res.status(404).end();
         } else {
             return res.status(200).end();
         }

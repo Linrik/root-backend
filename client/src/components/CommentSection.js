@@ -3,7 +3,6 @@ import React from 'react'
 import Defaultbox from './helper/DefaultBox'
 import Defaultboxcol from './helper/DefaultBoxCol'
 import {useTranslation} from "react-i18next";
-import { Box } from '@mui/system';
 const axios = require('axios').default
 
 const Comment = ({comment, index}) =>{
@@ -11,7 +10,7 @@ const Comment = ({comment, index}) =>{
     return(
     <Defaultbox key={index} sx={{borderBottom:1, textAlign:'center', flexDirection:'column'}}>
     <Typography variant="h5" component="h5">
-        {comment.user===null ? "deleted_user":comment.user.firstname}
+        {comment.user===null ? "deleted_user":comment.user.firstname+" "+comment.user.lastname}
     </Typography>
     <Typography variant="h6" component="h6">
         {comment.comment}
@@ -19,7 +18,7 @@ const Comment = ({comment, index}) =>{
 </Defaultbox>
 )}
 
-export default function CommentSection({openComments, commentList, postID, isLoggedIn}) {
+export default function CommentSection({openComments, commentList, postID, isLoggedIn, fetch}) {
 
     const { t } = useTranslation();
     const [text, setText] = React.useState("");
@@ -36,9 +35,8 @@ export default function CommentSection({openComments, commentList, postID, isLog
             data: {comment: text, postid: postID},
             withCredentials: true,
         }).then((response)=>{
-            console.log(response)
-            console.log('Message Submitted')
             setText("");
+            fetch();
         }).catch(function (error){
             console.log(error)
         })
@@ -53,14 +51,6 @@ export default function CommentSection({openComments, commentList, postID, isLog
     <Defaultboxcol>
         <Collapse in={openComments} timeout="auto" unmountOnExit>
             <Defaultboxcol>
-                {isLoggedIn &&
-                <form onSubmit={sendNewComment}>
-                <Defaultbox sx={{justifyContent:'space-between'}}>
-                    <TextField required onChange={onTextChange} label={t('write_comment')} sx={{flexGrow:6}}> </TextField>
-                    <Button variant="outlined" type={'submit'} sx={{flexGrow:1}}>submit</Button>
-                </Defaultbox>
-                </form>
-}
                 {commentList !== null ?
                  commentList.map((comment, index) => {
                     return(
@@ -68,6 +58,13 @@ export default function CommentSection({openComments, commentList, postID, isLog
                     )
                 }) :
                  ""}
+                 {isLoggedIn &&
+                <form onSubmit={sendNewComment}>
+                <Defaultbox sx={{justifyContent:'space-between'}}>
+                    <TextField required value={text} onChange={onTextChange} label={t('write_comment')} sx={{flexGrow:6}}> </TextField>
+                    <Button variant="outlined" type={'submit'} sx={{flexGrow:1}}>submit</Button>
+                </Defaultbox>
+                </form>}
             </Defaultboxcol>
         </Collapse>
     </Defaultboxcol>

@@ -19,6 +19,25 @@ const Home = () => {
 
     const {login} = React.useContext(LoginContext);
     
+    const fetchArticles = async () =>{
+        try {
+            const request = await axios({
+                method: 'get',
+                url: '/api/article',
+                withCredentials: true,
+            })
+            var fullArticleList = request.data;
+            const newArticleList = [];
+            
+            for (let index = 0; index < (fullArticleList.length < 5? fullArticleList.length : 5); index++) {
+                newArticleList.push(fullArticleList[index]);
+            }
+            setArticleList(newArticleList);
+        } catch(e){
+            console.log(e);
+        }
+    }
+
     // Hendter påmeldte arrangementer for innlogget bruker, og alle arrangementer og artikler for fremvisning av top 5 nyeste.
     React.useEffect( () => {
         const fetchMyEvents = async () =>{
@@ -53,29 +72,6 @@ const Home = () => {
                 console.log(e);
             }
         }
-      
-
-
-        const fetchArticles = async () =>{
-            try {
-                const request = await axios({
-                    method: 'get',
-                    url: '/api/article',
-                    withCredentials: true,
-                })
-                var fullArticleList = request.data;
-                const newArticleList = [];
-                
-                for (let index = 0; index < (fullArticleList.length < 5? fullArticleList.length : 5); index++) {
-                    newArticleList.push(fullArticleList[index]);
-                }
-                setArticleList(newArticleList);
-
-            } catch(e){
-                console.log(e);
-            }
-        }
-    
         fetchEvents();
         fetchArticles();
         if(login.loginStatus){
@@ -148,7 +144,7 @@ const Home = () => {
                 {ArticleList.map((article, index) =>{
                     return(
                         <Box key={article.title + index} sx={{width:'275px', maxHeight:'500px', overflow:'hidden'}}>
-                            <Article  className='ArticleTest' in_post={article} margin={0} />
+                            <Article fetch={fetchArticles} className='ArticleTest' in_post={article} margin={0} />
                         </Box>
                     )
                 })}
