@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Defaultbox from '../components/helper/DefaultBox';
 import { Paper, Typography, Button, TextField } from '@mui/material';
 import Paper1200p from '../components/helper/Paper1200p';
@@ -80,11 +79,12 @@ const LangAdmin = () => {
     );
 };
 
-
+// Skjema som dukker opp ved endring av språk eller lage nytt språk
 const LangForm = ({langID, langList, fetchLang, t}) => {
 
     const fields = React.useContext(langContext);
 
+    // Sender inn data til server post om ny eller put om endre
     const handleSubmit = async (event) => {
         event.preventDefault();
         const inputFields = [];
@@ -111,22 +111,17 @@ const LangForm = ({langID, langList, fetchLang, t}) => {
     return(<Paper1200p>
         
         <Defaultboxcol>
-            {/* <Typography variant="body1">Språk: {langList[langID].initial.toUpperCase()} - {langList[langID].name}</Typography> */}
             <form onSubmit={handleSubmit}>
                 <Defaultboxcol sx={{p:0, m:0}}>
                 <TextField
                       id={"lngName"}
                       label="Språk"
                       defaultValue={langID<0 ? "" : langList[langID].languagename===undefined ? "" : langList[langID].languagename}
-                    //   onChange={}
-                      
                     />
                     <TextField
                       id={"lngInit"}
                       label="Språk Initialer"
                       defaultValue={langID<0 ? "" : langList[langID].language ===undefined ? "" : langList[langID].language}
-                    //   onChange={}
-                      
                     />
                 {fields.map((v, k)=>(
                     <TextField
@@ -134,9 +129,6 @@ const LangForm = ({langID, langList, fetchLang, t}) => {
                       key={v}
                       label={v}
                       defaultValue={langID<0 ? "" : langList[langID].translate[v] ===undefined ? "" : langList[langID].translate[v]}
-                    // defaultValue={noListTemp[k]}
-                    //   onChange={}
-                      
                     />
                 ))}
                 <Button type='submit'>{t('submit')}</Button>
@@ -146,6 +138,7 @@ const LangForm = ({langID, langList, fetchLang, t}) => {
     </Paper1200p>)
 }
 
+// Box som holder på alle tilgjengelige språk
 const LangBox = ({langID, langName, langInitial, handleEdit, handleDelete, t}) => {
     return(
         <Spacebetween>
@@ -162,11 +155,5 @@ const LangBox = ({langID, langName, langInitial, handleEdit, handleDelete, t}) =
         </Spacebetween>
     );
 }
-
-
-LangAdmin.propTypes = {
-
-};
-
 
 export default LangAdmin;
