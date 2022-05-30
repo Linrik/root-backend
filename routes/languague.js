@@ -23,7 +23,7 @@ router.route('/')
                 return res.json({status:210})
             }
             res.locals.level = 'info'
-            res.locals.message = `Språk ble lagt til ${doc}`
+            res.locals.message = `Språk ble lagt til ${doc.languagename}`
             res.json({status:200})
             next()
         })
@@ -42,7 +42,7 @@ router.route('/')
                     return res.json({status:210})
                 } 
                 res.locals.level = 'info'
-                res.locals.message = `Språket har blitt endret ${doc}`
+                res.locals.message = `Språket har blitt endret ${doc.languagename}`
                 res.json({status:200})
                 next()
             })
