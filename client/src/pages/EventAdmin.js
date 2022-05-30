@@ -1,5 +1,5 @@
 import React from 'react';
-import {Paper, Button, Box, List} from '@mui/material';
+import {Button, List} from '@mui/material';
 import {useTranslation} from "react-i18next";
 import ArticleForm from '../components/ArticleForm';
 import Defaultbox from '../components/helper/DefaultBox';
@@ -10,21 +10,6 @@ import Paper1200p from '../components/helper/Paper1200p';
 import Spacebetween from '../components/helper/SpaceBetween';
 const axios = require('axios').default
 
-
-const itemData = 
-[
-    'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
-    'https://images.unsplash.com/photo-1551782450-a2132b4ba21d',
-    'https://images.unsplash.com/photo-1522770179533-24471fcdba45',
-    'https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c',
-    'https://images.unsplash.com/photo-1533827432537-70133748f5c8',
-    'https://images.unsplash.com/photo-1558642452-9d2a7deb7f62'    
-];
-function getImage() {
-    var random = parseInt(Math.random()*6);
-    return itemData[random];
-}
-
 const EventAdmin = () => {
 
     const { t } = useTranslation();
@@ -34,6 +19,8 @@ const EventAdmin = () => {
 
     const [search, setSearch] = React.useState("");
 
+    /*Metode som filtrerer listen med arrangementer mot et bestemt arrangement og oppdaterer listen ved gjennomført axios kall.
+      Axios kallet er en request om å slette bestemt arrangement basert på arrangement ID. */
     const handleDelete = async (postID) => {
         
         const newPostList = postList.filter((item) => item._id !== postID);
@@ -49,13 +36,14 @@ const EventAdmin = () => {
         }).then((response)=>{
             setShowForm(false);
             fetchEvents();
+            setPostList(newPostList);
         }).catch(function (e){
             console.log(e)
         })
 
-        setPostList(newPostList);
     }
 
+    /* */
     function handleEdit(postID) {
         const postItem = postList.find((item) => item._id === postID);
         const startDT = new Date( DateTime.fromISO(postItem.dateFrom))

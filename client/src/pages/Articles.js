@@ -1,44 +1,24 @@
 import React from 'react';
 import Grid from '@mui/material/Grid';
 
-import { Box, Paper, Typography, } from '@mui/material';
+import { Box, Typography, } from '@mui/material';
 import Defaultbox from '../components/helper/DefaultBox';
 import Article from "../components/Article";
 import { useTranslation } from 'react-i18next';
 const axios = require('axios').default
 
-// const Item = styled(Paper)(({ theme }) => ({
-//   ...theme.typography.body2,
-//   padding: theme.spacing(1),
-//   textAlign: 'center',
-//   color: theme.palette.text.secondary,
-// }));
-
+//en predefinert liste som bestemmer mønster for størrelsefordeling av komponenter i artikkelsiden i et grid med 12 i størrelse
 const sizeSequence = [
     12, 6, 6, 5, 7, 6, 6, 7, 5, 12, 5, 7
 ];
 
-//Genererer link til et bilde fra @idemData
-function getImage() {
-    var random = parseInt(Math.random()*6);
-    return itemData[random];
-}
-
-const itemData = 
-[
-    'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
-    'https://images.unsplash.com/photo-1551782450-a2132b4ba21d',
-    'https://images.unsplash.com/photo-1522770179533-24471fcdba45',
-    'https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c',
-    'https://images.unsplash.com/photo-1533827432537-70133748f5c8',
-    'https://images.unsplash.com/photo-1558642452-9d2a7deb7f62'    
-];
-
+// returnerer et Grid med artikler hentet fra databasen 
 const Articles = () => {
     const {t} = useTranslation();
     const [postList, setPostList] = React.useState([]);
 
     React.useEffect( () => {
+        /*axios request for å hente artikler fra datbase og lagre i postList*/
         const fetchArticles = async () =>{
             try {
                 const request = await axios({
@@ -55,7 +35,7 @@ const Articles = () => {
 
     }, [setPostList]);
     
-                    
+    
     var seqIndex = 0;
     return (
         <Box>
@@ -70,6 +50,8 @@ const Articles = () => {
             <Grid  container columns={12}
                 alignItems="stretch"
                 sx={{maxWidth:'1200px',}}>
+                {/* En .map() loop som lager alle artiklene og bestemmer størrelsen basert på mønsteret i "sizeSequence".
+                    Metoden sjekker også om artikkel har et bilde, og sender et default bilde ved mangel*/}
                 {postList.map((article, index) =>{
                     if(seqIndex===sizeSequence.length){
                         seqIndex = 0;
@@ -81,7 +63,6 @@ const Articles = () => {
                     </Grid>
                     )
                 })}
-                {/* <PushElements items = {postList} /> */}
             </Grid>
         </Defaultbox>
         </Box>

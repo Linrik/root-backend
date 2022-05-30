@@ -78,34 +78,37 @@ const ArticleAdmin = () => {
         fetchArticles();
     }, [setArticleList, t]);
     
-    // Metode for hente  
+    // Metode for å lage ny artikkel, den viser en tom redigeringsboks, og tar med "fetch" for å oppdatere listen når ny artikkel blir opprettet
     function handleNewPost() {
         setForm(<ArticleForm fetch={fetchArticles} setShowForm = {setShowForm} in_isNewPost={true} isEvent={false}/>);
         setShowForm(true);
     }
-        return (
-            <>
-            <Paper1200p>
-                <Spacebetween>
-                    <Typography variant="h2" >{t('admin_page_article')}</Typography>
-                    <SearchBox setSearch={setSearch} t={t}/>
-                </Spacebetween>
-                <PostList handleDelete={handleDelete}
-                            handleEdit={handleEdit}
-                            postList={articleList}
-                            search={search} />
-            </Paper1200p>    
-            
-            <Defaultbox id = 'form-box'>
-                    {!showForm ? 
-                        <Button variant="outlined" onClick={handleNewPost}> {t('new_article')}</Button> 
-                        : form}
-            </Defaultbox>    
-            </>
-        );
+
+    return (
+        <>
+        {/* En liste med eksisterende artikkler med mulighet for redigering og sletting */}
+        <Paper1200p>
+            <Spacebetween>
+                <Typography variant="h2" >{t('admin_page_article')}</Typography>
+                <SearchBox setSearch={setSearch} t={t}/>
+            </Spacebetween>
+            <PostList handleDelete={handleDelete}
+                        handleEdit={handleEdit}
+                        postList={articleList}
+                        search={search} />
+        </Paper1200p>    
+        
+        {/* En state med enten bare en knapp for åpne ny Redigeringsboks eller bare selve redigeringsboksen "form"*/}
+        <Defaultbox id = 'form-box'>
+                {!showForm ? 
+                    <Button variant="outlined" onClick={handleNewPost}> {t('new_article')}</Button> 
+                    : form}
+        </Defaultbox>    
+        </>
+    );
 };
 
-// Komponent med tekstfelt for å søke etter artikkel tittel
+// Komponent med tekstfelt for å søke etter og filtrere artikkel tittel
 const SearchBox = ({setSearch, t}) => {
     const changeSearch = (e) => {
         setSearch(e.target.value);
@@ -117,6 +120,7 @@ const SearchBox = ({setSearch, t}) => {
     );
 }
 
+// returnerer en liste med artikler med tittel som stemmer over ens med tekst i søkefelt, søkefelt er tomt ved start
 const PostList = ({handleDelete, handleEdit, postList, search}) =>{
     const filterPost = postList.filter(v => {
         return v.title.toLowerCase().indexOf(search.toLowerCase()) !== -1;
