@@ -59,18 +59,17 @@ router.route('/')
                 next()
                 return res.json({status:210})
             }
-            if(req.file===undefined){
-                doc.overwrite({
-                    title: req.body.title,
-                    description: req.body.description
-                })
-            } else {
-                doc.overwrite({
-                    title: req.body.title,
-                    description: req.body.description,
-                    image: req.body.image
-                })
+            let dataToPut = {
+                title: req.body.title,
+                description: req.body.description,
+                postedAt: doc.postedAt,
             }
+            if(req.file!== undefined){
+                dataToPut = Object.assign(dataToPut, {image: req.file.filename})
+            } else if(doc.image!==undefined) {
+                dataToPut = Object.assign(dataToPut, {image: doc.image})
+            }
+            doc.overwrite(dataToPut)
             await doc.save((err, change)=>{
                 if(err){
                     res.locals.level = 'error'

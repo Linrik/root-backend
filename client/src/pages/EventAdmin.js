@@ -58,16 +58,17 @@ const EventAdmin = () => {
 
     function handleEdit(postID) {
         const postItem = postList.find((item) => item._id === postID);
+        const startDT = new Date( DateTime.fromISO(postItem.dateFrom))
+        const endDT = new Date( DateTime.fromISO(postItem.dateTo))
         setForm(
             <ArticleForm 
                 setShowForm = {setShowForm}
                 in_postTitle = {postItem.title}
                 in_postDescription = {postItem.description}
-                in_image = {postItem.image}
-                in_startDate = {postItem.startDate}
-                in_startTime = {postItem.startTime}
-                in_endDate = {postItem.endDate}
-                in_endTime = {postItem.endTime}
+                in_startDate = {startDT}
+                in_startTime = {startDT}
+                in_endDate = {endDT}
+                in_endTime = {endDT}
                 in_isNewPost = {false}
                 in_id = {postItem._id}
                 fetch={fetchEvents}

@@ -120,7 +120,13 @@ export const langContext = React.createContext([
 "how_to_join_event_a",
 "wishing_good_day_q",
 "wishing_good_day_a",
-"log_admin"
+"log_admin",
+"change_password",
+"sure_about_delete",
+"delete_user_guide",
+"recent_events",
+"recent_articles"
+
 ])
 export const pagesContext = React.createContext({
     home: [

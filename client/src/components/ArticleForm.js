@@ -18,8 +18,7 @@ import Spacebetween from './helper/SpaceBetween';
 import FormData from 'form-data';
 const axios = require('axios').default
 
-const ArticleForm = ({fetch, setShowForm, in_postTitle, in_image, in_postDescription, in_startDate,in_startTime, in_endDate,  in_endTime, isEvent, in_isNewPost, in_id}) => {
-    
+const ArticleForm = ({fetch, setShowForm, in_postTitle, in_postDescription, in_startDate,in_startTime, in_endDate,  in_endTime, isEvent, in_isNewPost, in_id}) => {
     const { t } = useTranslation();
 
     const [postTitle, setTitle] = React.useState(in_postTitle === undefined ? "": in_postTitle);
@@ -32,8 +31,8 @@ const ArticleForm = ({fetch, setShowForm, in_postTitle, in_image, in_postDescrip
     const [endTime, setEndTime] = React.useState(in_endTime === undefined ? new Date(DateTime.now()) : in_endTime);
     
     const convertToDateTime = (date, time) =>{
-        const dateObject = new DateTime.fromObject(date.c);
-        const timeObject = new DateTime.fromObject(time.c);
+        const dateObject = date.c===undefined ? new DateTime.fromJSDate(date) : new DateTime.fromObject(date.c);
+        const timeObject = time.c===undefined ? new DateTime.fromJSDate(time) : new DateTime.fromObject(time.c);
         const isoString = (dateObject.toISODate()+'T'+timeObject.toISOTime())
 
         const newDateTime = new Date(DateTime.fromISO(isoString));
