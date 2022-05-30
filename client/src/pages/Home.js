@@ -125,8 +125,7 @@ const Home = () => {
                     return (
                         <Eventcard 
                             key={event.title+index} 
-                            post ={event} 
-                            image={getImage()} 
+                            post ={event}
                             myEventList = {myEventList} 
                             in_handlejoinEvent = {handlejoinEvent}
                             in_handleCancelEvent = {handleCancelEvent}
@@ -149,7 +148,7 @@ const Home = () => {
                 {ArticleList.map((article, index) =>{
                     return(
                         <Box key={article.title + index} sx={{width:'275px', maxHeight:'500px', overflow:'hidden'}}>
-                            <Article  className='ArticleTest' image={getImage()} in_post={article} margin={0} />
+                            <Article  className='ArticleTest' in_post={article} margin={0} />
                         </Box>
                     )
                 })}

@@ -38,7 +38,7 @@ const Article = ({in_post, margin}) => {
         sx={{display:'flex', flexWrap:'wrap', flexDirection:'row'}}
       >
         
-        <Box sx={{boxShadow: 24,
+        <Box sx={{
           backgroundImage: `url("${cardImage}")`,
           backgroundRepeat:'no-repeat',
           backgroundSize:'cover',
@@ -67,7 +67,7 @@ const Article = ({in_post, margin}) => {
         <Fade Fade in={open}>
           <Box sx={{m:0, p:0}}>
             <Paper sx={{ maxWidth:'1200px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', outline:0, width:'100%', maxHeight:'100vh', overflow:'scroll'}}>
-              <Box sx={{boxShadow: 24,
+              <Box sx={{
                 backgroundImage: `url("${cardImage}")`,
                 backgroundRepeat:'no-repeat', 
                 backgroundAttachment:'fixed', 
