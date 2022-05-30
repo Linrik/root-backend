@@ -22,6 +22,7 @@ const LangAdmin = () => {
         setShowForm(!showForm);
     }
     
+    
     //Setter showForm state til false, og kjører en axios request som henter alle lagrede språk fra databasen.  
     const fetchLang = async () =>{
         setShowForm(false)
