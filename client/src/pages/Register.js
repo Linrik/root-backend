@@ -21,8 +21,8 @@ const Register = () => {
     const [regPass, setRegPass] = React.useState("");
     const [regPassRep, setRegPassRep] = React.useState("");
 
-    // Axios request for mot databasen mot login informasjonen, ved suksess vil bruker bli logget inn,
-    //  sendes til "hjem" siden og oppdaterer navbar
+    // Axios request for databasen mot login informasjonen, ved suksess vil bruker bli logget inn,
+    //  sendes til "hjem" siden og navbar vi bli oppdatert
     const handleSubmit = async(event) => {
         event.preventDefault();
         if(regPass === regPassRep){

@@ -1,13 +1,8 @@
 import React from 'react';
-import Grid from '@mui/material/Grid';
-
-import { Avatar, Box, Collapse, Icon, IconButton, Modal, Paper, TextField, Typography, } from '@mui/material';
+import { Avatar, Box, Collapse, Icon, IconButton, Modal, Paper, Typography, } from '@mui/material';
 import Defaultbox from '../components/helper/DefaultBox';
-import {useTranslation} from "react-i18next";
 import Fade from '@mui/material/Fade';
 import Backdrop from '@mui/material/Backdrop';
-import Paper1200p from './helper/Paper1200p';
-import Spacebetween from './helper/SpaceBetween';
 import Defaultboxcol from './helper/DefaultBoxCol';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";

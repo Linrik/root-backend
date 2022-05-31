@@ -96,7 +96,8 @@ const ProfileCard = (props) => {
 
     
     
-    //Sender put-request til backend hvor sjekk av nåværende og input passord skjer, og oppdatering av navn skjer ved sukksess
+    //Sender put-request til backend hvor sjekk av nåværende og input passord skjer,
+    //navn oppdateres ved ved sukksess, skjema byttes til disabled og passord input blir resatt.
     const confirmEditName = async () => {
         if(updatedFName !== user.firstname || updatedLName !== user.lastname){
             await axios({
@@ -262,7 +263,7 @@ const ProfileCard = (props) => {
                 justifyContent: 'space-evenly'
             }}>            
                 {editName ? 
-                    <Button  onClick={confirmEditName}>{t('confirm_name')}</Button> : 
+                    <Button onClick={confirmEditName}>{t('confirm_name')}</Button> : 
                     <Button onClick={handleEditName}>{t('edit_name')}</Button>
                 }
                 {editPassword ? 
