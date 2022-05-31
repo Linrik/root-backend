@@ -6,7 +6,7 @@ const express = require('express'),
       User = require('../config/userSchema'),
       Event = require('../config/eventSchema'),
       Article = require('../config/articleSchema'),
-      { isAdmin, isUser, isRoot, isEditor } = require('../routes/AuthMiddelware');
+      { isUser } = require('../routes/AuthMiddelware');
 router.route('/:type')
     .post(async (req, res, next) =>{
         const comment = new Comment({

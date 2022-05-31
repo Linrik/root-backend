@@ -1,9 +1,8 @@
 const express = require('express'),
       router = express.Router(),
       Event = require('../config/eventSchema'),
-      comment = require('./comment'),
       User = require('../config/userSchema'),
-      { isAdmin, isUser, isRoot, isEditor } = require('../routes/AuthMiddelware'),
+      { isUser, isEditor } = require('../routes/AuthMiddelware'),
       {upload} = require('../config/storageSetup');
 
 router.route('/')
@@ -173,5 +172,4 @@ router.route('/')
         })
         
 
-//Router.route('/comment', comment)
 module.exports = router

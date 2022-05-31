@@ -1,6 +1,5 @@
 const User = require('./userSchema'),
       LocalStrategy = require('passport-local').Strategy,
-      express = require('express'),
       passport = require('passport'),
       bcrypt = require('bcrypt')
       

@@ -3,7 +3,6 @@ const express = require('express'),
       User = require('../config/userSchema'),
       passport = require('passport'),
       bcrypt = require('bcrypt'),
-      logger = require('../config/logger'),
       { isAdmin, isUser, isRoot, isEditor } = require('../routes/AuthMiddelware')
 
 const mailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<;>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

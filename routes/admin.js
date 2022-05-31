@@ -1,13 +1,9 @@
 const express = require('express'),
       router = express.Router(),
       User = require('../config/userSchema'),
-      Langstatic = require('../config/langStatSchema'),
-      logger = require('../config/logger'),
-      loggerMid = require('./logMiddleware'),
-      passport = require('passport'),
-      session = require('express-session'),
-      mongoose = require('mongoose'),
-      isAdmin = require('./AuthMiddelware').isAdmin
+      logger = require('../config/logger')
+      
+
 const { route } = require('express/lib/application');
 const path = require('path');
 // laget api til å gi å fjerne rolle med en admin sjekk

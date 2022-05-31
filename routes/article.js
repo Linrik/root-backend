@@ -3,7 +3,6 @@ const { isEditor } = require('./AuthMiddelware');
 const express = require('express'),
       router = express.Router(),
       User = require('../config/userSchema'),
-      passport = require('passport'),
       Article = require('../config/articleSchema'),
       {upload} = require('../config/storageSetup');
 // laget api som registrerer bruker med encryptet hash passord
