@@ -32,7 +32,7 @@ function FAQCard({question, answer}) {
   };
 
   return (
-    <Card sx={{ m:1}}>
+    <Card sx={{ m:1, width: '100%', maxWidth: '1200px'}}>
       
       <CardContent sx={{pl:0}}>
         <CardActions sx={{pl:0}}> 
@@ -57,7 +57,7 @@ function FAQCard({question, answer}) {
       
       <Collapse in={expanded} timeout="auto" unmountOnExit>
           {/* Her kommer første svar til spørsmål */}
-          <Defaultbox  sx={{justifyContent:'flex-start'}}>
+          <Defaultbox  sx={{justifyContent:'flex-start', overflowWrap: "break-word"}}>
             <Typography variant={"h6"} component={"h6"}>
                 {answer}
             </Typography>
@@ -71,7 +71,7 @@ const FAQTable = () => {
   const {t} = useTranslation();
   
     return(
-        <Defaultbox sx={{ flexDirection: 'column', mb:2}}>
+        <Defaultbox sx={{ mb:2, width:'100%' }}>
             {FAQData.map((e, index)=>(
               <FAQCard key ={e.question+index} question={t(e.question)} answer={t(e.answer)} />
           ))}

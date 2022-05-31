@@ -186,7 +186,7 @@ const handleCancelEvent = async () => {
       <Fade in={openModal}>
       <Box sx={{  position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',  p: 4, outline:0, width:'100%', maxWidth:'1200px'}}>
         <Paper1200p>
-          <Box sx={{boxShadow: 24, backgroundImage: `url("${cardImage}")`, backgroundRepeat:'no-repeat', backgroundAttachment:'fixed', backgroundSize:'cover', width:'100%', height:'300px', backgroundPosition:'center center'}}>
+          <Box sx={{backgroundImage: `url("${cardImage}")`, backgroundRepeat:'no-repeat', backgroundAttachment:'fixed', backgroundSize:'cover', width:'100%', height:'300px', backgroundPosition:'center center'}}>
           <IconButton 
               aria-label="close" 
               onClick={handleClose} >

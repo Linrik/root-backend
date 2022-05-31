@@ -108,7 +108,7 @@ const About = () => {
                     </Grid>
                 </Defaultbox>
             </Defaultbox>
-            <Defaultbox>
+            <Defaultbox sx={{width:"100%"}}>
                 <FAQTable/>
             </Defaultbox>
         </Defaultboxcol>
