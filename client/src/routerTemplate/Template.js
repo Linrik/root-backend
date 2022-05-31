@@ -8,7 +8,9 @@ import { useCookies } from "react-cookie";
 import Navigation from '../components/Navigation';
 import { fetchLogin } from '../App';
 
+// Dette komponentet setter hva som skal vises for alle sider i hele applikasjonen
 
+// Konfigurasjon for å oppdatere Login state og Farge state for hele applikasjonen
 export const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 export const LoginContext = React.createContext({ Template: () => {} })
 const Template = () => {
@@ -31,12 +33,13 @@ const Template = () => {
     );
 };
 
+// Komponent som holder på farge instillinger og sender dette videre ned i applikasjonen
 const ToggleColorMode = () => {
 
     const [cookies, setCookie] = useCookies(["colormode"]);
-
     const [mode, setMode] = React.useState(cookies.colormode);
 
+    // Oppsett og bruk av cookie som husker på fargetema
     const handleColorModeCookie = (current) => {
         if(current!=='light' && current!=='dark'){
           current='light';

@@ -9,6 +9,7 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 const axios = require('axios').default
 
+// Side for å se logg og endre loggnivå
 const Sitelog = () => {
 
     const [log, setLog] = React.useState();
@@ -16,7 +17,7 @@ const Sitelog = () => {
     const [logActive, setLogActive] = React.useState(false);
     const {t} = useTranslation();
 
-    
+    // Henter inn nåværende konfigurasjon av logg
     const fetchLogLevel = async ()=>{
         await axios ({
             method:'get',
@@ -32,6 +33,7 @@ const Sitelog = () => {
     }
 
     React.useEffect(()=>{
+        // Henter logg fil
         const fetchLog = async ()=>{
             await axios ({
                 method:'get',
