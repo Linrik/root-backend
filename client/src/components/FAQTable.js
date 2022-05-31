@@ -71,7 +71,7 @@ const FAQTable = () => {
   const {t} = useTranslation();
   
     return(
-        <Defaultbox sx={{ flexDirection: 'row-reverse', mb:2}}>
+        <Defaultbox sx={{ flexDirection: 'column', mb:2}}>
             {FAQData.map((e, index)=>(
               <FAQCard key ={e.question+index} question={t(e.question)} answer={t(e.answer)} />
           ))}
