@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Button, Box } from '@mui/material';
 import {useTranslation} from "react-i18next";
 
+// Håndterer nye bilder før opplasting. Viser frem bilde som en forrhåndsvisning.
 const FileInput = ({imageData, setImage}) => {
   const { t } = useTranslation();
 

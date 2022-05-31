@@ -101,108 +101,109 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 const Navigation = ({Outlet}) => {
-    // const {loginStatus} = React.useContext(loginSession);
-    const {login, loginMode} = React.useContext(LoginContext);
-    useEffect(() => {
-        loginMode.Template();
-    }, [loginMode]);
+const {login, loginMode} = React.useContext(LoginContext);
+useEffect(() => {
+    loginMode.Template();
+}, [loginMode]);
 
+
+let navigate = useNavigate();
+
+const theme = useTheme();
+const [open, setOpen] = React.useState(false);
+
+const handleDrawerOpen = () => {
+    setOpen(true);
+};
+
+const handleDrawerClose = () => {
+    setOpen(false);
+};
+
+const routes = React.useContext(pagesContext);
+
+const logOut = async () => {
     
-    let navigate = useNavigate();
+    await axios ({
+        method:'get',
+        url:"/api/user/logout",
+        withCredentials: true
+    }).then((response)=>{
+        navigate('/login')
+    })
+    .catch(function (error){
+        console.log(error)
+    })
+}
 
-    const theme = useTheme();
-    const [open, setOpen] = React.useState(false);
-
-    const handleDrawerOpen = () => {
-        setOpen(true);
-    };
-
-    const handleDrawerClose = () => {
-        setOpen(false);
-    };
-
-    const routes = React.useContext(pagesContext);
-
-    const logOut = async () => {
-        
-        await axios ({
-            method:'get',
-            url:"/api/user/logout",
-            withCredentials: true
-        }).then((response)=>{
-            navigate('/login')
-        })
-        .catch(function (error){
-            console.log(error)
-        })
-    }
-
-    return (
-        <Box sx={{display: "flex"}}>
-            <CssBaseline />
-            <AppBar position="fixed" open={open}>
-                <Toolbar>
-                <IconButton
-                    color="inherit"
-                    aria-label="open drawer"
-                    onClick={handleDrawerOpen}
-                    edge="start"
-                    sx={{
-                    marginRight: '36px',
-                    ...(open && { display: 'none' }),
-                    }}
-                >
-                    <MenuIcon />
-                </IconButton>
-                    <Box component={Link} to={'/'} sx={{mt:'7px'}}>
-                    <img src={`https://i.ibb.co/WH2kxFR/Root-Icon2.png?w=16&h=16&fit=crop&auto=format`}
-                        srcSet={(`https://i.ibb.co/WH2kxFR/Root-Icon2.png?w=16&h=crop&auto=format&dpr=2 2x`)}
-                        alt={"/root"}
-                        loading="lazy"
-                        style={{ width: '150px', justifySelf:'flex-start'}}
-                    />
-                    </Box>
-                </Toolbar>
-            </AppBar>
-            <Drawer variant="permanent" open={open}>
-                <DrawerHeader>
-                <IconButton onClick={handleDrawerClose}>
-                    {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-                </IconButton>
-                </DrawerHeader>
-
-                {/* Meny lister */}
-                <Navigationlist category={routes.home} />
-                <Navigationlist category={routes.base} />
-                {login!==undefined && login.loginStatus===true ? 
-                    <>
-                    {login.user.editor && <Navigationlist category={routes.editor} />}
-                    {login.user.admin && <Navigationlist category={routes.admin} />}
-                    <Navigationlist category={routes.loggedIn} />
-                    </>
-                    :
-                    <Navigationlist category={routes.loggedOut} />
-                }
-                {/* <LoginSwapList swap={logOut} /> */}
-                <ColorSwitchList />
-
-            </Drawer>
-            <Defaultbox sx={{ m:0,p:0,gap:0,
-                justifyContent: 'flex-start',
-                flexDirection: 'column',
-                minHeight: '100vh',
-                flexGrow: 1
-            }}>
-                <Box component="main" sx={{ flexGrow: 1, p: 0}}>
-                    <DrawerHeader />
-                    <Suspense fallback={<Loading/>}>
-                        <Outlet/>
-                    </Suspense>
-                </Box>
-                <Footer/>
-            </Defaultbox>
+return (
+<Box sx={{display: "flex"}}>
+<CssBaseline />
+<AppBar position="fixed" open={open}>
+    <Toolbar>
+    <IconButton
+        color="inherit"
+        aria-label="open drawer"
+        onClick={handleDrawerOpen}
+        edge="start"
+        sx={{
+        marginRight: '36px',
+        ...(open && { display: 'none' }),
+        }}
+    >
+        <MenuIcon />
+    </IconButton>
+        <Box component={Link} to={'/'} sx={{mt:'7px'}}>
+        <img src={`https://i.ibb.co/WH2kxFR/Root-Icon2.png?w=16&h=16&fit=crop&auto=format`}
+            srcSet={(`https://i.ibb.co/WH2kxFR/Root-Icon2.png?w=16&h=crop&auto=format&dpr=2 2x`)}
+            alt={"/root"}
+            loading="lazy"
+            style={{ width: '150px', justifySelf:'flex-start'}}
+        />
         </Box>
-    );
+    </Toolbar>
+</AppBar>
+<Drawer variant="permanent" open={open}>
+    <DrawerHeader>
+    <IconButton onClick={handleDrawerClose}>
+        {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+    </IconButton>
+    </DrawerHeader>
+
+    {/* Meny lister */}
+    {/* En navigation list inneholder alle lenker til en gruppe på navigasjonen */}
+    <Navigationlist category={routes.home} />
+    <Navigationlist category={routes.base} />
+    {login!==undefined && login.loginStatus===true ? 
+        <>
+        {login.user.editor && <Navigationlist category={routes.editor} />}
+        {login.user.admin && <Navigationlist category={routes.admin} />}
+        <Navigationlist category={routes.loggedIn} />
+        </>
+        :
+        <Navigationlist category={routes.loggedOut} />
+    }
+    {/* <LoginSwapList swap={logOut} /> */}
+    <ColorSwitchList />
+
+</Drawer>
+<Defaultbox sx={{ m:0,p:0,gap:0,
+    justifyContent: 'flex-start',
+    flexDirection: 'column',
+    minHeight: '100vh',
+    flexGrow: 1
+}}>
+    <Box component="main" sx={{ flexGrow: 1, p: 0}}>
+        <DrawerHeader />
+        <Suspense fallback={<Loading/>}>
+            {/* Outlet vise innhold som blir ført ned fra template */}
+            <Outlet/>
+        </Suspense>
+    </Box>
+    <Footer/>
+</Defaultbox>
+</Box>
+);
 };
 
 

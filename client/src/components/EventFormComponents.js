@@ -12,7 +12,6 @@ import Spacebetween from './helper/SpaceBetween';
 
 //returnerer to datepickers og to timepickers for å sette start og slutt data til events.
 function EventFormComponents({dateTimeState, t}) {
-
     // Listeet opp variabler for å slippe å skrive "dateTimeState." gjentatte ganger i koden
     const { 
         startDate, setStartDate,
@@ -21,68 +20,67 @@ function EventFormComponents({dateTimeState, t}) {
         endTime, setEndTime
     } = dateTimeState;
 
-
 return (
-    <Spacebetween sx={{
-        p:0,
-        m:0
-    }} >
+<Spacebetween sx={{
+    p:0,
+    m:0
+}} >
 
-    {/* Her brukes Luxon npm (AdapterLuxon) for å håndtere dato formatering */}
-    <LocalizationProvider dateAdapter={AdapterLuxon}>
-        <Defaultbox xs={5} md={5} sx={{
-            justifyContent:"flex-start"
-        }}>
+{/* Her brukes Luxon npm (AdapterLuxon) for å håndtere dato formatering */}
+<LocalizationProvider dateAdapter={AdapterLuxon}>
+    <Defaultbox xs={5} md={5} sx={{
+        justifyContent:"flex-start"
+    }}>
 
-            <DesktopDatePicker
-            label={t('start_date')}
+        <DesktopDatePicker
+        label={t('start_date')}
+        inputFormat="MM/dd/yyyy"
+        value={startDate}
+        onChange={(newValue)=>{
+            setStartDate(newValue);
+        }}
+        renderInput={(params) => <TextField {...params} />}
+        />
+        
+        <TimePicker
+        label={t('start_time')}
+        value={startTime}
+        onChange={(newValue)=>{
+            setStartTime(newValue);
+        }}
+        renderInput={(params) => <TextField {...params} />}
+        />
+    </Defaultbox>
+
+    <Defaultbox xs={5} md={5} sx={{
+        justifyContent:{
+            xs:"flex-start",
+            md:"flex-end"
+        }
+    }}>
+        <DesktopDatePicker
+            sx={{margin:'50px'}}
+            label={t('end_date')}
             inputFormat="MM/dd/yyyy"
-            value={startDate}
+            value={endDate}
             onChange={(newValue)=>{
-                setStartDate(newValue);
+                setEndDate(newValue);
             }}
             renderInput={(params) => <TextField {...params} />}
-            />
+        />
             
-            <TimePicker
-            label={t('start_time')}
-            value={startTime}
+        <TimePicker
+            label={t('end_time')}
+            value={endTime}
             onChange={(newValue)=>{
-                setStartTime(newValue);
+                setEndTime(newValue);
             }}
             renderInput={(params) => <TextField {...params} />}
-            />
-        </Defaultbox>
+        />
 
-        <Defaultbox xs={5} md={5} sx={{
-            justifyContent:{
-                xs:"flex-start",
-                md:"flex-end"
-            }
-        }}>
-            <DesktopDatePicker
-                sx={{margin:'50px'}}
-                label={t('end_date')}
-                inputFormat="MM/dd/yyyy"
-                value={endDate}
-                onChange={(newValue)=>{
-                    setEndDate(newValue);
-                }}
-                renderInput={(params) => <TextField {...params} />}
-            />
-                
-            <TimePicker
-                label={t('end_time')}
-                value={endTime}
-                onChange={(newValue)=>{
-                    setEndTime(newValue);
-                }}
-                renderInput={(params) => <TextField {...params} />}
-            />
-
-        </Defaultbox>
-        </LocalizationProvider>
-    </Spacebetween>
+    </Defaultbox>
+    </LocalizationProvider>
+</Spacebetween>
 );
 }
 

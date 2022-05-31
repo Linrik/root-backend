@@ -45,7 +45,6 @@ const Register = () => {
             })
         }
         console.log({regFirstName, regLastName, regMail, regPass, regPassRep})
-        
     }
 
     return (

@@ -94,8 +94,6 @@ const ProfileCard = (props) => {
         setOpenConfirmDelete(true);
     }
 
-    
-    
     //Sender put-request til backend hvor sjekk av nåværende og input passord skjer,
     //navn oppdateres ved ved sukksess, skjema byttes til disabled og passord input blir resatt.
     const confirmEditName = async () => {

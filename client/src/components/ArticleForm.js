@@ -19,147 +19,151 @@ import FormData from 'form-data';
 const axios = require('axios').default
 
 const ArticleForm = ({fetch, setShowForm, in_postTitle, in_postDescription, in_startDate,in_startTime, in_endDate,  in_endTime, isEvent, in_isNewPost, in_id}) => {
-    const { t } = useTranslation();
+const { t } = useTranslation();
 
-    const [postTitle, setTitle] = React.useState(in_postTitle === undefined ? "": in_postTitle);
-    const [postDescription, setDescription] = React.useState(in_postDescription === undefined ? "" : in_postDescription);
-    const [postImage, setPostImage] = React.useState();
-    const [startDate, setStartDate] = React.useState(in_startDate === undefined ? new Date(DateTime.now()) : in_startDate);
-    const [startTime, setStartTime] = React.useState(in_endDate === undefined ? new Date(DateTime.now()) : in_startTime);
-    const [endDate, setEndDate] = React.useState(in_startTime === undefined ? new Date(DateTime.now()) : in_endDate);
-    const [endTime, setEndTime] = React.useState(in_endTime === undefined ? new Date(DateTime.now()) : in_endTime);
+const [postTitle, setTitle] = React.useState(in_postTitle === undefined ? "": in_postTitle);
+const [postDescription, setDescription] = React.useState(in_postDescription === undefined ? "" : in_postDescription);
+const [postImage, setPostImage] = React.useState();
+const [startDate, setStartDate] = React.useState(in_startDate === undefined ? new Date(DateTime.now()) : in_startDate);
+const [startTime, setStartTime] = React.useState(in_endDate === undefined ? new Date(DateTime.now()) : in_startTime);
+const [endDate, setEndDate] = React.useState(in_startTime === undefined ? new Date(DateTime.now()) : in_endDate);
+const [endTime, setEndTime] = React.useState(in_endTime === undefined ? new Date(DateTime.now()) : in_endTime);
+
+const convertToDateTime = (date, time) =>{
+const dateObject = date.c===undefined ? new DateTime.fromJSDate(date) : new DateTime.fromObject(date.c);
+const timeObject = time.c===undefined ? new DateTime.fromJSDate(time) : new DateTime.fromObject(time.c);
+const isoString = (dateObject.toISODate()+'T'+timeObject.toISOTime())
+
+const newDateTime = new Date(DateTime.fromISO(isoString));
+return newDateTime
+}
+
+const handleSubmitEvent = async (event) =>{
+const dateObjectStart = convertToDateTime(startDate, startTime);
+const dateObjectEnd = convertToDateTime(endDate, endTime);
+event.preventDefault();
+const d = new FormData();
+if(postImage!==undefined){
+    d.append("image", postImage, postImage.name)
+}
+d.append("title", postTitle)
+d.append("description", postDescription)
+d.append("dateFrom", dateObjectStart)
+d.append("dateTo", dateObjectEnd)
+d.append("eventid", in_id)
+var method = in_isNewPost ? 'post' : 'put';
+await axios({
+    method: method,
+    url: "/api/event",
+    data: d,
+    withCredentials: true,
+}).then((response)=>{
+    setShowForm(false);
+    fetch();
+}).catch(function (error){
+    console.log(error)
+})
+}
+
+const handleSubmitArticle = async (event) =>{
+event.preventDefault();
+const d = new FormData();
+if(postImage!==undefined){
+    d.append("image", postImage, postImage.name)
+}
+d.append("title", postTitle)
+d.append("description", postDescription)
+d.append("articleid", in_id)
+var method = in_isNewPost ? 'post' : 'put';
+await axios({
+    method: method,
+    url: "/api/article",
+    data: d,
+    withCredentials: true,
+}).then((response)=>{
+    setShowForm(false);
+    fetch();
+}).catch(function (error){
+    console.log(error)
+})
+}
+const handleClose = () =>{
+    setShowForm(false);
+}
+
+const skjemaboxStyle = {
+    width:"100%",
+    justifyContent: 'space-between',
+};
+
+return(
+<Paper sx={{maxWidth:'1200px'}}>
+<form onSubmit={isEvent ? handleSubmitEvent : handleSubmitArticle} >
+<Defaultbox>
+    <Spacebetween>
+    <Typography sx={{p:"0 10px",m:0}} variant="h4">
+        { t( (isEvent ? 'new_event' : "new_article") ) }
+    </Typography>
+    <Box>
+        <IconButton 
+            aria-label="close" 
+            onClick={handleClose} 
+            sx={{right: 8, top: 8,color: (theme) => theme.palette.grey[500],
+            alignSelf:'end', marginTop:'-30px'}}>
+            <CloseIcon />
+        </IconButton>
+    </Box>
+    </Spacebetween>
+
+    <Defaultbox container sx = {{width:'100%',
+                justifyContent:"space-between",
+                alignItems:'flex-start'}}>
+        <TextField 
+        defaultValue={postTitle}
+        onChange={(e) => setTitle(e.target.value)} 
+        label = {t('post_title')} 
+        required id="outlined-required" 
+        sx={{flexGrow:1}}/>
+    </Defaultbox>
+
+    {isEvent && <EventFormComponents dateTimeState={{
+        startDate, setStartDate,
+        endDate, setEndDate,
+        startTime, setStartTime,
+        endTime, setEndTime
+    }} t = {t}/>}
     
-    const convertToDateTime = (date, time) =>{
-        const dateObject = date.c===undefined ? new DateTime.fromJSDate(date) : new DateTime.fromObject(date.c);
-        const timeObject = time.c===undefined ? new DateTime.fromJSDate(time) : new DateTime.fromObject(time.c);
-        const isoString = (dateObject.toISODate()+'T'+timeObject.toISOTime())
-
-        const newDateTime = new Date(DateTime.fromISO(isoString));
-        return newDateTime
-    }
-
-    const handleSubmitEvent = async (event) =>{
-        const dateObjectStart = convertToDateTime(startDate, startTime);
-        const dateObjectEnd = convertToDateTime(endDate, endTime);
-        event.preventDefault();
-        const d = new FormData();
-        if(postImage!==undefined){
-            d.append("image", postImage, postImage.name)
-        }
-        d.append("title", postTitle)
-        d.append("description", postDescription)
-        d.append("dateFrom", dateObjectStart)
-        d.append("dateTo", dateObjectEnd)
-        d.append("eventid", in_id)
-        var method = in_isNewPost ? 'post' : 'put';
-        await axios({
-            method: method,
-            url: "/api/event",
-            data: d,
-            withCredentials: true,
-        }).then((response)=>{
-            setShowForm(false);
-            fetch();
-        }).catch(function (error){
-            console.log(error)
-        })
-    }
-
-    const handleSubmitArticle = async (event) =>{
-        event.preventDefault();
-        const d = new FormData();
-        if(postImage!==undefined){
-            d.append("image", postImage, postImage.name)
-        }
-        d.append("title", postTitle)
-        d.append("description", postDescription)
-        d.append("articleid", in_id)
-        var method = in_isNewPost ? 'post' : 'put';
-        await axios({
-            method: method,
-            url: "/api/article",
-            data: d,
-            withCredentials: true,
-        }).then((response)=>{
-            setShowForm(false);
-            fetch();
-        }).catch(function (error){
-            console.log(error)
-        })
-
-    }
-    const handleClose = () =>{
-        setShowForm(false);
-    }
-
-    const skjemaboxStyle = {
+    <Defaultbox sx = {{
+        ...skjemaboxStyle,
+        alignContent: 'stretch'
+    }}>
+        <TextField 
+            defaultValue={postDescription}
+            onChange={(e) => setDescription(e.target.value)}
+            id="outlined-multiline-static"
+            label={t('post_description')}
+            multiline
+            fullWidth
+            rows = {5}
+            required/>
+    </Defaultbox>
+    <Defaultbox sx = {{
+        ...skjemaboxStyle,
         width:"100%",
-        justifyContent: 'space-between',
-    };
+        justifyContent: 'left',
+    }}>
+    <FileInput imageData= {postImage} setImage = {setPostImage}>
 
-    return(
-        <Paper sx={{maxWidth:'1200px'}}>
-            <form onSubmit={isEvent ? handleSubmitEvent : handleSubmitArticle} >
-            <Defaultbox>
-                <Spacebetween>
-                    <Typography sx={{p:"0 10px",m:0}} variant="h4">{ t( (isEvent ? 'new_event' : "new_article") ) }</Typography>
-                <Box>
-                        <IconButton 
-                            aria-label="close" 
-                            onClick={handleClose} 
-                            sx={{right: 8, top: 8,color: (theme) => theme.palette.grey[500], alignSelf:'end', marginTop:'-30px'}}>
-                            <CloseIcon />
-                        </IconButton>
-                    </Box>
-                </Spacebetween>
+    </FileInput>
+    </Defaultbox>
 
-                <Defaultbox container sx = {{width:'100%', justifyContent:"space-between", alignItems:'flex-start'}}>
-                    <TextField 
-                    defaultValue={postTitle}
-                    onChange={(e) => setTitle(e.target.value)} 
-                    label = {t('post_title')} 
-                    required id="outlined-required" 
-                    sx={{flexGrow:1}}/>
-                </Defaultbox>
-
-                {isEvent && <EventFormComponents dateTimeState={{
-                    startDate, setStartDate,
-                    endDate, setEndDate,
-                    startTime, setStartTime,
-                    endTime, setEndTime
-                }} t = {t}/>}
-                
-                <Defaultbox sx = {{
-                    ...skjemaboxStyle,
-                    alignContent: 'stretch'
-                }}>
-                    <TextField 
-                        defaultValue={postDescription}
-                        onChange={(e) => setDescription(e.target.value)}
-                        id="outlined-multiline-static"
-                        label={t('post_description')}
-                        multiline
-                        fullWidth
-                        rows = {5}
-                        required/>
-                </Defaultbox>
-                <Defaultbox sx = {{
-                    ...skjemaboxStyle,
-                    width:"100%",
-                    justifyContent: 'left',
-                }}>
-                <FileInput imageData= {postImage} setImage = {setPostImage}>
-
-                </FileInput>
-                </Defaultbox>
-
-                <Button type='submit' variant="contained" sx={{p:1, }}>
-                    {t('upload')}
-                </Button>
-            </Defaultbox>   
-            </form>
-        </Paper>
-    )    
+    <Button type='submit' variant="contained" sx={{p:1, }}>
+        {t('upload')}
+    </Button>
+</Defaultbox>   
+</form>
+</Paper>
+)
 }
 
 ArticleForm.defaultProps = {
