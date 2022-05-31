@@ -6,7 +6,8 @@ const express = require('express'),
       passport = require('passport'),
       session = require('express-session'),
       mongoStore = require('connect-mongo'),
-      cors = require('cors')
+      cors = require('cors'),
+      favicon = require('serve-favicon')
 
 const admin = require('./routes/admin'),
       event = require('./routes/event'),
@@ -64,6 +65,7 @@ const corsOptions = {
     credentials: true
   }
 app.set('trust proxy', 1);
+app.use(favicon(path.join(__dirname, 'resources', 'favicon.ico')))
 app.use(cors(corsOptions))
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
