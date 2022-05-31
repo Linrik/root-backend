@@ -5,7 +5,6 @@ const { combine, timestamp, printf } = format;
 const appFormat = printf(({timestamp, email, message})=>{
     return `${timestamp};${email};${message}`
 })
-
 const logger = createLogger({
         level: 'info',
         format: combine(

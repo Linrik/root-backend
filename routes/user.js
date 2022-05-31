@@ -7,11 +7,8 @@ const express = require('express'),
       { isAdmin, isUser, isRoot, isEditor } = require('../routes/AuthMiddelware')
 
 const mailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<;>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-const isEmail = (email)=> {
-    return email.match(mailRegex)
-}
-
-// laget api som registrerer bruker med encryptet hash passord
+const isEmail = (email)=> {return email.match(mailRegex)}
+//registrerer bruker med encryptet hash passord
 router.route('/signup')
     .post(async (req, res, next) => {
         if(isEmail(req.body.email.toLowerCase())){
@@ -33,7 +30,6 @@ router.route('/signup')
                     res.redirect('/');
                     next()
                 });
-                
             })
         } else{
             res.json("Ugyldig Email")
@@ -60,7 +56,7 @@ router.route('/')
         })
         next()
     })
-    // endre på bruker (ferdig, men må testes)
+    // endre på bruker sitt fornavn og etternavn
     .put(isUser, async (req, res, next) => {
         User.findOne({ email: req.session.passport.user.email}).select("+password").then((user) => {  
             if (!user) {
@@ -69,7 +65,7 @@ router.route('/')
                 res.json({status:210})
                 next()
                 return done(null, false); 
-                }
+            }
             bcrypt.compare(req.body.password, user.password, async function(err, isMatch) {
                 if(err){
                     res.locals.level = 'error'
@@ -83,7 +79,6 @@ router.route('/')
                         firstname: req.body.firstname,
                         lastname: req.body.lastname,
                     })
-                    
                     res.locals.level = 'info'
                     res.locals.message = `Bruker endret på brukerinformasjon ${req.body.firstname} - ${req.body.lastname}`
                     
@@ -95,10 +90,9 @@ router.route('/')
                     res.json({status:210})
                 }   
             })
-          })
-        
+          })   
     })
-    // slett bruker (ferdig, men må testes)
+    // slett bruker
     .delete(isUser, async (req, res, next) => {
         await User.findOne({ email: req.session.passport.user.email }).select("+password").then((user) => {  
             if (!user) {
@@ -154,8 +148,7 @@ router.route('/')
                         res.locals.message = `skjedde en feil under sammenligning av passord ${err}`
                         next()
                         return res.json({status:210})
-                    } 
-                    
+                    }  
                     if(isMatch){
                         const saltRounds = 10
                         bcrypt.hash(req.body.newPassword, saltRounds, async (err, hash) =>{

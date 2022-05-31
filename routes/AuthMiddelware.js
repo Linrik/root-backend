@@ -6,7 +6,6 @@ module.exports.isUser = (req, res, next)=>{
         res.status(401).json({msg:"du må være logget inn for denne handlingen"})
     }
 }
-
 module.exports.isRoot = (req, res, next)=>{
     if(this.isUser && req.user.rootMember){
         next()
@@ -22,7 +21,6 @@ module.exports.isEditor = (req, res, next) => {
         res.status(401).json({msg:"du må være editor for denne handlingen"})
     }
 }
-
 module.exports.isAdmin = (req, res, next) => {
     if(this.isUser && req.user.admin){
         next()

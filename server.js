@@ -78,9 +78,8 @@ app.use('/api/article', article, appLog)
 app.use('/api/comment', comment, appLog)
 app.use('/api/language', lang, appLog)
 app.use('/api/admin', isAdmin, admin, appLog)
-
-
 app.use(express.static(path.join(__dirname, 'client/build')));
+
 app.get('*', (req, res)=>{
     res.sendFile(__dirname +"/client/build/index.html", function(err) {
         if (err) {

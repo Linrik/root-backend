@@ -19,7 +19,6 @@ const userSchema = new mongoose.Schema({
     admin: Boolean,
     editor: Boolean
 })
-
 // hasher passordet før det blir lagret
 userSchema.pre('save', function (next) {
     bcrypt.hash(this.password, saltRounds, (err, hash) => {

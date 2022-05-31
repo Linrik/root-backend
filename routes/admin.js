@@ -46,7 +46,7 @@ router.route('/admin')
         res.json({status:200})
         next()
     })
-
+//gi editor rolle
 router.route('/editor')
     .put(async (req, res, next)=>{
         await User.updateOne({email: req.body.email}, {editor: true})
