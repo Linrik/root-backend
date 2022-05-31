@@ -23,7 +23,6 @@ const ArticleForm = ({fetch, setShowForm, in_postTitle, in_postDescription, in_s
 
     const [postTitle, setTitle] = React.useState(in_postTitle === undefined ? "": in_postTitle);
     const [postDescription, setDescription] = React.useState(in_postDescription === undefined ? "" : in_postDescription);
-    // const [postImage, setPostImage] = React.useState(in_image === undefined ? null : in_image);
     const [postImage, setPostImage] = React.useState();
     const [startDate, setStartDate] = React.useState(in_startDate === undefined ? new Date(DateTime.now()) : in_startDate);
     const [startTime, setStartTime] = React.useState(in_endDate === undefined ? new Date(DateTime.now()) : in_startTime);
@@ -38,7 +37,6 @@ const ArticleForm = ({fetch, setShowForm, in_postTitle, in_postDescription, in_s
         const newDateTime = new Date(DateTime.fromISO(isoString));
         return newDateTime
     }
-
 
     const handleSubmitEvent = async (event) =>{
         const dateObjectStart = convertToDateTime(startDate, startTime);

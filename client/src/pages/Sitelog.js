@@ -8,11 +8,14 @@ import Switch from '@mui/material/Switch';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 const axios = require('axios').default
+
 const Sitelog = () => {
+
     const [log, setLog] = React.useState();
     const [logLevel, setLogLevel] = React.useState();
     const [logActive, setLogActive] = React.useState(false);
     const {t} = useTranslation();
+
     
     const fetchLogLevel = async ()=>{
         await axios ({
@@ -80,6 +83,7 @@ const Sitelog = () => {
     }
 
     return (
+
         <Defaultbox>
             <Paper1200p sx={{
                 p:3

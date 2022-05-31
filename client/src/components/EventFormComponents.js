@@ -10,8 +10,10 @@ import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { DateTime } from 'luxon';
 import Spacebetween from './helper/SpaceBetween';
 
+//returnerer to datepickers og to timepickers for å sette start og slutt data til events.
 function EventFormComponents({dateTimeState, t}) {
 
+    // Listeet opp variabler for å slippe å skrive "dateTimeState." gjentatte ganger i koden
     const { 
         startDate, setStartDate,
         endDate, setEndDate,
@@ -19,11 +21,14 @@ function EventFormComponents({dateTimeState, t}) {
         endTime, setEndTime
     } = dateTimeState;
 
+
 return (
     <Spacebetween sx={{
         p:0,
         m:0
     }} >
+
+    {/* Her brukes Luxon npm (AdapterLuxon) for å håndtere dato formatering */}
     <LocalizationProvider dateAdapter={AdapterLuxon}>
         <Defaultbox xs={5} md={5} sx={{
             justifyContent:"flex-start"
