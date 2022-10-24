@@ -9,6 +9,7 @@ const eventSchema = new mongoose.Schema({
    },
    title: String,
    description: String,
+   address: String,
    dateFrom: Date,
    dateTo: Date,
    image: String,

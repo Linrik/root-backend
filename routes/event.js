@@ -27,6 +27,7 @@ router.route('/')
                 user: await User.findOne({  _id: req.session.passport.user.id}),
                 title: req.body.title,
                 description: req.body.description,
+                address: req.body.address,
                 dateFrom: req.body.dateFrom,
                 dateTo: req.body.dateTo
             })
@@ -35,6 +36,7 @@ router.route('/')
                 user: await User.findOne({  _id: req.session.passport.user.id}),
                 title: req.body.title,
                 description: req.body.description,
+                address: req.body.address,
                 dateFrom: req.body.dateFrom,
                 dateTo: req.body.dateTo,
                 image: req.file.filename
@@ -65,6 +67,7 @@ router.route('/')
             let dataToPut = {
                 title: req.body.title,
                 description: req.body.description,
+                address: req.body.address,
                 dateFrom: req.body.dateFrom,
                 dateTo: req.body.dateTo,
                 postedAt: doc.postedAt,

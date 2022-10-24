@@ -1,7 +1,7 @@
 const mongoose = require("mongoose"),
       bcrypt = require('bcrypt'),
       saltRounds = 10;
-//laget UserSchema
+//UserSchema
 const userSchema = new mongoose.Schema({
     email: {
         type: String,

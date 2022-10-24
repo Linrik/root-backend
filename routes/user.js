@@ -5,25 +5,30 @@ const express = require('express'),
       bcrypt = require('bcrypt'),
       { isAdmin, isUser, isRoot, isEditor } = require('../routes/AuthMiddelware')
 
+// regex for å validere e-post adresse
+// hentet fra https://emailregex.com/
 const mailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<;>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const isEmail = (email)=> {return email.match(mailRegex)}
-//registrerer bruker med encryptet hash passord
+//registrerer bruker
 router.route('/signup')
     .post(async (req, res, next) => {
         if(isEmail(req.body.email.toLowerCase())){
-            //registrer bruker
+            //lagrer data i userSchema objekt
             const nyBruker = new User({
                 email: req.body.email.toLowerCase(),
                 firstname: req.body.firstname,
                 lastname: req.body.lastname,
                 password: req.body.password,
             })
+            //lagrer i db
             await nyBruker.save((err, doc)=>{
                 if(err)return res.json("E-post allerede i bruk")
                
+                //logger krever at route sender med info
                 res.locals.level = 'info'
                 res.locals.email = req.body.email
                 res.locals.message = `Bruker ble registrert ${doc}`
+
                 req.login(nyBruker, function(err) {
                 if (err) { return next(err); }
                     res.redirect('/');
@@ -57,6 +62,9 @@ router.route('/')
     })
     // endre på bruker sitt fornavn og etternavn
     .put(isUser, async (req, res, next) => {
+        // endringer på bruker krever passord for å 
+        // bekrefte endringer så vi henter bruker 
+        // med passord
         User.findOne({ email: req.session.passport.user.email}).select("+password").then((user) => {  
             if (!user) {
                 res.locals.level = 'error'
@@ -65,6 +73,8 @@ router.route('/')
                 next()
                 return done(null, false); 
             }
+            // sammenligner det innsendte passordet med hash passordet på user
+            // objektet fra databasen
             bcrypt.compare(req.body.password, user.password, async function(err, isMatch) {
                 if(err){
                     res.locals.level = 'error'
