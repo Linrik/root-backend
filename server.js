@@ -18,7 +18,7 @@ const admin = require('./routes/admin'),
       comment = require('./routes/comment'),
       { appLog } = require('./routes/logMiddleware'),
       port = process.env.PORT,
-      { isAdmin } = require('./routes/AuthMiddelware');
+      { isAdmin, isUser } = require('./routes/AuthMiddelware');
 const path = require('path')
 
 const dbOptions = {
@@ -73,7 +73,7 @@ app.use('/api/resources', express.static('resources'))
 app.use('/api/user', user, appLog)
 app.use('/api/event', event, appLog)
 app.use('/api/article', article, appLog)
-app.use('/api/comment', comment, appLog)
+app.use('/api/comment', isUser, comment, appLog)
 app.use('/api/language', lang, appLog)
 app.use('/api/admin', isAdmin, admin, appLog)
 app.use(express.static(path.join(__dirname, 'client/build')));
