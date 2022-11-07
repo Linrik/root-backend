@@ -1,3 +1,4 @@
+// Rebuild on heroku
 require('dotenv').config();
 require('./config/passport')
 const express = require('express'),
