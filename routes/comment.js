@@ -8,7 +8,7 @@ const express = require('express'),
       Article = require('../config/articleSchema'),
       { isUser } = require('../routes/AuthMiddelware');
 router.route('/:type')
-    .post(async (req, res, next) =>{
+    .post(isUser, async (req, res, next) =>{
         const comment = new Comment({
             user: await User.findById({_id: req.session.passport.user.id}),//bruker cookie sin user referanse id
             comment: req.body.comment
@@ -37,7 +37,7 @@ router.route('/:type')
                 res.send({status:200})
         }
     })
-    .put(async (req, res, next) => {
+    .put(isUser, async (req, res, next) => {
         Comment.findOne({_id: req.body.commentid}).then((comment)=>{ 
             User.findOne({user: comment.user}).then(async (user)=>{
                 if(comment.user === req.session.passport.user){
