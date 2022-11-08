@@ -102,8 +102,8 @@ router.route('/')
     })
 
     router.route('/:id')
-        .get(async (req, res, next)=>{
-           await Article.findById({_id: req.params.id}, (err, doc) =>{
+        .get((req, res, next)=>{
+           Article.findById({_id: req.params.id}, (err, doc) =>{
                 if(err) return res.json("Artikkel ikke funnet")
                 res.json(doc)
             })
