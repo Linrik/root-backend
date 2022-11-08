@@ -110,15 +110,27 @@ router.route('/')
 
     router.route('/id/:id')
         .get(async (req, res, next)=>{
-           await Event.findById({_id: req.params.id}, (err, doc) =>{
-                if(err){
-                    res.locals.level = 'info'
-                    res.locals.message = `Event ikke funnet ${err}`
-                    next()
-                    return res.json({status:210})
-                } 
-                res.json(doc)
+//            await Event.findById({_id: req.params.id}, (err, doc) =>{
+//                 if(err){
+//                     res.locals.level = 'info'
+//                     res.locals.message = `Event ikke funnet ${err}`
+//                     next()
+//                     return res.json({status:210})
+//                 } 
+//                 res.json(doc)
+//             })
+                 
+           const event = await Event.findById({_id: req.params.id})
+            .populate( 'user', 'firstname lastname')
+            .populate({
+                path: 'comments',
+                populate: {
+                    path: 'user',
+                    select: 'firstname lastname',
+                }
             })
+            res.json(event)
+            next()
         })
 
     router.route('/participants')
