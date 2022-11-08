@@ -102,10 +102,18 @@ router.route('/')
     })
 
     router.route('/:id')
-        .get((req, res, next)=>{
-           Article.findById({_id: req.params.id}, (err, doc) =>{
-                if(err) return res.json("Artikkel ikke funnet")
-                res.json(doc)
+        .get(async(req, res, next)=>{
+
+            const articles = await Article.findById({_id: req.params.id})
+            .populate( 'user', 'firstname lastname')
+            .populate({
+                path: 'comments',
+                populate: {
+                    path: 'user',
+                    select: 'firstname lastname',
+                }
             })
+            res.json(articles)
+            next()
         })
     module.exports = router
