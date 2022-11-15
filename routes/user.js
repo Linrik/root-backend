@@ -181,5 +181,32 @@ router.route('/')
                 const users = await User.find();
                 res.json(users).status(200)
             })
+            .put(isUser, async (req, res, next) => {
+                // endringer på bruker krever passord for å 
+                // bekrefte endringer så vi henter bruker 
+                // med passord
+                User.findOne({ email: req.session.passport.user.email}).then((user) => {  
+                    if (!user) {
+                        res.locals.level = 'error'
+                        res.locals.message = `fant ikke brukeren ${user}`
+                        res.json({status:210})
+                        next()
+                        return done(null, false); 
+                    } else{
+                        User.updateOne({email: req.session.passport.user.email},
+                            {
+                                firstname: req.body.firstname,
+                                lastname: req.body.lastname,
+                            })
+                            res.locals.level = 'info'
+                            res.locals.message = `Bruker endret på brukerinformasjon ${req.body.firstname} - ${req.body.lastname}`
+                            
+                            req.session.passport.user.firstname = req.body.firstname
+                            req.session.passport.user.lastname = req.body.lastname
+                            res.json({status:200})
+                            next()
+                    }        
+                  })   
+            })
 
 module.exports = router;
