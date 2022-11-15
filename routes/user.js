@@ -185,7 +185,7 @@ router.route('/')
                 // endringer på bruker krever passord for å 
                 // bekrefte endringer så vi henter bruker 
                 // med passord
-                User.findOne({ email: req.session.passport.user.email}).then((user) => {  
+                User.findOne({ email: req.session.passport.user.email}).then(async (user) => {  
                     if (!user) {
                         res.locals.level = 'error'
                         res.locals.message = `fant ikke brukeren ${user}`
@@ -193,7 +193,7 @@ router.route('/')
                         next()
                         return done(null, false); 
                     } else{
-                        User.updateOne({email: req.session.passport.user.email},
+                        await User.updateOne({email: req.session.passport.user.email},
                             {
                                 firstname: req.body.firstname,
                                 lastname: req.body.lastname,
