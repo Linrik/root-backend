@@ -122,6 +122,7 @@ router.route('/')
                  
            const event = await Event.findById({_id: req.params.id})
             .populate( 'user', 'firstname lastname')
+            .populate('participants', 'firstname lastname')
             .populate({
                 path: 'comments',
                 populate: {
